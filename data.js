@@ -1,5 +1,6 @@
 var dataAdvances = {
   agriculture: {
+  	key: "agriculture",
     name: "Agriculture",
     terrain: ["Shrubland","Savanna","Forest","Rainforest"],
     1: "Simple Fields",
@@ -7,18 +8,21 @@ var dataAdvances = {
   },
   
   aquatecture: {
+  	key: "aquaculture",
     name: "Aquatecture",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: "Pier",
   },
   
   butchery: {
+  	key: "butchery",
     name: "Butchery",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: "Butcher",
   },
   
   carpentry: {
+  	key: "carpentry",
     name: "Carpentry",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: "Wood Hut",
@@ -26,18 +30,21 @@ var dataAdvances = {
   },
   
   caribouHerding: {
+  	key: "caribouHerding",
     name: "Caribou Herding",
     terrain: ["Tundra"],
     1: "Caribou Paddock",
   },
   
   cattleHerding: {
+  	key: "cattleHerding",
     name: "Cattle Herding",
     terrain: ['Savanna'],
     1: "Cattle Kraal",
   },
   
   ceramics: {
+  	key: "ceramics",
     name: "Ceramics",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Potter',
@@ -46,12 +53,14 @@ var dataAdvances = {
   },
   
   chickenHusbandry: {
+  	key: "chickenHusbandry",
     name: "Chicken Husbandry",
     terrain: ["Rainforest"],
     1: 'Chicken Coop',
   },
   
   construction: {
+  	key: "construction",
     name: "Construction",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Stone Hut',
@@ -59,18 +68,21 @@ var dataAdvances = {
   },
   
   discipline: {
+  	key: "discipline",
     name: "Discipline",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: "Placeholder",
   },
   
   dyes: {
+  	key: "dyes",
     name: "Dyes",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Dyehouse',
   },
   
   excavation: {
+  	key: "excavation",
     name: "Excavation",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Well',
@@ -78,48 +90,56 @@ var dataAdvances = {
   },
   
   falconry: {
+  	key: "falconry",
     name: "Falconry",
     terrain: "Forest",
     1: 'Mews',
   },
   
   feminism: {
+  	key: "feminism",
     name: "Feminism",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: "Placeholder"
   },
   
   finance: {
+  	key: "finance",
     name: "Finance",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Bank',
   },
   
   fishing: {
+  	key: "fishing",
     name: "Fishing",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Net Weaver',
   },
   
   forestry: {
+  	key: "forestry",
     name: "Forestry",
     terrain: ['Forest','Rainforest'],
     1: 'Lumberyard',
   },
   
   goatHerding: {
+  	key: "goatHerding",
     name: "Goat Herding",
     terrain: ['Shrubland','Savanna'],
     1: 'Goat Herd',
   },
   
   honor: {
+  	key: "honor",
     name: "Honor",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Placeholder',
   },
   
   horseHerding: {
+  	key: "horseHerding",
     name: "Horse Herding",
     terrain: ['Savanna'],
     1: 'Horse Herd',
@@ -128,6 +148,7 @@ var dataAdvances = {
   },
   
   kennelry: {
+  	key: "kennelry",
     name: "Kennelry",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Wolf Den',
@@ -135,6 +156,7 @@ var dataAdvances = {
   },
   
   leatherworking: {
+  	key: "leatherworking",
     name: "Leatherworking",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Tannery',
@@ -143,6 +165,7 @@ var dataAdvances = {
   },
   
   manufacture: {
+  	key: "manufacture",
     name: "Manufacture",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Knappery',
@@ -153,12 +176,14 @@ var dataAdvances = {
   },
   
   masculinism: {
+  	key: "masculinism",
     name: "Masculinism",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Placeholder',
   },
   
   metalurgy: {
+  	key: "metalurgy",
     name: "Metalurgy",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Smelter',
@@ -166,12 +191,14 @@ var dataAdvances = {
   },
   
   preservation: {
+  	key: "preservation",
     name: "Food Preservation",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Granary',
   },
   
   pyrotechnics: {
+  	key: "pyrotechnics",
     name: "Pyrotecnics",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Charcoal Burner',
@@ -179,12 +206,14 @@ var dataAdvances = {
   },
   
   race: {
+  	key: "race",
     name: "Race",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Placeholder',
   },
   
   swineHusbandry: {
+  	key: "swingHusbandry",
     name: "Swine Husbandry",
     terrain: ["Shrubland","Forest"],
     1: 'Swine Herd',
@@ -192,6 +221,7 @@ var dataAdvances = {
   },
   
   trade: {
+  	key: "trade",
     name: "Trade",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Trade Route',
@@ -497,6 +527,7 @@ var dataBiomes = {
   },
   
   ocean: {
+  	name: 'Ocean',
     
   },
   

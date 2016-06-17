@@ -432,17 +432,23 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     
     var claim = availableStocks[Math.floor(Math.random()*availableStocks.length)];
-    var claimNum = Math.ceil(Math.min(this.population,worldMap.coords[this.x][this.y].stocks[claim]/2));
     
-    worldMap.coords[this.x][this.y].stocks[claim] -= claimNum;
-    
-    if (this.inv[claim] === undefined) {
-      this.inv[claim] = claimNum;
+    if (claim === undefined) {
+    	notification = this.name + "does not find anything in the stockpile worth claiming.";
     } else {
-      this.inv[claim] += claimNum;
+		var claimNum = Math.ceil(Math.min(this.population,worldMap.coords[this.x][this.y].stocks[claim]/2));
+	
+		worldMap.coords[this.x][this.y].stocks[claim] -= claimNum;
+	
+		if (this.inv[claim] === undefined) {
+		  this.inv[claim] = claimNum;
+		} else {
+		  this.inv[claim] += claimNum;
+		}
+		
+		notification = this.name + " claims " + claimNum + " " + dataResources[claim].plural + ".";
+
     }
-    
-    notification = this.name + " claims " + claimNum + " " + dataResources[claim].plural + ".";
     console.log(notification);
     this.notify(notification);
   
@@ -452,31 +458,35 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     var neighbors = [];
     
-    for (var i in worldMap.coords[x][y].units) {
-      if (worldMap.coords[x][y].units[i] != this) {
-        neighbors.push(worldMap.coords[x][y].units[i],worldMap.coords[x][y].units[i],worldMap.coords[x][y].units[i]);
+    for (var i in worldMap.coords[this.x][this.y].units) {
+      if (worldMap.coords[this.x][this.y].units[i] != this) {
+        neighbors.push(worldMap.coords[this.x][this.y].units[i],worldMap.coords[this.x][this.y].units[i],worldMap.coords[this.x][this.y].units[i]);
       }
     }
     
-    if (x > 0) {
-      neighbors = neighbors.concat(worldMap.coords[x-1][y].units);
+    if (this.x > 0) {
+      neighbors = neighbors.concat(worldMap.coords[this.x-1][this.y].units);
     }
     
-    if (y > 0 ) {
-      neighbors = neighbors.concat(worldMap.coords[x][y-1].units);
+    if (this.y > 0 ) {
+      neighbors = neighbors.concat(worldMap.coords[this.x][this.y-1].units);
     }
     
-    if (x < worldMap.prefs.size_x-1) {
-      neighbors = neighbors.concat(worldMap.coords[x+1][y].units);
+    if (this.x < worldMap.prefs.size_x-1) {
+      neighbors = neighbors.concat(worldMap.coords[this.x+1][this.y].units);
     }
     
-    if (y < worldMap.prefs.size_y-1) {
-      neighbors = neighbors.concat(worldMap.coords[x][y+1].units);
+    if (this.y < worldMap.prefs.size_y-1) {
+      neighbors = neighbors.concat(worldMap.coords[this.x][this.y+1].units);
     }
     
     if (neighbors.length === 0) {
       notification = this.name + " has no neighbors to share with!";
+      
     } else {
+    
+	  // Sharing!
+	  
       var targetPop = neighbors[Math.floor(Math.random()*neighbors.length)];
       var sharingRites = this.rites;
       var sharingAdvances = this.advances;
@@ -943,15 +953,14 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     var potentialAdvances = dataResources[sacrifice].advances;
     var advance = potentialAdvances[Math.floor(Math.random()*potentialAdvances.length)];
     
-    if (Math.random()*100 < sacrificeNum + pop.advances.failures && advance !== undefined) {
+    if (Math.random()*100 < sacrificeNum + pop.advances.failures && advance !== undefined) {     
       if (pop.advances[advance.name] === undefined) {
-        pop.advances[advance.name] = 1;
+        pop.advances[advance.key] = 1;
       } else {
-        pop.advances[advance.name]++;
+        pop.advances[advance.key]++;
       }
       pop.advances.failures = 0;
-      notification = pop.name + " destroys " + sacrificeNum + " " + dataResources[sacrifice].plural + " in an experiment.  They discover an "+advance.name+".";
-      
+      notification = pop.name + " destroys " + sacrificeNum + " " + dataResources[sacrifice].plural + " in an experiment.  They discover an "+advance.name+".";      
     } else {
       pop.advances.failures++;
       notification = pop.name + " destroys " + sacrificeNum + " " + dataResources[sacrifice].plural + " in an experiment.  It yields only negative data.";
@@ -1032,7 +1041,7 @@ function Rite(pop,sacrifice) {
   
   var potentialValues = Object.keys(pop.values);
   this.valueName = potentialValues[Math.floor(Math.random()*potentialValues.length)];
-  this.valueNum = pop.values[this.valueName];
+  this.valueNum = Math.max(0,Math.min(100,Math.floor(pop.values[this.valueName])));
   
   this.power = Math.floor(Math.random()*20);
   

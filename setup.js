@@ -493,7 +493,7 @@ var worldMap = {
       //Migrating Northward
       if (worldMap.coords[x][y-1].altitude > 0 && Math.random() < 0.6 ) {
         
-        expName = ["Snowbirds","of the South","Southron","Sudé","Boreas","Septentrio"][Math.floor(Math.random()*4)];
+        expName = ["Snowbirds","of the South","Southron","Sude","Boreas","Septentrio"][Math.floor(Math.random()*4)];
         
         expPop = new Pop(peopleName+" "+expName,newPeople,Math.floor(newPop.population/4),x,y-1,newPop.prestige,newPop.values);
         pops.push(expPop);
@@ -1034,10 +1034,10 @@ var view = {
     selectPaneTemperature.innerHTML = worldMap.coords[x][y].temperature + " celsius";
     selectPaneNaturalBounty.innerHTML = site.name;
     
-    selectPaneWest.innerHTML = worldMap.coords[x-1][y].biome + " to the west " + neighborsWest + ".";
-    selectPaneEast.innerHTML = worldMap.coords[x+1][y].biome + " to the east " + neighborsEast + ".";
-    selectPaneNorth.innerHTML = worldMap.coords[x][y-1].biome + " to the north " + neighborsNorth + ".";
-    selectPaneSouth.innerHTML = worldMap.coords[x][y+1].biome + " to the south " + neighborsSouth + ".";
+    selectPaneWest.innerHTML = worldMap.coords[x-1][y].biome.name + " to the west " + neighborsWest + ".";
+    selectPaneEast.innerHTML = worldMap.coords[x+1][y].biome.name + " to the east " + neighborsEast + ".";
+    selectPaneNorth.innerHTML = worldMap.coords[x][y-1].biome.name + " to the north " + neighborsNorth + ".";
+    selectPaneSouth.innerHTML = worldMap.coords[x][y+1].biome.name + " to the south " + neighborsSouth + ".";
     
     selectPane.style.display = 'inherit';
     
