@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <link rel="stylesheet" href="style.css">
+    <script src="data.js"></script>
+    <script src="setup.js"></script>
+    <script src="pops.js"></script>
+    <script src="debug.js"></script>
+  </head>
+
+  <body>
+    
+    <div id="banner">
+      <h1 class="banner">Phorex</h1>
+      <h3 class="banner">eXplore - eXtend - eXchange - eXalt</h3>
+    </div>
+    
+    <div id="introduction">
+      <p>Phorex is a very rough work-in-progress attempting to build a "4X" game in javascript.  It doesn't work yet, but it makes pretty maps.</p>
+      <button onclick="testMap.setUp()">Or click this to see the most boring map ever. (Debug Map)</button>
+    </div>
+    
+   <table id="setupTable">
+     <tr>
+       <td colspan="8"><hr /></td>
+     <tr>
+      <td class="setupCell" id="setupCellCoords">
+        New Map<br />
+        <input class="setupSlider" type="range" min="25" max="100" value="75" id="setupCoordsButton" onchange="handlers.setupCoords()" />
+      </td>
+      
+      <td class="setupCell" id="setupCellTectonics">
+        Tectonics<br />
+        <button class="setupSlider" disabled id="setupTectonicsButton" onclick="handlers.setupTectonics()">Rumble</button>
+      </td>
+      
+      <td class="setupCell" id="setupCellOcean">
+        Ocean<br />
+        <input class="setupSlider" type="range" min="10" max="19" value="15" step=".5" disabled id="setupOceanButton" onchange="handlers.setupOceans()" />
+      </td>
+      
+      <td class="setupCell" id="setupCellHemisphere">
+        Hemisphere<br />
+        N <input class="setupSliderHemisphere" type="range" min="1" max="2" id="setupHemisphereButton" disabled onchange="handlers.setupHemisphere()" /> S
+      </td>
+      
+      <td class="setupCell" id="setupCellPrecipitation">
+        Precipitation<br />
+        <input class="setupSlider" type="range" min="8" max="20" value="12" disabled id="setupPrecipitationButton" onchange="handlers.setupPrecipitation()" />
+      </td>
+      
+      <td class="setupCell" id="setupCellTemperature">
+        Temperature<br />
+        <input class="setupSlider" type="range" min="0" max="20" value="10" disabled id="setupTemperatureButton" onchange="handlers.setupTemperature()" />
+      </td>
+      
+      <td class="setupCell" id="setupCellBiomes">
+        Climate<br />
+        <button class="setupSlider" disabled id="setupBiomesButton" onclick="handlers.setupBiomes()">Finalize</button>
+      </td>
+      
+      <td class="setupCell" id="setupCellPopulations">
+        Populations<br />
+        <button class="setupSlider" disabled id="setupPopulationsButton" onclick="handlers.setupPopulations()">Continue</button>
+      </td>
+    
+   </tr>
+   
+   <tr><td colspan="8"><hr /></td></tr>
+   
+   </table>
+   
+   <div id="worldMapDiv">
+     
+     <div id="uiWorldMapExpansion">
+       <button hidden id="expandWorldMapButton" onclick="handlers.expandWorldMap()">Expand</button>
+       <button hidden id="collapseWorldMapButton" onclick="handlers.collapseWorldMap()">Collapse</button>
+     </div>
+     <h2 class="uiTitle" id="uiTitleMinimap">World Map</h2>
+     
+     <table id="worldMapTable">
+       
+     </table>
+     
+     <div hidden id="worldMapLegendDiv">
+       <button onclick="handlers.setLegendToElevation()">Elevation</button>
+       <button onclick="handlers.setLegendToPrecipitation()">Precipitation</button>
+       <button onclick="handlers.setLegendToTemperature()">Temperature</button>
+       <button onclick="handlers.setLegendToPopulation()">Population</button>
+     </div>
+    
+  </div>
+    
+    <div id="selectPane">
+      
+      <p>In the <span id="selectPaneBiomeVerbose">UNSET</span> of their homelands, <span id="selectPanePopulationsNumber">UNSET</span> peoples have come together, united by a new vision of a bright future.</p>
+      
+      <h3>The People</h3>
+      <ul id="selectPanePopulationsList">
+        <li>One population</li>
+        <li>Second population</li>
+        <li>Last population</li>
+      </ul>
+      
+      <h3>The Land</h3>
+      <ul>
+        <li>Biome: <span id="selectPaneBiome">UNSET</span></li>
+        <li>Elevation: <span id="selectPaneAltitude">UNSET</span></li>
+        <li>Precipitation: <span id="selectPanePrecipitation">UNSET</span></li>
+        <li>Temperature: <span id="selectPaneTemperature">UNSET</span></li>
+        <li>Natural Bounty: <span id="selectPaneNaturalBounty">UNSET</span></li>
+      </ul>
+      
+      <h3>The Region</h3>
+      <ul>
+        <li>In the <span id="selectPaneWest">UNSET</span></li>
+        <li>In the <span id="selectPaneEast">UNSET</span></li>
+        <li>In the <span id="selectPaneNorth">UNSET</span></li>
+        <li>In the <span id="selectPaneSouth">UNSET</span></li>
+      </ul>
+      
+      <p>A leader has arisen to lead the people into a bright new age.  They herald a vision of civilization that they promise will protect and feed their people, allowing them to flourish into the bright future.</p>
+      
+      <button onclick="handlers.selectTile()">I am the vision that guides this new leader!</button><br />
+      <button onclick="view.populatePopulationsPane()">Show me another group.</button>
+      <button disabled>Oh god let's just make a new map</button>
+    </div>
+    
+    <div hidden id="uiTileDiv">
+      <div class="uiPanel" id="uiPanelPeople">
+        <h2 class="uiTitle" id="uiTitlePeople">The People</h2>
+        <ul id="uiPeopleList"></ul>
+      </div>
+      <div class="uiPanel" id="uiPanelLand">
+        <h2 class="uiTitle" id="uiTitleLand">The Land</h2>
+        <p id="uiLandShort"></p>
+        <h3 class="ui">Sites</h3>
+        <ul id="uiSitesList"></ul>
+        <h3 class="ui">Stockpile</h3>
+        <ul id="uiStocksList"></ul>
+      </div>
+      <div class="uiPanel" id="uiPanelMinimap">
+        <h2 class="uiTitle" id="uiTitleDate">The Present</h2>
+        <button id="uiNextTurn" onclick="handlers.processTurn()">Next Season »</button>
+      </div>
+      <div class="clear"></div>
+      <div class="uiPanel" id="uiPanelCivics">
+        <h2 class="uiTitle" id="uiTitleCivics">Civics</h2>
+      </div>
+      <div class="uiPanel" id="uiPanelWorship">
+        <h2 class="uiTitle" id="uiTitleWorship">Worship</h2>
+        <h3 class="ui">Rites</h3>
+        <ul id="uiRitesList"></ul>
+      </div>
+      <div class="uiPanel" id="uiPanelRelations">
+        <h2 class="uiTitle" id="uiTitleRelations">Relations</h2>
+        <ul id="uiRelationsList"></ul>
+      </div>
+      
+    </div>
+    
+    <hr class="clear" />
+    
+    <div id="uiTextWall">
+      
+      <div class="uiPullPanel" id="uiNotifications">
+        <h2 class="uiTitle" id="uiTitleNotifications">Notifications
+          <button id="uiToggleNotificationsButton" onclick="view.uiToggleNotifications()">Hide</button>
+        </h2>
+          <div id="uiNotificationsContent">
+            <ul id="uiNotificationsList"></ul>
+          </div>
+        
+      </div>
+      
+      <div class="uiPullPanel"  id="uiHelp">
+        <h2 class="uiTitle" id="uiTitleHelp">Help
+          <button id="uiToggleHelpButton" onclick="view.uiToggleHelp()">Hide</button>
+        </h2>
+        <div id="uiHelpContent">
+          <p>To make a map, start by selecting a size on the first slider.  That will unlock the next step, which will add tectonic activity.  Click that as many times as you like before adding water to the oceans by adjusting the Ocean slider.  Once you're happy with that, select a hemisphere and fiddle with the climate of your map.</p>
+          <p>Clicking the last button will (after a moment) take you to the selection panel where you can pick a group of people to play in the game.</p>
+          <p>Once you select a people, you will be taken to their home tile where you can see various details about them and their home.  You can click on the "Next Season" button to see what happens to them.</p>
+          <p>Eventually, you'll be able to actually, you know, <em>do stuff</em>, but that hasn't been coded yet.</p>
+          <p>To start over, just reload the page.</p>
+        </div>
+
+      </div>
+      
+    </div>
+    
+  </body>
+
+</html>

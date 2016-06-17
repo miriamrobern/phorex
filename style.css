@@ -1,0 +1,230 @@
+/* Styles go here */
+
+.clear {
+  clear: both;
+}
+
+#introduction {
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 5%;
+}
+
+body {
+  background: #eee;
+  font-family: sans-serif;
+  font-size: .7em;
+}
+
+td {
+  width: 500px;
+	text-align: center;
+	cursor: default;
+}
+
+table {
+  border-spacing: 0px;
+  table-layout:fixed;
+}
+
+#banner {
+  line-height: 0.2em;
+  color: #888;
+  text-align: center;
+}
+
+h3.banner {
+  text-decoration: overline;
+  font-family: sans-serif;
+}
+
+#worldMapTable {
+  font-size:.25em; 
+}
+
+#selectPane {
+  display: none;
+  width: 50%;
+  background: #fff;
+  border: 5px solid #555;
+  padding: 10px;
+  margin: 10px 33% 0 33%;
+}
+
+.setupCell {
+  text-align: center;
+  vertical-align: top;
+  padding: 10px;
+}
+
+.setupSlider {
+  width: 80px;
+}
+
+.setupSliderHemisphere {
+  width: 20px;
+}
+
+
+
+#uiTileDiv {
+}
+
+.uiPanel {
+  width: 30%;
+  /* height: 200px; */
+  float: left;
+  margin: 5px;
+}
+
+.uiTitle {
+  padding: 3px;
+}
+
+h3.ui {
+  width: 100%;
+  border-bottom: 1px solid black;
+  margin-bottom: 0px;
+}
+
+ul {
+  margin: 3px;
+  padding-left: 15px;
+}
+
+#uiDate {
+  background-color: cyan;
+  text-align: right;
+}
+
+#worldMapDiv {
+  background-color: khaki;
+  padding: 10px;
+}
+
+#uiWorldMapExpansion {
+  float:right;
+}
+
+#uiTitleMinimap {
+  color: #7F462C;
+  margin: 0px;
+}
+
+#uiTitlePeople {
+  background-color: red;
+  color: gold;  
+}
+
+#uiTitleLand {
+  background-color: darkgreen;
+  color: khaki;  
+}
+
+#uiTitleDate {
+  background-color: blue;
+  color: lightgrey;  
+  text-align: right;
+}
+
+#uiTitleCivics {
+  background-color: purple;
+  color: gold;  
+}
+
+#uiTitleWorship {
+  background-color: orange;
+  color: blue;  
+}
+
+#uiTitleRelations {
+  background-color: yellow;
+  color: darkorange;  
+}
+
+#uiNextTurn {
+  float: right;
+}
+
+.uiPullPanel {
+  margin: 5px;
+}
+
+#uiHelp {
+  float: left;
+  width: 45%;
+}
+
+#uiNotifications {
+  float: right;
+  width: 45%;
+}
+
+#uiTitleHelp {
+  background-color: #333;
+  color: #eee;
+}
+
+#uiTitleNotifications {
+  background-color: #228;
+  color: #882;
+}
+
+#uiToggleHelpButton {
+  float:right;
+}
+
+#uiToggleNotificationsButton {
+  float:right;
+}
+
+
+/* Pop-Up  */
+
+a.popup span {
+  display:none;
+  color: #333;
+  z-index: 10;
+  padding: 7px 10px;
+  margin-top: -30px;
+  margin-left: 28px;
+  width: 240px;
+}
+
+a.popup:hover span {
+  display: inline;
+  color: #333;
+  position:absolute;
+  border: 3px solid #777;
+  background: #ddd;
+  line-height: 1.2em;
+}
+
+.bigstat {
+  font-size: 2em;
+  font-weight: bolder;
+  color: #333;
+  margin: 10px 0px 10px 0px;
+}
+
+.popupheader {
+  color: blue;
+  text-align: right;
+  padding-right: 10px;
+  vertical-align: top;
+}
+
+.popupbox {
+  color: blue;
+}
+
+.popupdata {
+  text-align: left;
+}
+
+
+
+
+
+
+
