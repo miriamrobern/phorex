@@ -1074,10 +1074,10 @@ var view = {
       popLi.innerHTML = "<strong>" + pop.name + ",</strong> " + pop.population + " " + pop.people.name + " " + pop.job.job + "s   <a class='popup'>[i]<span>" + popPopUp + "</span></a>";
       uiPeopleList.appendChild(popLi);
       
-      var notLi = document.createElement('li');
-      notLi.innerHTML = pop.lastSeason;
-      uiNotificationsList.appendChild(notLi);
-      
+	  var notLi = document.createElement('li');
+	  notLi.innerHTML = pop.lastSeason;
+	  uiNotificationsList.appendChild(notLi);
+
     }
   },
   
@@ -1140,7 +1140,11 @@ var view = {
     
     var localRites = [];
     for (i in worldMap.coords[view.focusX][view.focusY].units) {
-      localRites = localRites.concat(worldMap.coords[view.focusX][view.focusY].units[i].rites);
+    	for (r in worldMap.coords[view.focusX][view.focusY].units[i].rites) {
+    		if (localRites.indexOf(worldMap.coords[view.focusX][view.focusY].units[i].rites[r]) === -1) {
+    			localRites = localRites.concat(worldMap.coords[view.focusX][view.focusY].units[i].rites[r]);
+    		}
+    	}
     }
     
     for (i in localRites) {

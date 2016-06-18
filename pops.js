@@ -108,7 +108,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     var force = this.force();
     force = Math.floor(force*100)/100;
-    popUpText += "<tr><td class='popupbox'><div class='bigstat'>"+this.prestige+"</div> Prestige</td><td class='popupbox'><div class='bigstat'>Y</div> Loyalty</td><td class='popupbox'><div class='bigstat'>"+force+"</div> Force</td></tr>";
+    popUpText += "<tr><td class='popupbox'><div class='bigstat'>"+Math.floor(this.prestige*10)/10+"</div> Prestige</td><td class='popupbox'><div class='bigstat'>Y</div> Loyalty</td><td class='popupbox'><div class='bigstat'>"+force+"</div> Force</td></tr>";
     popUpText += "<tr><td colspan='3'><hr /></td></tr>";
   
     var demographicsText = '';
@@ -552,6 +552,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         var advance = advancesList[Math.floor(Math.random()*advancesList.length)]
         if (targetPop.advances[advance] === undefined) {
           targetPop.advances[advance] = 1;
+          console.log("advance: ",advance);
           notification = this.name + " shares the " + dataAdvances[advance].name + " advance with " + targetPop.name + ".";
           var shared = 1;
         } else if (targetPop.advances[advance] < this.advances[advance]) {
@@ -694,7 +695,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         // add matriarchs to disposition shit-list
       }
       
-      notification = pop.name + " celebrates their mothers by exacting " + tributeNum + " " + dataResources[tribute].plural + " as tribute from the " + targetPop.name + "s.";
+      notification = pop.name + " celebrates their mothers by exacting " + tributeNum + " " + dataResources[tribute].plural + " as tribute from the " + targetPop.name + ".";
       
     } else if (pop.demographics.gender != "Women" && superiors.length > 0) {
       var targetPop = superiors[Math.floor(Math.random()*superiors.length)];
@@ -770,7 +771,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         // add patriarchs to disposition shit-list
       }
       
-      notification = pop.name + " celebrates their fathers by exacting " + tributeNum + " " + dataResources[tribute].plural + " as tribute from the " + targetPop.name + "s.";
+      notification = pop.name + " celebrates their fathers by exacting " + tributeNum + " " + dataResources[tribute].plural + " as tribute from the " + targetPop.name + ".";
       
     } else if (pop.demographics.gender != "Men" && superiors.length > 0) {
       var targetPop = superiors[Math.floor(Math.random()*superiors.length)];
@@ -854,7 +855,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         // add neuters to disposition shit-list
       }
       
-      notification = pop.name + " celebrates their celibates by exacting " + tributeNum + " " + dataResources[tribute].plural + " as tribute from the " + targetPop.name + "s.";
+      notification = pop.name + " celebrates their celibates by exacting " + tributeNum + " " + dataResources[tribute].plural + " as tribute from the " + targetPop.name + ".";
       
     } else if (pop.demographics.gender != "Neuter" && superiors.length > 0) {
       var targetPop = superiors[Math.floor(Math.random()*superiors.length)];
@@ -1050,9 +1051,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	// Upgrade this to take into account dispositions
   	raidTarget = weakTargets[Math.floor(Math.random()*weakTargets.length)];
   	
-  	console.log("raidDestination: ",raidDestination);
-  	
-  	if (raidDestination != undefined > 0 && raidTargets.length === 0) {
+  	if (raidDestination !== undefined && raidTargets.length === 0) {
   		notification = pop.name + " mounts a raid to ("+raidDestination.x+","+raidDestination.y+") and finds an undefended stockpile.";
   		
   		// Plunder the stockpile
@@ -1063,7 +1062,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   		
   		// Arm Up?
   		
-  	} else if (raidTarget != undefined) {
+  	} else if (raidTarget !== undefined) {
   		notification = pop.name + " mounts a raid on the " + raidTarget.name + ".  ";
   		var potentialSpoilsPop = Object.keys(raidTarget.inv);
   		var potentialSpoilsPile = Object.keys(raidDestination.stocks);
@@ -1094,57 +1093,60 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   			
   			notification = notification + "They struggle against the defenders and return at "+Math.floor(pop.health)+"% health.";
   		} else { // crit fail / routed
-  			spoilsPopNum *= 0;
-  			spoilsPileNum *= 0;
+  			spoilsPopNum = 0;
+  			spoilsPileNum = 0;
   			pop.health -= 30;
   			notification = notification + pop.name + " are routed!  They return home without any spoils and at "+Math.floor(pop.health)+"% health.";
   		}
   		
-  		spoilsPopNum = Math.floor(spoilsPopNum*100)/100;
-  		spoilsPileNum = Math.floor(spoilsPileNum*100)/100;
+  		if (spoilsPileNum !== 0 ) {
   		
-  		if (spoilsPop === undefined && spoilsPile === undefined) {
-  			spoilsText = "Their targets, however, had nothing to take as spoils.";
-  		} else if (spoilsPop === undefined) {
-  			spoilsText = "They keep " + spoilsPopNum + " of the " +raidTarget.name+ "'s " + dataResources[spoilsPop].plural + " as spoils.";
-  			if (pop.inv[spoilsPop] === undefined) {
-  				pop.inv[spoilsPop] = spoilsPopNum;
-  			} else {
-  				pop.inv[spoilsPop] += spoilsPopNum;
-  			}
-  			raidTarget.inv[spoilsPop] -= spoilsPopNum;
-  		} else if (spoilsPile === undefined) {
-  			spoilsText = "They add their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile.";
-  			pop.prestige += 10;
-  			if (worldMap.coords[pop.x][pop.y].stocks[spoilsPile] === undefined) {
-  				worldMap.coords[pop.x][pop.y].stocks[spoilsPile] = spoilsPileNum;
-  			} else {
-  				worldMap.coords[pop.x][pop.y].stocks[spoilsPile] += spoilsPileNum;
-  			}
-  			raidDestination.stocks[spoilsPile] -= spoilsPileNum;
-  		} else {
-  			spoilsText = "They add a portion of their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile and keep " + spoilsPopNum + " of the " +raidTarget.name+ "'s " + dataResources[spoilsPop].plural + " for themselves.";
-  			pop.prestige += 10;
-  			if (pop.inv[spoilsPop] === undefined) {
-  				pop.inv[spoilsPop] = spoilsPopNum;
-  			} else {
-  				pop.inv[spoilsPop] += spoilsPopNum;
-  			}
-  			if (worldMap.coords[pop.x][pop.y].stocks[spoilsPile] === undefined) {
-  				worldMap.coords[pop.x][pop.y].stocks[spoilsPile] = spoilsPileNum;
-  			} else {
-  				worldMap.coords[pop.x][pop.y].stocks[spoilsPile] += spoilsPileNum;
-  			}
-  			raidTarget.inv[spoilsPop] -= spoilsPopNum;
-  			raidDestination.stocks[spoilsPile] -= spoilsPileNum;
+			spoilsPopNum = Math.floor(spoilsPopNum*100)/100;
+			spoilsPileNum = Math.floor(spoilsPileNum*100)/100;
+		
+			if (spoilsPop === undefined && spoilsPile === undefined) {
+				spoilsText = "Their targets, however, had nothing to take as spoils.";
+			} else if (spoilsPop === undefined) {
+				spoilsText = "They keep " + spoilsPopNum + " of the " +raidTarget.name+ "'s " + dataResources[spoilsPop].plural + " as spoils.";
+				if (pop.inv[spoilsPop] === undefined) {
+					pop.inv[spoilsPop] = spoilsPopNum;
+				} else {
+					pop.inv[spoilsPop] += spoilsPopNum;
+				}
+				raidTarget.inv[spoilsPop] -= spoilsPopNum;
+			} else if (spoilsPile === undefined) {
+				spoilsText = "They add their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile.";
+				pop.prestige += 10;
+				if (worldMap.coords[pop.x][pop.y].stocks[spoilsPile] === undefined) {
+					worldMap.coords[pop.x][pop.y].stocks[spoilsPile] = spoilsPileNum;
+				} else {
+					worldMap.coords[pop.x][pop.y].stocks[spoilsPile] += spoilsPileNum;
+				}
+				raidDestination.stocks[spoilsPile] -= spoilsPileNum;
+			} else {
+				spoilsText = "They add a portion of their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile and keep " + spoilsPopNum + " of the " +raidTarget.name+ "'s " + dataResources[spoilsPop].plural + " for themselves.";
+				pop.prestige += 10;
+				if (pop.inv[spoilsPop] === undefined) {
+					pop.inv[spoilsPop] = spoilsPopNum;
+				} else {
+					pop.inv[spoilsPop] += spoilsPopNum;
+				}
+				if (worldMap.coords[pop.x][pop.y].stocks[spoilsPile] === undefined) {
+					worldMap.coords[pop.x][pop.y].stocks[spoilsPile] = spoilsPileNum;
+				} else {
+					worldMap.coords[pop.x][pop.y].stocks[spoilsPile] += spoilsPileNum;
+				}
+				raidTarget.inv[spoilsPop] -= spoilsPopNum;
+				raidDestination.stocks[spoilsPile] -= spoilsPileNum;
+			}
+		
+			raidTarget.prestige -= 5;
+			raidTarget.values.aggression += 2;
+		
+			// Add raiders to raidTarget's dispositions shit-list
+		
+			notification = notification + " " + spoilsText;
   		}
-  		
-  		raidTarget.prestige -= 5;
-  		raidTarget.values.aggression += 2;
-  		
-  		// Add raiders to raidTarget's dispositions shit-list
-  		
-  		notification = notification + " " + spoilsText;
   		
   	}
   	
