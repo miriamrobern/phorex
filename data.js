@@ -278,7 +278,7 @@ var dataResources = {
   bone: {
     key: "bone",
     name: "Bone",
-    plural: "pile of Bones",
+    plural: "piles of Bones",
     advances: [dataAdvances.kennelry],
   },
   
@@ -489,6 +489,7 @@ var dataBiomes = {
     naturalSites: [dataSites.clayDeposit,dataSites.grazingLand,dataSites.outcropping],
     fauna: ["caribou",'polar bear',"puffin","penguin",'hare','wolf','fox','yak'],
     flora: ['lichen','rock willow','pasque','saxifrage'],
+    moveCost: 30,
   },
   
   desert: {
@@ -496,6 +497,7 @@ var dataBiomes = {
     naturalSites: [dataSites.clayDeposit,dataSites.outcropping,dataSites.canyon,dataSites.oasis,dataSites.cenote],
     fauna: ['jackal','camel','vulture','snake','scorpion','goat','wolf','tortoise','lizard','owl'],
     flora: ['palm','date','mustard seed','cactus'],
+    moveCost: 50,
   },
   
   shrubland: {
@@ -503,6 +505,7 @@ var dataBiomes = {
     naturalSites: [dataSites.grazingLand,dataSites.clayDeposit,dataSites.pond,dataSites.river],
     fauna: ['antelope','sheep','cat','wolf','otter','fox','bat','wallaby','hare','zebra','rhinoceros','mouse','rat','elephant','owl'],
     flora: ["saltbrush",'needlebush','tomato','currant','cassia','bloodbush','cotton','sage'],
+    moveCost: 20,
   },
   
   rainforest: {
@@ -510,6 +513,7 @@ var dataBiomes = {
     naturalSites: [dataSites.river,dataSites.pond,dataSites.clayDeposit,dataSites.outcropping,dataSites.hardwoodGrove,dataSites.canyon],
     fauna: ['duiker','fox','cat','ocelot','ferret','bat','bonobo','chimpanzee','loris','orangutan','mouse','rat'],
     flora: ['vine','bamboo','fern','orchid','palm','water lily','rubber tree','bougainvillea','corpse flower','pitcherplant','durian'],
+    moveCost: 70,
   },
   
   savanna: {
@@ -517,6 +521,7 @@ var dataBiomes = {
     naturalSites: [dataSites.river,dataSites.pond,dataSites.clayDeposit,dataSites.grazingLand,dataSites.outcropping,dataSites.cenote,dataSites.canyon],
     fauna: ['antelope','gazelle','peccary','buffalo','giraffe','duiker','leopard','lion','tiger','fox','hyena','lynx','bat','mouse','rat','squirrel','porcupine','owl','hawk'],
     flora: ['tall grass','acacia','manketti','bushwillow','baobab','melon'],
+    moveCost: 20,
   },
   
   forest: {
@@ -524,10 +529,12 @@ var dataBiomes = {
     naturalSites: [dataSites.river,dataSites.pond,dataSites.peatBog,dataSites.clayDeposit,dataSites.outcropping,dataSites.hardwoodGrove,dataSites.fruitGrove,dataSites.canyon],
     fauna: ['ox','peccary','deer','elk','cat','wolf','fox','wolverine','bat','lemur','opposum','kangaroo','rabbit','hare','ape','tamarin','monkey','elephant','mouse','rat','squirrel','porcupine','owl','hawk','eagle'],
     flora: ['oak','pine','berry','water lily','rose','lily','dandelion'],
+    moveCost: 60,
   },
   
   ocean: {
   	name: 'Ocean',
+    moveCost: 20,
     
   },
   

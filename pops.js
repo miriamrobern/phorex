@@ -8,6 +8,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.population = population;
   this.x = x;
   this.y = y;
+  this.lastSeason = "";
   
   if (prestige === undefined) {
     this.prestige = Math.floor(Math.random()*100);
@@ -190,11 +191,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   };
   
   this.notify = function(notification) {
-    var uiNotificationsList = document.getElementById('uiNotificationsList');
-    
-    if (this.x === view.focusX && this.y === view.focusY) {
-      uiNotificationsList.innerHTML = uiNotificationsList.innerHTML + "<li>" + notification + "</li>"
-    }
+    this.lastSeason = this.lastSeason + notification + "  ";
     
   };
   
@@ -221,8 +218,56 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     return force;
   };
   
-  this.move = function() {
-    return 100;
+  this.defense = function() {
+  	return this.force();
+  };
+  
+  this.withinRange = function() {
+  
+  	var openPaths = [{x:this.x, y:this.y, movementRemaining: this.movement, path:[]}];
+  	var visited = [worldMap.coords[this.x][this.y]];
+  	var destinations = [];
+  	
+  	checkPath = function(x,y,movementRemaining,path) {
+  		if (visited.indexOf(worldMap.coords[x][y]) === -1) {
+  		
+  			if (worldMap.coords[x][y].altitude > 0) { // Overland Movement
+
+				// Reduce movement
+				movementRemaining -= worldMap.coords[x][y].biome.moveCost;
+			
+				var newPath = path.slice(0,path.length);
+				newPath.push({tile:worldMap.coords[x][y],x:x,y:y});
+				openPaths.push({x:x,y:y,movementRemaining:movementRemaining,path:newPath});
+				visited.push(worldMap.coords[x][y])
+				destinations.push({tile:worldMap.coords[x][y],x:x,y:y,path})
+  			
+  			} else {
+  				// Ocean Movement
+				visited.push(worldMap.coords[x][y])
+  			}
+  		
+  		}
+  	}
+  	
+  	while (openPaths.length > 0) {
+  		var thisPath = openPaths.shift();
+  		if (thisPath.x-1 > 0 && thisPath.movementRemaining > 0) {
+  			checkPath(thisPath.x-1,thisPath.y,thisPath.movementRemaining,thisPath.path);
+  			}
+  		if (thisPath.x+1 < worldMap.prefs.size_x && thisPath.movementRemaining > 0) {
+  			checkPath(thisPath.x+1,thisPath.y,thisPath.movementRemaining,thisPath.path);
+  			}
+  		if (thisPath.y-1 > 0 && thisPath.movementRemaining > 0) {
+  			checkPath(thisPath.x,thisPath.y-1,thisPath.movementRemaining,thisPath.path);
+  			}
+  		if (thisPath.y+1 < worldMap.prefs.size_y && thisPath.movementRemaining > 0) {
+  			checkPath(thisPath.x,thisPath.y+1,thisPath.movementRemaining,thisPath.path);
+  			}
+  	};
+  	
+  	return destinations;
+  
   };
   
   this.split = function(name) {
@@ -559,12 +604,16 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     impulse = Object.keys(impulse).reduce(function(a, b){ return impulse[a] > impulse[b] ? a : b });
     
+    notification = pop.name + "has an impulse that didn't go off: " + impulse;
+    
     if (impulse === "jobChange") {
       this.impulse.jobChange(this);
     } else if (impulse === "matriarchy") {
       this.impulse.matriarchy(this);
     } else if (impulse === "patriarchy") {
       this.impulse.patriarchy(this);
+    } else if (impulse === "neutrarchy") {
+      this.impulse.neutrarchy(this);
     } else if (impulse === "piety") {
       this.impulse.piety(this);
     } else if (impulse === "authority") {
@@ -861,7 +910,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
       notification = pop.name + " expels its less prestigious members into a new population.";
       
-    } else if (targets.length < 1) {
+    } else if (targets.length < 1 && superiors.length > 0) {
       var targetPop = superiors[Math.floor(Math.random()*superiors.length)]
       pop.values.authority -= 1;
       targetPop.prestige += 1;
@@ -875,7 +924,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
       notification = pop.name + " serves " + targetPop.name + ", spending " + tributeNum + " " + dataResources[tribute].plural + " in the process.";
       
-    } else {
+    } else if (targets.length > 0) {
       
       var targetPop = targets[Math.floor(Math.random()*targets.length)];
       targetPop.prestige -= 1;
@@ -893,6 +942,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
       notification = pop.name + " exacts "+tributeNum+" "+dataResources[tribute].plural+" as tribute from the "+targetPop.name+", as is their right.";
       
+    } else {
+      console.log(pop);
+      notification = pop.name + " finds a weird edge-case.";
     }
     
     
@@ -969,24 +1021,137 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   };
   
   this.impulse.aggression = function(pop) {
+  
+  	var tiles = pop.withinRange();
+  	var raidDestination;
+  	var raidTargets = [];
+  	var weakTargets = [];
+  	var raidForce = pop.force();
+  	var targetDefense = 0;
+  	var raidTarget;
+  	
+  	if (tiles.length > 0) {
+  		raidDestination = tiles[Math.floor(Math.random()*tiles.length)].tile
+  		raidTargets = raidDestination.units;
+  	} else if (worldMap.coords[pop.x][pop.y].units.length > 1) {
+  		raidDestination = worldMap.coords[pop.x][pop.y];
+  		raidTargets = raidDestination.units;
+  	} else {
+  		pop.impulse.authority(pop);
+  	}
+  	
+  	for (i in raidTargets) {
+  		targetDefense = raidTargets[i].defense();
+  		if (raidTargets[i] != pop && raidForce > targetDefense*0.8) {
+  			weakTargets.push(raidTargets[i]);
+  		}
+  	}
+  	
+  	// Upgrade this to take into account dispositions
+  	raidTarget = weakTargets[Math.floor(Math.random()*weakTargets.length)];
+  	
+  	console.log("raidDestination: ",raidDestination);
+  	
+  	if (raidDestination != undefined > 0 && raidTargets.length === 0) {
+  		notification = pop.name + " mounts a raid to ("+raidDestination.x+","+raidDestination.y+") and finds an undefended stockpile.";
+  		
+  		// Plunder the stockpile
+  		
+  	} else if (raidTarget === undefined && raidTargets.length > 0) {
+  		raidTarget = raidTargets[Math.floor(Math.random()*raidTargets.length)];
+  		notification = pop.name + " mounts a raid but finds the " + raidTarget.name + " far too formidable to fight.";
+  		
+  		// Arm Up?
+  		
+  	} else if (raidTarget != undefined) {
+  		notification = pop.name + " mounts a raid on the " + raidTarget.name + ".  ";
+  		var potentialSpoilsPop = Object.keys(raidTarget.inv);
+  		var potentialSpoilsPile = Object.keys(raidDestination.stocks);
+  		var spoilsPop = potentialSpoilsPop[Math.floor(Math.random()*potentialSpoilsPop.length)];
+  		var spoilsPile = potentialSpoilsPile[Math.floor(Math.random()*potentialSpoilsPile.length)];
+  		var spoilsPopNum = raidTarget.inv[spoilsPop] / 2;
+  		var spoilsPileNum = raidDestination.stocks[spoilsPile] / 2;
+  		var spoilsText;
+  		
+  		if (raidForce/targetDefense > 2) { // crit success
+  			spoilsPopNum *= 1.5;
+  			spoilsPileNum *= 1.5;
+  			raidTarget.health -= 30;
+  			
+  			notification = notification + "They trounce the defenders and return at "+Math.floor(pop.health)+"% health.";
+  		} else if (raidForce/targetDefense > 1) { // success
+  			spoilsPopNum *= 1;
+  			spoilsPileNum *= 1;
+  			pop.health -= 10;
+  			raidTarget.health -= 20;
+  			
+  			notification = notification + "They defeat the defenders and return at "+Math.floor(pop.health)+"% health.";
+  		} else if (raidForce/targetDefense > .5) { // weak hit
+  			spoilsPopNum *= 0;
+  			spoilsPileNum *= 1;
+  			pop.health -= 20;
+  			raidTarget.health -= 10;
+  			
+  			notification = notification + "They struggle against the defenders and return at "+Math.floor(pop.health)+"% health.";
+  		} else { // crit fail / routed
+  			spoilsPopNum *= 0;
+  			spoilsPileNum *= 0;
+  			pop.health -= 30;
+  			notification = notification + pop.name + " are routed!  They return home without any spoils and at "+Math.floor(pop.health)+"% health.";
+  		}
+  		
+  		spoilsPopNum = Math.floor(spoilsPopNum*100)/100;
+  		spoilsPileNum = Math.floor(spoilsPileNum*100)/100;
+  		
+  		if (spoilsPop === undefined && spoilsPile === undefined) {
+  			spoilsText = "Their targets, however, had nothing to take as spoils.";
+  		} else if (spoilsPop === undefined) {
+  			spoilsText = "They keep " + spoilsPopNum + " of the " +raidTarget.name+ "'s " + dataResources[spoilsPop].plural + " as spoils.";
+  			if (pop.inv[spoilsPop] === undefined) {
+  				pop.inv[spoilsPop] = spoilsPopNum;
+  			} else {
+  				pop.inv[spoilsPop] += spoilsPopNum;
+  			}
+  			raidTarget.inv[spoilsPop] -= spoilsPopNum;
+  		} else if (spoilsPile === undefined) {
+  			spoilsText = "They add their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile.";
+  			pop.prestige += 10;
+  			if (worldMap.coords[pop.x][pop.y].stocks[spoilsPile] === undefined) {
+  				worldMap.coords[pop.x][pop.y].stocks[spoilsPile] = spoilsPileNum;
+  			} else {
+  				worldMap.coords[pop.x][pop.y].stocks[spoilsPile] += spoilsPileNum;
+  			}
+  			raidDestination.stocks[spoilsPile] -= spoilsPileNum;
+  		} else {
+  			spoilsText = "They add a portion of their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile and keep " + spoilsPopNum + " of the " +raidTarget.name+ "'s " + dataResources[spoilsPop].plural + " for themselves.";
+  			pop.prestige += 10;
+  			if (pop.inv[spoilsPop] === undefined) {
+  				pop.inv[spoilsPop] = spoilsPopNum;
+  			} else {
+  				pop.inv[spoilsPop] += spoilsPopNum;
+  			}
+  			if (worldMap.coords[pop.x][pop.y].stocks[spoilsPile] === undefined) {
+  				worldMap.coords[pop.x][pop.y].stocks[spoilsPile] = spoilsPileNum;
+  			} else {
+  				worldMap.coords[pop.x][pop.y].stocks[spoilsPile] += spoilsPileNum;
+  			}
+  			raidTarget.inv[spoilsPop] -= spoilsPopNum;
+  			raidDestination.stocks[spoilsPile] -= spoilsPileNum;
+  		}
+  		
+  		raidTarget.prestige -= 5;
+  		raidTarget.values.aggression += 2;
+  		
+  		// Add raiders to raidTarget's dispositions shit-list
+  		
+  		notification = notification + " " + spoilsText;
+  		
+  	}
+  	
+  	// Fog
+  	
+  	// Defenders take no losses!
     
-    // Find targets within range
-    
-    // If no target of lesser or comparable Force available,
-    // - arm up
-    
-    // If vulnerable target is available, perform raid
-    // - Compare Force values
-    // - Assess casualties
-    // - add enmity to target pop disposition list
-    // - Assess spoils
-    // - Assess fog-of-war reveals
-    // - Add (half of?) spoils to stockpile, add status for victor
-    
-    // If no targets at all available
-    // - split off a less-aggressive population (ie, future target)
-    
-    notification = pop.name + " has an aggresive impulse. (Unimplemented)";
   };
   
   this.impulse.growFood = function(pop) {
@@ -1005,14 +1170,25 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   };
   
   this.impulse.migration = function(pop) {
-    
-    // Find a destination within range
-    
-    // If no destination available, what?
-    
-    // Otherwise, migrate!
-    
-    notification = pop.name + " wants to migrate away, but that isn't coded yet.";
+  
+  	var tiles = pop.withinRange();
+  	
+  	if (tiles.length > 0) {
+  		var targetTile = tiles[Math.floor(Math.random()*tiles.length)];
+  		var oldTile = worldMap.coords[pop.x][pop.y];
+  		oldTile.units.splice(oldTile.units.indexOf(pop),1);
+  		pop.name.x = targetTile.x;
+  		pop.name.y = targetTile.y;
+  		pop.prestige = Math.floor((pop.prestige + 50)/2);
+  		targetTile.tile.units.push(pop);
+  		notification = pop.name + " migrates to a new area."
+  		
+  		// Adjust fog for PC populations
+  		
+  	} else {
+  		notification = pop.name + " wants to migrate away, but there is nowhere to go.";
+  		// Reduce Loyalty
+  	}
   };
   
 };

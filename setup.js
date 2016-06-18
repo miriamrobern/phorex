@@ -674,6 +674,7 @@ var handlers = {
     
     // And then populations do things:
     for (i in popsByPrestige) {
+      popsByPrestige[i].lastSeason = "";
       popsByPrestige[i].work();
     }
     
@@ -1057,8 +1058,10 @@ var view = {
   refreshPeoplePanel: function() {
     
     var uiPeopleList = document.getElementById("uiPeopleList");
+    var uiNotificationsList = document.getElementById('uiNotificationsList');
     
     uiPeopleList.innerHTML = "";
+    uiNotificationsList.innerHTML = "";
     
     worldMap.coords[view.focusX][view.focusY].units.sort(function(a,b){return b.prestige - a.prestige});
     
@@ -1070,6 +1073,10 @@ var view = {
       var popPopUp = pop.popUp();
       popLi.innerHTML = "<strong>" + pop.name + ",</strong> " + pop.population + " " + pop.people.name + " " + pop.job.job + "s   <a class='popup'>[i]<span>" + popPopUp + "</span></a>";
       uiPeopleList.appendChild(popLi);
+      
+      var notLi = document.createElement('li');
+      notLi.innerHTML = pop.lastSeason;
+      uiNotificationsList.appendChild(notLi);
       
     }
   },
