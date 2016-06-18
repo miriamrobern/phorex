@@ -1071,7 +1071,7 @@ var view = {
       
       var popLi = document.createElement('li');
       var popPopUp = pop.popUp();
-      popLi.innerHTML = "<strong>" + pop.name + ",</strong> " + pop.population + " " + pop.people.name + " " + pop.job.job + "s   <a class='popup'>[i]<span>" + popPopUp + "</span></a>";
+      popLi.innerHTML = "<a class='popup'><strong>" + pop.name + ",</strong> " + pop.population + " " + pop.people.name + " " + pop.job.job + "s <span>" + popPopUp + "</span></a>";
       uiPeopleList.appendChild(popLi);
       
 	  var notLi = document.createElement('li');
@@ -1086,17 +1086,48 @@ var view = {
     var uiLandShort = document.getElementById('uiLandShort');
     var uiSitesList = document.getElementById("uiSitesList");
     var uiStocksList = document.getElementById("uiStocksList");
+    var sitePopUp;
     
     var here=worldMap.coords[view.focusX][view.focusY]
-    uiLandShort.innerHTML = here.biome.name + " (" + Math.floor(here.altitude*900) + "m elevation, " + here.precipitation + "cm rainfall " + here.temperature + "° celsius)";
+    uiLandShort.innerHTML = here.biome.name + " (" + Math.floor(here.altitude*900) + "m elevation, " + here.precipitation + "cm rainfall " + here.temperature + "\u00B0 celsius)";
     
     uiSitesList.innerHTML = "";
     uiStocksList.innerHTML = "";
     
+    var sitePopUp = function() {
+    	return site.name;
+    };
+    
     for (i in worldMap.coords[view.focusX][view.focusY].sites) {
       
       site = worldMap.coords[view.focusX][view.focusY].sites[i];
-      siteText = site.name ;
+      sitePopUp = "<strong>"+site.name+"</strong>";
+      if (site.tools) {
+      	sitePopUp += "<p>When equipped with "+site.tools.name+"s, the ";
+      } else {
+      	sitePopUp += "<p> The ";
+      }
+      sitePopUp += site.job+"s at this site "
+      if (site.materials.length === 0) {
+      	sitePopUp += "produce ";
+      } else {
+      	sitePopUp += "convert "+site.materials+" to ";
+      }
+      sitePopUp += site.primaryProduce.plural+". Additionally, they may also produce a small amount of "
+      for (var r in site.secondaryProduce) {
+      	sitePopUp += " "+site.secondaryProduce[r].name
+      	if (r < site.secondaryProduce.length-1 && site.secondaryProduce.length > 2) {
+      		sitePopUp += ",";
+      	}
+      	if (r == site.secondaryProduce.length-2) {
+      		sitePopUp += " or";
+      	}
+      }
+      sitePopUp += ".</p>";
+      if (site.upgradeAdvance !== undefined) {
+      	sitePopUp += "<p>Upgrades with the "+site.upgradeAdvance.name+" advance.</p>";
+      }
+      siteText = "<a class='popup'>"+site.name+"<span>"+sitePopUp+"</span></a>" ;
       
       var sitesLi = document.createElement('li');
       sitesLi.innerHTML = siteText;
@@ -1149,7 +1180,7 @@ var view = {
     
     for (i in localRites) {
       ritePopUp = localRites[i].popUp();
-      ritesList = ritesList + "<li>"+localRites[i].name+" <a class='popup'>[i]<span>" + ritePopUp + "</span></a></li>";
+      ritesList = ritesList + "<li><a class='popup'>"+localRites[i].name+"<span>" + ritePopUp + "</span></a></li>";
     }
     
     uiRitesList.innerHTML = ritesList;
