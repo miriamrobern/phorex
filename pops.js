@@ -8,7 +8,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.population = population;
   this.x = x;
   this.y = y;
-  this.lastSeason = "";
+  this.lastSeason;
   
   if (prestige === undefined) {
     this.prestige = Math.floor(Math.random()*100);

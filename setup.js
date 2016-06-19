@@ -636,6 +636,7 @@ var handlers = {
   
   selectTile: function() {
     worldMap.setupSelect(view.focusX,view.focusY);
+  	view.displayWorldMap();
     view.refreshUi();
   },
   
@@ -714,6 +715,8 @@ var view = {
     
   focusX: '',
   focusY: '',
+  mouseoverX: -1,
+  mouseoverY: -1,
   
   displaySetUpTable: function() {
     
@@ -810,6 +813,7 @@ var view = {
     mapTable.innerHTML = '';
     var cellAltitudeRelative = '';
     var cellColor = '';
+    var cellBorder = '';
       
     for (y = 0 ; y < worldMap.prefs.size_y; y++) {
       
@@ -828,44 +832,61 @@ var view = {
           //Grayscale
           cellColor = cellAltitudeRelative.toString(16) + cellAltitudeRelative.toString(16) + cellAltitudeRelative.toString(16);
           mapCell.setAttribute('bgcolor',cellColor);
+          cellBorder = "1px solid " + cellColor;
+          mapCell.style.border = cellBorder;
           
         } else if (worldMap.coords[x][y].altitude < 0) {
           // Water
-          cellColor = cellAltitudeRelative.toString(16) + cellAltitudeRelative.toString(16) + "FF";
+          cellAltitudeRelative = Math.max(cellAltitudeRelative-32,16);
+          cellColor = cellAltitudeRelative.toString(16) + cellAltitudeRelative.toString(16) + "DD";
           mapCell.setAttribute('bgcolor',cellColor);
+          cellBorder = "1px solid " + cellColor;
+          mapCell.style.border = cellBorder;
           
         } else if (worldMap.coords[x][y].temperature < 0) {
           //Tundra
           cellAltitudeRelative = Math.min(255,cellAltitudeRelative + 50 )
           cellColor = cellAltitudeRelative.toString(16) + cellAltitudeRelative.toString(16) + cellAltitudeRelative.toString(16);
           mapCell.setAttribute('bgcolor',cellColor);
+          cellBorder = "1px solid " + cellColor;
+          mapCell.style.border = cellBorder;
             
         } else if (worldMap.coords[x][y].precipitation > 200) {
           //Rainforest
           cellAltitudeRelative = Math.max(16,cellAltitudeRelative - 40 )
           cellColor = cellAltitudeRelative.toString(16) + "77" + cellAltitudeRelative.toString(16);
           mapCell.setAttribute('bgcolor',cellColor);
+          cellBorder = "1px solid " + cellColor;
+          mapCell.style.border = cellBorder;
             
         } else if (worldMap.coords[x][y].precipitation < 50) {
           //Desert
           cellColor = "dddd" + cellAltitudeRelative.toString(16);
           mapCell.setAttribute('bgcolor',cellColor);
+          cellBorder = "1px solid " + cellColor;
+          mapCell.style.border = cellBorder;
             
         } else if (worldMap.coords[x][y].temperature > 20) {
           //Savanna
           cellColor = "BBBB" + cellAltitudeRelative.toString(16);
           mapCell.setAttribute('bgcolor',cellColor);
+          cellBorder = "1px solid " + cellColor;
+          mapCell.style.border = cellBorder;
             
         } else if (worldMap.coords[x][y].precipitation > 100 ) {
           //Forest
           cellAltitudeRelative = Math.max(16,cellAltitudeRelative - 20 )
           cellColor = cellAltitudeRelative.toString(16) + "99" + cellAltitudeRelative.toString(16);
           mapCell.setAttribute('bgcolor',cellColor);
+          cellBorder = "1px solid " + cellColor;
+          mapCell.style.border = cellBorder;
             
         } else {
           //Scrubland
           cellColor = "99bb" + cellAltitudeRelative.toString(16);
           mapCell.setAttribute('bgcolor',cellColor);
+          cellBorder = "1px solid " + cellColor;
+          mapCell.style.border = cellBorder;
             
         // } else {
         //   //Alpine
@@ -892,6 +913,15 @@ var view = {
           mapCell.innerHTML = "~";
         } else if (worldMap.stage === "complete" && worldMap.coords[x][y].altitude < 0) {
           mapCell.innerHTML = "~";
+        }
+        
+        
+        // Mouseover Cursor
+        
+        if (x === view.focusX && y === view.focusY) {
+        	mapCell.className = "focusTile";
+        } else {
+        	mapCell.className = "mapTile";
         }
         
         mapRow.appendChild(mapCell);
@@ -1074,9 +1104,11 @@ var view = {
       popLi.innerHTML = "<a class='popup'><strong>" + pop.name + ",</strong> " + pop.population + " " + pop.people.name + " " + pop.job.job + "s <span>" + popPopUp + "</span></a>";
       uiPeopleList.appendChild(popLi);
       
-	  var notLi = document.createElement('li');
-	  notLi.innerHTML = pop.lastSeason;
-	  uiNotificationsList.appendChild(notLi);
+      if (pop.lastSeason !== undefined) {
+		  var notLi = document.createElement('li');
+		  notLi.innerHTML = pop.lastSeason;
+		  uiNotificationsList.appendChild(notLi);
+      }
 
     }
   },
@@ -1089,7 +1121,7 @@ var view = {
     var sitePopUp;
     
     var here=worldMap.coords[view.focusX][view.focusY]
-    uiLandShort.innerHTML = here.biome.name + " (" + Math.floor(here.altitude*900) + "m elevation, " + here.precipitation + "cm rainfall " + here.temperature + "\u00B0 celsius)";
+    uiLandShort.innerHTML = here.biome.name + " (" + Math.floor(here.altitude*900) + "m elevation, " + here.precipitation + "cm rainfall, " + here.temperature + "\u00B0 celsius)";
     
     uiSitesList.innerHTML = "";
     uiStocksList.innerHTML = "";
@@ -1146,8 +1178,6 @@ var view = {
         uiStocksList.appendChild(stocksLi);        
       }
       
-
-      
     }
     
   },
@@ -1197,6 +1227,7 @@ var view = {
   refocus: function(x,y) {
     view.focusX = x;
     view.focusY = y;
+  	view.displayWorldMap();
     view.refreshUi();
   },
   
