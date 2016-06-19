@@ -40,10 +40,10 @@ var testMap = {
     
     // pop(name,people,population,x,y,prestige,values,demographics,dispositions,equipment,health,movement,job)
     
-    southeast = new Pop("Southeasterners",south,22,2,2,100,{aggression: 50, piety: 100},{gender:"mixed",age:"mixed"});
-    northwest = new Pop("Northwesterners",north,11,1,1,1,{aggression: 50, piety: 100},{gender:"mixed",age:"mixed"});
-    northeast = new Pop("Northeasterners",north,50,1,2,50,{aggression: 50, piety: 100},{gender:"mixed",age:"mixed"});
-    southwest = new Pop("Southwesterners",south,21,2,1,21,{aggression: 50, piety: 100},{gender:"mixed",age:"mixed"});
+    southeast = new Pop("Southeasterners",south,22,2,2,100,{aggression: 100, piety: 100},{gender:"mixed",age:"mixed"});
+    northwest = new Pop("Northwesterners",north,11,1,1,1,{aggression: 100, piety: 100},{gender:"mixed",age:"mixed"});
+    northeast = new Pop("Northeasterners",north,50,1,2,50,{aggression: 100, piety: 100},{gender:"mixed",age:"mixed"});
+    southwest = new Pop("Southwesterners",south,21,2,1,21,{aggression: 100, piety: 100},{gender:"mixed",age:"mixed"});
     
     
     worldMap.coords[1][1].units = [northwest];

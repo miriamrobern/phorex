@@ -1,5 +1,7 @@
 // Code goes here
 
+var notificationLog = [];
+
 var gameClock = {
   turn: 0,
   

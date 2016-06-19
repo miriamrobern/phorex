@@ -56,7 +56,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   }
   
   if (dispositions === undefined) {
-    this.dispositions = {};
+  	this.dispositions = {};
+    this.dispositions.positive = [undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined];
+    this.dispositions.negative = [undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined];
   } else {
     this.dispositions = dispositions;
   }
@@ -192,9 +194,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     return popUpText;
   };
   
-  this.notify = function(notification) {
+  this.notify = function(notification,witnesses,locations) {
     this.lastSeason = this.lastSeason + notification + "  ";
-    console.log(this,notification);
+//     notificationLog.push([this,worldMap.coords[this.x][this.y],witnesses,locations,notification]);
+    console.log([this],notification);
     
   };
   
@@ -553,7 +556,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         var advance = advancesList[Math.floor(Math.random()*advancesList.length)]
         if (targetPop.advances[advance] === undefined) {
           targetPop.advances[advance] = 1;
-          console.log("advance: ",advance);
           notification = this.name + " shares the " + dataAdvances[advance].name + " advance with " + targetPop.name + ".";
           var shared = 1;
         } else if (targetPop.advances[advance] < this.advances[advance]) {
@@ -590,11 +592,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       impulse[i] = this.values[i] - Math.random()*100;
     }
     
-    impulse.jobChange = (this.inv.food/this.population)*100 - Math.random()*100 ;
-    
     if (this.prestige < 1) {
       // will eventually need to check for freedom of movement
       impulse.migration =  this.prestige * -1 ;
+    }
+    
+    if (this.job.primaryProduce === dataResources.food) {
+    	impulse.jobChange = (this.inv.food/this.population)*100 - Math.random()*100 ;
     }
     
     if (this.inv.food < 1 && worldMap.coords[this.x][this.y].stocks.food < 1 && this.job.primaryProduce != dataResources.food) {
@@ -605,7 +609,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     impulse = Object.keys(impulse).reduce(function(a, b){ return impulse[a] > impulse[b] ? a : b });
     
-    notification = pop.name + "has an impulse that didn't go off: " + impulse;
+    notification = this.name + "has an impulse that didn't go off: " + impulse;
     
     if (impulse === "jobChange") {
       this.impulse.jobChange(this);
@@ -697,6 +701,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
       if (Math.random()*100 > targetPop.values.matriarchy) {
         // add matriarchs to disposition shit-list
+		targetPop.dispositions.negative.shift();
+		targetPop.dispositions.negative.push(pop);
       }
       
       notification = pop.name + " celebrates their mothers by exacting " + tributeNum + " " + dataResources[tribute].plural + " as tribute from the " + targetPop.name + ".";
@@ -713,6 +719,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       } else {
       	targetPop.inv[tribute] += tributeNum;
       }
+
+      // Add inferiors to superior's disposition like list
+      targetPop.dispositions.positive.shift();
+      targetPop.dispositions.positive.push(pop);
       
       targetPop.prestige += 1;
       
@@ -780,7 +790,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       pop.prestige += 1;
       
       if (Math.random()*100 > targetPop.values.patriarchy) {
-        // add patriarchs to disposition shit-list
+			// add patriarchs to disposition shit-list
+			targetPop.dispositions.negative.shift();
+			targetPop.dispositions.negative.push(pop);
       }
       
       notification = pop.name + " celebrates their fathers by exacting " + tributeNum + " " + dataResources[tribute].plural + " as tribute from the " + targetPop.name + ".";
@@ -798,6 +810,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       	targetPop.inv[tribute] += tributeNum;
       }
       
+      // Add inferiors to superior's disposition like list
+      targetPop.dispositions.positive.shift();
+      targetPop.dispositions.positive.push(pop);
       
       targetPop.prestige += 1;
       
@@ -873,7 +888,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       pop.prestige += 1;
       
       if (Math.random()*100 > targetPop.values.neutrarchy) {
-        // add neuters to disposition shit-list
+			// add neuters to disposition shit-list
+			targetPop.dispositions.negative.shift();
+			targetPop.dispositions.negative.push(pop);
       }
       
       notification = pop.name + " celebrates their celibates by exacting " + tributeNum + " " + dataResources[tribute].plural + " as tribute from the " + targetPop.name + ".";
@@ -891,6 +908,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       	targetPop.inv[tribute] += tributeNum;
       }
       
+      // Add inferiors to superior's disposition like list
+      targetPop.dispositions.positive.shift();
+      targetPop.dispositions.positive.push(pop);
       
       targetPop.prestige += 1;
       
@@ -919,7 +939,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       }
     }
       
-    if (pop.population > 1 && targets.length < 1) {
+    if (pop.population > 1 && targets.length < 1 && superiors.length < 2) {
       var lowClassName = ["Low-caste ","Abject ","Poor ","Lesser ","Debased "][Math.floor(Math.random()*5)] ;
       var newPop = pop.split();
       newPop.name = lowClassName + pop.name;
@@ -934,6 +954,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       if (Math.random() > 1/newPop.population) {
         newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
       }
+      
+      pop.loyalty.player *= 0.8;
       
       notification = pop.name + " expels its less prestigious members into a new population.";
       
@@ -953,6 +975,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       	targetPop.inv[tribute] += tributeNum;
       }
       
+      // Add servants to superior's disposition like list
+      targetPop.dispositions.positive.shift();
+      targetPop.dispositions.positive.push(pop);
       
       notification = pop.name + " serves " + targetPop.name + ", spending " + tributeNum + " " + dataResources[tribute].plural + " in the process.";
       
@@ -973,7 +998,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       }
       
       if (Math.random()*100 > targetPop.values.authority) {
-        // add authoritarians to disposition shit-list
+      		// Add raiders to raidTarget's dispositions shit-list
+			targetPop.dispositions.negative.shift();
+			targetPop.dispositions.negative.push(pop);
       }
       
       notification = pop.name + " exacts "+tributeNum+" "+dataResources[tribute].plural+" as tribute from the "+targetPop.name+", as is their right.";
@@ -1062,6 +1089,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	var raidDestination;
   	var raidTargets = [];
   	var weakTargets = [];
+  	var hatedTargets = [];
   	var raidForce = pop.force();
   	var targetDefense = 0;
   	var raidTarget;
@@ -1083,7 +1111,12 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   		}
   	}
   	
-  	// Upgrade this to take into account dispositions
+  	// Add additional entries for weak targets already on the raiders' shit-list  	
+  	for (i in weakTargets) {
+  		hatedTargets = hatedTargets.concat(pop.dispositions.negative.filter(function(pop) {return pop === weakTargets[i]}));
+  	}
+  	weakTargets = weakTargets.concat(hatedTargets);
+
   	raidTarget = weakTargets[Math.floor(Math.random()*weakTargets.length)];
   	
   	if (raidDestination !== undefined && raidTargets.length === 0) {
@@ -1113,6 +1146,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   			raidTarget.health -= 30;
   			
   			notification = notification + "They trounce the defenders and return at "+Math.floor(pop.health)+"% health.";
+  			raidTarget.lastSeason += "The "+pop.name+" trounce them in a raid, reducing their health to "+raidTarget.health+"%.";
   		} else if (raidForce/targetDefense > 1) { // success
   			spoilsPopNum *= 1;
   			spoilsPileNum *= 1;
@@ -1120,6 +1154,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   			raidTarget.health -= 20;
   			
   			notification = notification + "They defeat the defenders and return at "+Math.floor(pop.health)+"% health.";
+  			raidTarget.lastSeason += "The "+pop.name+" defeat them in a raid, reducing their health to "+raidTarget.health+"%.";
   		} else if (raidForce/targetDefense > .5) { // weak hit
   			spoilsPopNum *= 0;
   			spoilsPileNum *= 1;
@@ -1127,11 +1162,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   			raidTarget.health -= 10;
   			
   			notification = notification + "They struggle against the defenders and return at "+Math.floor(pop.health)+"% health.";
+  			raidTarget.lastSeason += "The "+pop.name+" struggle against them in a raid, reducing their health to "+raidTarget.health+"%.";
   		} else { // crit fail / routed
   			spoilsPopNum = 0;
   			spoilsPileNum = 0;
   			pop.health -= 30;
   			notification = notification + pop.name + " are routed!  They return home without any spoils and at "+Math.floor(pop.health)+"% health.";
+  			raidTarget.lastSeason += "The "+pop.name+" attempt a raid against them, but are repulsed!";
   		}
   		
   		if (spoilsPileNum !== 0 ) {
@@ -1143,6 +1180,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 				spoilsText = "Their targets, however, had nothing to take as spoils.";
 			} else if (spoilsPop === undefined) {
 				spoilsText = "They keep " + spoilsPopNum + " of the " +raidTarget.name+ "'s " + dataResources[spoilsPop].plural + " as spoils.";
+				raidTarget.lastSeason += "The raiders carry off " + spoilsPopNum + " " + dataResources[spoilsPop].plural + " from the "+raidTarget.name+".  ";
 				if (pop.inv[spoilsPop] === undefined) {
 					pop.inv[spoilsPop] = spoilsPopNum;
 				} else {
@@ -1151,6 +1189,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 				raidTarget.inv[spoilsPop] -= spoilsPopNum;
 			} else if (spoilsPile === undefined) {
 				spoilsText = "They add their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile.";
+				raidTarget.lastSeason += "The raiders carry off " + spoilsPileNum + " " + dataResources[spoilsPile].plural + " from the stockpile.  ";
 				pop.prestige += 10;
 				if (worldMap.coords[pop.x][pop.y].stocks[spoilsPile] === undefined) {
 					worldMap.coords[pop.x][pop.y].stocks[spoilsPile] = spoilsPileNum;
@@ -1160,6 +1199,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 				raidDestination.stocks[spoilsPile] -= spoilsPileNum;
 			} else {
 				spoilsText = "They add a portion of their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile and keep " + spoilsPopNum + " of the " +raidTarget.name+ "'s " + dataResources[spoilsPop].plural + " for themselves.";
+				raidTarget.lastSeason += "The raiders carry off " + spoilsPileNum + " " + dataResources[spoilsPile].plural + " from the stockpile and " + spoilsPopNum + " " + dataResources[spoilsPop].plural + " from the "+raidTarget.name+".  ";
 				pop.prestige += 10;
 				if (pop.inv[spoilsPop] === undefined) {
 					pop.inv[spoilsPop] = spoilsPopNum;
@@ -1179,6 +1219,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 			raidTarget.values.aggression += 2;
 		
 			// Add raiders to raidTarget's dispositions shit-list
+			raidTarget.dispositions.negative.shift();
+			raidTarget.dispositions.negative.push(pop);
 		
 			notification = notification + " " + spoilsText;
   		}
@@ -1186,9 +1228,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	}
   	
   	// Fog
-  	
-  	// Defenders take no losses!
-    
+  	    
   };
   
   this.impulse.growFood = function(pop) {
