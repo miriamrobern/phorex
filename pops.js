@@ -9,6 +9,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.x = x;
   this.y = y;
   this.lastSeason;
+  this.loyalty = {player:0};
   
   if (prestige === undefined) {
     this.prestige = Math.floor(Math.random()*100);
@@ -108,7 +109,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     var force = this.force();
     force = Math.floor(force*100)/100;
-    popUpText += "<tr><td class='popupbox'><div class='bigstat'>"+Math.floor(this.prestige*10)/10+"</div> Prestige</td><td class='popupbox'><div class='bigstat'>Y</div> Loyalty</td><td class='popupbox'><div class='bigstat'>"+force+"</div> Force</td></tr>";
+    loyalty = this.loyalty.player;
+    popUpText += "<tr><td class='popupbox'><div class='bigstat'>"+Math.floor(this.prestige*10)/10+"</div> Prestige</td><td class='popupbox'><div class='bigstat'>"+loyalty+"</div> Loyalty</td><td class='popupbox'><div class='bigstat'>"+force+"</div> Force</td></tr>";
     popUpText += "<tr><td colspan='3'><hr /></td></tr>";
   
     var demographicsText = '';

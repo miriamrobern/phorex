@@ -526,6 +526,10 @@ var worldMap = {
     
     var selectPane = document.getElementById('selectPane');
     selectPane.style.display = 'none';
+    
+    for (i in worldMap.coords[x][y].units) {
+    	worldMap.coords[x][y].units[i].loyalty.player = 50;
+    }
 
   },
   
@@ -638,6 +642,13 @@ var handlers = {
     worldMap.setupSelect(view.focusX,view.focusY);
   	view.displayWorldMap();
     view.refreshUi();
+  },
+  
+  selectPop: function(i) {
+  	var pop = worldMap.coords[view.focusX][view.focusY].units[i];
+  	if (pop.loyalty.player > 0) {
+  		console.log(pop);
+  	}
   },
   
   setLegendToElevation: function() {
@@ -1101,7 +1112,7 @@ var view = {
       
       var popLi = document.createElement('li');
       var popPopUp = pop.popUp();
-      popLi.innerHTML = "<a class='popup'><strong>" + pop.name + ",</strong> " + pop.population + " " + pop.people.name + " " + pop.job.job + "s <span>" + popPopUp + "</span></a>";
+      popLi.innerHTML = "<a onclick='handlers.selectPop("+i+")' class='popup'><strong>" + pop.name + ",</strong> " + pop.population + " " + pop.people.name + " " + pop.job.job + "s <span>" + popPopUp + "</span></a>";
       uiPeopleList.appendChild(popLi);
       
       if (pop.lastSeason !== undefined) {
