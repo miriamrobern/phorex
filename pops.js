@@ -50,7 +50,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   }
   
   if (demographics === undefined) {
-    this.demographics = {gender: "mixed",age:"mixed"};
+    this.demographics = {age:"mixed",gender: "mixed"};
   } else {
     this.demographics = demographics;
   }
@@ -118,14 +118,12 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     var demographicsText = '';
     
     for (var i in this.demographics) {
-      if (this.demographics[i] === "mixed") {
-        
-      } else {
+      if (this.demographics[i] !== "mixed") {
         demographicsText += this.demographics[i] + " ";
       }
     }
     
-    popUpText += "<tr><td class='popupheader'>Members:</td><td class='popupdata' colspan='2'>" + this.population + " "+this.people.name + "</td></tr>";
+    popUpText += "<tr><td class='popupheader'>Members:</td><td class='popupdata' colspan='2'>" + this.population + " " + this.people.name + " "  + demographicsText + "</td></tr>";
 
     
     var valuesText = '';
@@ -664,7 +662,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       }
     }
     
-    if (pop.demographics.gender === "mixed" && pop.population > 1) {
+    if ((pop.demographics.gender === "mixed" || pop.demographics.gender === "Breeders") && pop.population > 1) {
       notification = pop.name + " expels their men into a seperate population.";
       var newPop = pop.split(pop.name+" Men");
       pop.demographics.gender = "Women";
@@ -679,7 +677,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         newPop.demographics.gender = "Men";
       }
       
-      if (Math.random() > 1/newPop.population) {
+      if (Math.random() < 1/newPop.population) {
         newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
       }
       
@@ -755,7 +753,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       }
     }
     
-    if (pop.demographics.gender === "mixed" && pop.population > 1) {
+    if ((pop.demographics.gender === "mixed" || pop.demographics.gender === "Breeders") && pop.population > 1) {
       notification = pop.name + " expels their women into a seperate population.";
       var newPop = pop.split(pop.name+" Women");
       pop.demographics.gender = "Men";
@@ -770,7 +768,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         newPop.demographics.gender = "Women";
       }
       
-      if (Math.random() > 1/newPop.population) {
+      if (Math.random() < 1/newPop.population) {
         newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
       }
       
@@ -844,10 +842,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       }
     }
     
-    if (pop.demographics.gender === "mixed" && pop.population > 1) {
+    if ((pop.demographics.gender === "mixed" || pop.demographics.gender === "Men" || pop.demographics.gender === "Women" || pop.demographics.gender === "Queers") && pop.population > 1) {
       notification = pop.name + " expels their breeders into a seperate population.";
       var newPop = pop.split(pop.name+" Breeders");
-      pop.demographics.gender = "Neuter";
+      pop.demographics.gender = "Neuters";
       pop.values.neutrarchy = Math.min(100,pop.values.neutrarchy+10);
       newPop.values.neutrarchy = Math.max(0,newPop.values.neutrarchy-10);
       if (newPop.population < 3 && Math.random() > 0.2) {
@@ -862,17 +860,17 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         newPop.demographics.gender = "Women";
         newPop.name = pop.name + " Women" ;
       } else {
-        newPop.demographics.gender = "mixed";
+        newPop.demographics.gender = "Breeders";
       }
       
-      if (Math.random() > 1/newPop.population) {
+      if (Math.random() < 1/newPop.population) {
         newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
       }
       
       newPop.population += Math.floor(pop.population/2);
       pop.population -= Math.floor(pop.population/2);
       
-    } else if (pop.demographics.gender === "Neuter" && targets.length > 0) {
+    } else if (pop.demographics.gender === "Neuters" && targets.length > 0) {
       var targetPop = targets[Math.floor(Math.random()*targets.length)];
       var potentialTribute = Object.keys(targetPop.inv);
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];
@@ -895,7 +893,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
       notification = pop.name + " celebrates their celibates by exacting " + tributeNum + " " + dataResources[tribute].plural + " as tribute from the " + targetPop.name + ".";
       
-    } else if (pop.demographics.gender != "Neuter" && superiors.length > 0) {
+    } else if (pop.demographics.gender != "Neuters" && superiors.length > 0) {
       var targetPop = superiors[Math.floor(Math.random()*superiors.length)];
       var potentialTribute = Object.keys(pop.inv);
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];

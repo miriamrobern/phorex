@@ -143,15 +143,24 @@
       </div>
       <div class="uiPanel" id="uiPanelMinimap">
         <h2 class="uiTitle" id="uiTitleDate">The Present</h2>
-        <table id="minimapTable"></table>
         <button id="uiNextTurn" onclick="handlers.processTurn()">Next Season</button>
+		<hr class="clear" />
+        <table id="minimapTable"></table>
       </div>
       <div class="clear"></div>
       <div class="uiPanel" id="uiPanelCivics">
         <h2 class="uiTitle" id="uiTitleCivics">Civics</h2>
+      	<p>There is no formal government here.</p>
+        <h3 class="ui">Policies</h3>
+        <ul class="uiPolicies"></ul>
+        <h3 class="ui">Defenses</h3>
+        <ul class="uiDefense"></ul>
       </div>
       <div class="uiPanel" id="uiPanelWorship">
         <h2 class="uiTitle" id="uiTitleWorship">Worship</h2>
+        <p id="uiOfficalReligion">Worship practices here are entirely disorganized.</p>
+        <h3 class="ui">Places of Worship</h3>
+        <ul id="uiShrinesList"></ul>
         <h3 class="ui">Local Rites</h3>
         <ul id="uiRitesList"></ul>
       </div>
