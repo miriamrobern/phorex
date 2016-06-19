@@ -469,7 +469,7 @@ var worldMap = {
       
       
       //Migrating Eastward
-      if (worldMap.coords[x+1][y].altitude > 0 && Math.random() < 0.7 ) {
+      if (worldMap.coords[x+1][y].altitude > 0 && Math.random() < 0.5 ) {
         
         expName = ["Wanderers","of the West","Westron","Sunsetters","Eurus","Subsolanus"][Math.floor(Math.random()*4)];
         
@@ -480,7 +480,7 @@ var worldMap = {
       }
       
       //Migrating Westward
-      if (worldMap.coords[x-1][y].altitude > 0 && Math.random() < 0.7 ) {
+      if (worldMap.coords[x-1][y].altitude > 0 && Math.random() < 0.5 ) {
         
         expName = ["Refugees","of the East","Estos","of the Rising Sun","Zephyrus","Favonius"][Math.floor(Math.random()*4)];
         
@@ -491,7 +491,7 @@ var worldMap = {
       }
       
       //Migrating Northward
-      if (worldMap.coords[x][y-1].altitude > 0 && Math.random() < 0.6 ) {
+      if (worldMap.coords[x][y-1].altitude > 0 && Math.random() < 0.3 ) {
         
         expName = ["Snowbirds","of the South","Southron","Sude","Boreas","Septentrio"][Math.floor(Math.random()*4)];
         
@@ -502,7 +502,7 @@ var worldMap = {
       }
       
       //Migrating Southward
-      if (worldMap.coords[x][y+1].altitude > 0 && Math.random() < 0.6 ) {
+      if (worldMap.coords[x][y+1].altitude > 0 && Math.random() < 0.3 ) {
         
         expName = ["Newcomers","of the North","Norse","Notos","Auster"][Math.floor(Math.random()*4)];
         
@@ -832,6 +832,18 @@ var view = {
       
       for (x = 0 ; x < worldMap.prefs.size_x;x++) {
         
+		mapCell = view.displayMapTile(x,y);
+		mapRow.appendChild(mapCell);  
+        
+      }
+      
+      mapTable.appendChild(mapRow);
+    }
+    
+  },
+  
+  displayMapTile: function(x,y) {
+  
         var mapCell = document.createElement('td');
         
         // Tile Coloring
@@ -935,12 +947,8 @@ var view = {
         	mapCell.className = "mapTile";
         }
         
-        mapRow.appendChild(mapCell);
-        
-      }
-      
-      mapTable.appendChild(mapRow);
-    }
+        return mapCell;
+  
   },
   
   populatePopulationsPane: function() {
@@ -1198,6 +1206,35 @@ var view = {
     var dateSeason = gameClock.season();
     var dateYear = gameClock.year();
     uiTitleDate.innerHTML = dateSeason + ", Year "+ dateYear + "; Turn " + gameClock.turn;
+    
+    var minimapTable = document.getElementById('minimapTable');
+    minimapTable.innerHTML = '';
+    var cellAltitudeRelative = '';
+    var cellColor = '';
+    var cellBorder = '';
+      
+    for (y = view.focusY-4 ; y < view.focusY+5; y++) {
+      
+      var mapRow = document.createElement('tr');
+      
+      for (x = view.focusX-4 ; x < view.focusX+5;x++) {
+        
+        if (x > -1 && y > -1 && x < worldMap.prefs.size_x && y< worldMap.prefs.size_y) {
+        	mapCell = view.displayMapTile(x,y);
+        	
+        } else {
+        	var mapCell = document.createElement('td');
+        	mapCell.setAttribute('bgcolor','#aaa');
+        	mapCell.innerHTML = ".";
+        }
+		
+		mapRow.appendChild(mapCell);  
+        
+      }
+      
+      minimapTable.appendChild(mapRow);
+    }
+
   },
   
   refreshCivicsPanel: function() {

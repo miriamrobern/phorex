@@ -8,7 +8,7 @@ var dataAdvances = {
   },
   
   aquatecture: {
-  	key: "aquaculture",
+  	key: "aquatecture",
     name: "Aquatecture",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: "Pier",

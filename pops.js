@@ -19,29 +19,29 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   if (values === undefined) {
     this.values = {aggression:Math.floor(Math.random()*100)};
-    if (Math.random()>0.3) {
+    if (Math.random()>0.7) {
       this.values.matriarchy = Math.floor(Math.random()*100);
       this.values.patriarchy = Math.floor(Math.random()*100);
-    } else if (Math.random()>0.3) {
+    } else if (Math.random()>0.7) {
       this.values.matriarchy = Math.floor(Math.random()*100);
       this.values.patriarchy = Math.floor(Math.random()*100);
       this.values.neutrarchy = Math.floor(Math.random()*100);
-    } else if (Math.random()>0.3) {
+    } else if (Math.random()>0.7) {
       this.values.matriarchy = Math.floor(Math.random()*100);
       this.values.patriarchy = Math.floor(Math.random()*100);
       this.values.tertiarchy = Math.floor(Math.random()*100);
       this.values.quartarchy = Math.floor(Math.random()*100);
     }
     
-    if (Math.random()>0.3) {
+    if (Math.random()>0.6) {
       this.values.piety = Math.floor(Math.random()*100);
     }
     
-    if (Math.random()>0.3) {
+    if (Math.random()>0.6) {
       this.values.inquiry = Math.floor(Math.random()*100);
     }
     
-    if (Math.random()>0.3) {
+    if (Math.random()>0.6) {
       this.values.authority = Math.floor(Math.random()*100);
       
     }
@@ -194,6 +194,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   this.notify = function(notification) {
     this.lastSeason = this.lastSeason + notification + "  ";
+    console.log(this,notification);
     
   };
   
@@ -382,7 +383,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
     }
     
-    console.log(notification);
     this.notify(notification);
     
   };
@@ -461,7 +461,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
     }
     
-    console.log(notification);
     this.notify(notification);
   };
   
@@ -496,7 +495,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 		notification = this.name + " claims " + claimNum + " " + dataResources[claim].plural + ".";
 
     }
-    console.log(notification);
+
     this.notify(notification);
   
   };
@@ -579,7 +578,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       }
     }
     
-    console.log(notification);
     this.notify(notification);
     
   };
@@ -631,7 +629,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       this.impulse.growFood(this);
     } 
     
-    console.log(notification);
     this.notify(notification);
     
   };
@@ -688,8 +685,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];
       var tributeNum = Math.ceil(targetPop.inv[tribute]/2);
       
-      pop.inv[tribute] += tributeNum;
+      
       targetPop.inv[tribute] -= tributeNum;
+      if (pop.inv[tribute] === undefined) {
+      	pop.inv[tribute] = tributeNum;
+      } else {
+      	pop.inv[tribute] += tributeNum;
+      }
       
       pop.prestige += 1;
       
@@ -705,8 +707,12 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];
       var tributeNum = Math.ceil(pop.inv[tribute]/2);
       
-      targetPop.inv[tribute] += tributeNum;
       pop.inv[tribute] -= tributeNum;
+      if (targetPop.inv[tribute] === undefined) {
+      	targetPop.inv[tribute] = tributeNum;
+      } else {
+      	targetPop.inv[tribute] += tributeNum;
+      }
       
       targetPop.prestige += 1;
       
@@ -764,8 +770,12 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];
       var tributeNum = Math.ceil(targetPop.inv[tribute]/2);
       
-      pop.inv[tribute] += tributeNum;
       targetPop.inv[tribute] -= tributeNum;
+      if (pop.inv[tribute] === undefined) {
+      	pop.inv[tribute] = tributeNum;
+      } else {
+      	pop.inv[tribute] += tributeNum;
+      }
       
       pop.prestige += 1;
       
@@ -781,8 +791,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];
       var tributeNum = Math.ceil(pop.inv[tribute]/2);
       
-      targetPop.inv[tribute] += tributeNum;
       pop.inv[tribute] -= tributeNum;
+      if (targetPop.inv[tribute] === undefined) {
+      	targetPop.inv[tribute] = tributeNum;
+      } else {
+      	targetPop.inv[tribute] += tributeNum;
+      }
+      
       
       targetPop.prestige += 1;
       
@@ -848,8 +863,12 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];
       var tributeNum = Math.ceil(targetPop.inv[tribute]/2);
       
-      pop.inv[tribute] += tributeNum;
       targetPop.inv[tribute] -= tributeNum;
+      if (pop.inv[tribute] === undefined) {
+      	pop.inv[tribute] = tributeNum;
+      } else {
+      	pop.inv[tribute] += tributeNum;
+      }
       
       pop.prestige += 1;
       
@@ -865,8 +884,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];
       var tributeNum = Math.ceil(pop.inv[tribute]/2);
       
-      targetPop.inv[tribute] += tributeNum;
       pop.inv[tribute] -= tributeNum;
+      if (targetPop.inv[tribute] === undefined) {
+      	targetPop.inv[tribute] = tributeNum;
+      } else {
+      	targetPop.inv[tribute] += tributeNum;
+      }
+      
       
       targetPop.prestige += 1;
       
@@ -922,8 +946,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];
       var tributeNum = Math.ceil(pop.inv[tribute]/2);
       
-      targetPop.inv[tribute] += tributeNum;
       pop.inv[tribute] -= tributeNum;
+      if (targetPop.inv[tribute] === undefined) {
+      	targetPop.inv[tribute] = tributeNum;
+      } else {
+      	targetPop.inv[tribute] += tributeNum;
+      }
+      
       
       notification = pop.name + " serves " + targetPop.name + ", spending " + tributeNum + " " + dataResources[tribute].plural + " in the process.";
       
@@ -937,7 +966,11 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       var tributeNum = Math.ceil(pop.inv[tribute]/2);
       
       targetPop.inv[tribute] -= tributeNum;
-      pop.inv[tribute] += tributeNum;
+      if (pop.inv[tribute] === undefined) {
+      	pop.inv[tribute] = tributeNum;
+      } else {
+      	pop.inv[tribute] += tributeNum;
+      }
       
       if (Math.random()*100 > targetPop.values.authority) {
         // add authoritarians to disposition shit-list

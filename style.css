@@ -50,6 +50,11 @@ h3.banner {
   font-size:.25em; 
 }
 
+#minimapTable {
+	font-size:.5em;
+	border: 10px solid #aaa;
+}
+
 #selectPane {
   display: none;
   width: 50%;
