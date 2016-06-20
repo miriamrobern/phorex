@@ -708,6 +708,10 @@ var handlers = {
       popsByPrestige[i].impulse();
     }
     
+    for (i in popsByPrestige) {
+      popsByPrestige[i].season(popsByPrestige[i]);
+    }
+    
     gameClock.turn++;
     
     view.refreshUi();

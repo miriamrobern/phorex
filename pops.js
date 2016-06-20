@@ -849,7 +849,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       pop.values.neutrarchy = Math.min(100,pop.values.neutrarchy+10);
       newPop.values.neutrarchy = Math.max(0,newPop.values.neutrarchy-10);
       if (newPop.population < 3 && Math.random() > 0.2) {
-        newPop.demographics.gender = "mixed";
+        newPop.demographics.gender = "Breeders";
       } else if (newPop.population < 3 && Math.random < .1) {
         newPop.demographics.gender = "Genderqueers";
         newPop.name = pop.name + " Queers" ;
@@ -1264,6 +1264,64 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   		notification = pop.name + " wants to migrate away, but there is nowhere to go.";
   		// Reduce Loyalty
   	}
+  };
+  
+  this.season = function(pop) {
+  	var season = gameClock.season();
+  	
+  	if (season === "Winter") {
+  		pop.season.winter(pop);
+  	}
+
+  };
+  
+  this.season.spring = function(pop) {
+  };
+  
+  this.season.summer = function(pop) {
+  };
+  
+  this.season.autumn = function(pop) {
+  };
+  
+  this.season.winter = function(pop) {
+  	var mates = 0;
+  	var targetGender;
+  	var popGrowth;
+  	
+  	for (i in worldMap.coords[pop.x][pop.y].units) {
+  		targetGender = worldMap.coords[pop.x][pop.y].units[i].demographics.gender;
+  		if (pop.demographics.gender === "mixed") {
+  			mates += pop.population / 2;
+  		} else if ( targetGender !== pop.demographics.gender && targetGender !== "Neuters" ) {
+  			mates += worldMap.coords[pop.x][pop.y].units[i].population;
+  		} else if (targetGender === "Genderqueers" && pop.demographics.gender === "Genderqueers") {
+  			mates += worldMap.coords[pop.x][pop.y].units[i].population;
+  		}
+  	}
+  	
+  	popGrowth = pop.population * Math.min(0.3,0.1 * mates / pop.population);
+  	
+  	if (Math.random < popGrowth-Math.floor(popGrowth)) {
+  		popGrowth = Math.ceil(popGrowth);
+  	} else {
+  		popGrowth = Math.floor(popGrowth);
+  	}
+  	
+  	pop.population += popGrowth;
+  	
+  	if (popGrowth > 0) {
+  		notification = pop.name + " sees " +popGrowth+ " young people come of age and join them in adulthood.";
+  	} else if (mates/pop.population < .2 && pop.demographics.gender !== "Neuters") {
+  		notification = "With so few mates available, " + pop.name + " sees no new members come of age this year.";
+  	} else if (pop.demographics.gender === "Neuters") {
+  		notification = pop.name + " sees no new neuters come of age this year.";
+  	} else {
+  		notification = pop.name + " sees no new members come of age this year.";
+  	}
+  	
+    pop.notify(notification);
+      	
   };
   
 };
