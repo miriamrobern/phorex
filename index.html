@@ -127,6 +127,112 @@
       <button onclick="view.populatePopulationsPane()">Show me another group.</button>
       <button disabled>Oh god let's just make a new map</button>
     </div>
+
+    <div id="uiGuidancePanel" hidden>
+    	<table id="uiGuidanceTable"">
+    		<tr>
+    			<td id="uiGuidancePopUp"></td>
+    			<td id="uiGuidanceCenter">
+    				<h2>Guidance</h3>
+    				<p>Select one of the following options:</p>
+						<h3 class="uiGuidanceOption" onclick="view.selectGuidance('uiGuidanceDevelop')">Develop this Tile</h3>
+						<h3 class="uiGuidanceOption" onclick="view.selectGuidance('uiGuidanceExperiment')">Conduct an Experiment</h3>
+						<h3 class="uiGuidanceOption" onclick="view.selectGuidance('uiGuidanceWorship')">Worship</h3>
+						<h3 class="uiGuidanceOption" onclick="view.selectGuidance('uiGuidanceExpedition')">Mount an Expedition</h3>
+						<h3 class="uiGuidanceOption" onclick="view.selectGuidance('uiGuidanceSplitMerge')">Manage this Population</h3>
+						<h3 class="uiGuidanceOption" onclick="view.selectGuidance('uiGuidanceEquip')">Population Resources</h3>
+    			</td>
+    			<td id="uiGuidanceRight">
+    				<div id="uiGuidanceDevelop" hidden>
+    					<h2>Develop the Tile</h2>
+    					<p>Any population may prospect in an attempt to discover heretofore unknown natural resources, however each successive discovery is less likely than the last.  Once a population has discovered or learned advances, they can spend resources to build new work sites, civic structures, and places of worship.</p>
+    					<button>Prospect!</button>
+    					<br />
+    					<select>
+    						<option>Building One (costs 10 Cowrie)</option>
+    						<option>Building Two (costs 10 Stone)</option>
+    						<option>Building Three (costs 10 Lumber)</option>
+    					</select>
+    					<button>Build!</button>
+    				</div>
+    				<div id="uiGuidanceExperiment" hidden>
+    					<h2>Conduct an Experiment</h2>
+    					<p>You can guide the population to experiment with some of their resources in the hopes of learning a new advance.</p>
+    					<p>This population knows the following advances already: <span id="uiGuidanceKnownAdvances"></span>.</p>
+    					<select>
+    						<option>Lumber (might learn Forestry)</option>
+    						<option>Stone (might learn Construction or Excavation)</option>
+    						<option>Cowrie (might learn Finance or Jewelry)</option>
+    					</select>
+    					<button>Experiment!</button>
+    				</div>
+    				<div id="uiGuidanceWorship" hidden>
+    					<h2>Worship</h2>
+    					<p>Populations can enact any rite they know, or you can guide them to sacrifice resources in an attempt to design a new rite.</p>
+    					<h3>Enact a Rite</h3>
+    					<select>
+    						<option>Dance of the Moth</option>
+    						<option>Parable of the Swan</option>
+    						<option>Song of the Rabbit</option>
+    					</select>
+    					<button>Enact!</button>
+    					
+    					<h3></h3>
+    					<button>Design a New Rite</button>
+    				</div>
+    				<div id="uiGuidanceExpedition" hidden>
+    					<h2>Mount an Expedition</h2>
+    					<p>You can send this population to another tile within its range.  They can go as scouts, as raiders, or as migrants.</p>
+    					<p>(Later, you'll click on this map to select a destination.  Don't do that yet.)</p>
+    					<table id="minimapTable"></table>
+    					<hr />
+    					<button>Send as Scouts</button>
+    					<button>Send as Raiding Party</button>
+    					<button>Send as Migrants</button>
+    				</div>
+    				<div id="uiGuidanceSplitMerge" hidden>
+    					<h2>Manage this Population</h2>
+    						<p>Renaming a population costs nothing.  Splitting or merging populations is restricted by the populations' values and demographics.  The less they'd like the split or merge, the more it will cost you.</p>
+							<h3>Rename this Population</h3>
+							<input type='text' /> <button>Rename</button>
+							<h3>Split the Population</h3>
+							<select>
+								<option>Expel Men</option>
+								<option>Expel Heretics</option>
+								<option>Expel Low-Status</option>
+							</select>
+							<h3>Merge this Population with Another</h3>
+							<select>
+								<option>Other Population</option>
+								<option>Other Other Population</option>
+								<option>Yet A Different Population</option>
+							</select>
+    				</div>
+    				<div id="uiGuidanceEquip" hidden>
+    					<h2>Population Resources</h2>
+    						<p>Equipping a population with a certain resource does not cost points and increases the population's loyalty.  Divesting a population of a certain resource <em>does</em> cost points and decreases the population's loyalty.  Populations which have been equipped or divested of resources will still act on their own initiative this season.</p>
+    						<h3>Equip this Population</h3>
+							<select>
+								<option>Simple Tools</option>
+								<option>Lumber</option>
+								<option>Stone Axes</option>
+							</select>
+							<button>Equip!</button>
+							<h3>Divest this Population</h3>
+							<select>
+								<option>34 sacks of Food</option>
+								<option>12 Simple Tools</option>
+								<option>5 stacks of Lumber</option>
+							</select>
+							<button>Divest!</button>
+    				</div>
+    			</td>
+    			<td id="uiGuidanceClose">
+    				<button onclick="view.closeGuidancePanel()">Dismiss</button>
+    			</td>
+    		</tr>
+    	</table>    
+    </div>
     
     <div hidden id="uiTileDiv">
       <div class="uiPanel" id="uiPanelPeople">
@@ -201,6 +307,9 @@
       </div>
       
     </div>
+    
+    <div class="clear"></div>
+    
     
   </body>
 

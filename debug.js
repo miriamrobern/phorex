@@ -45,6 +45,8 @@ var testMap = {
     northeast = new Pop("Northeasterners",north,50,1,2,50,{aggression: 100, piety: 100},{gender:"mixed",age:"mixed"});
     southwest = new Pop("Southwesterners",south,21,2,1,21,{aggression: 100, piety: 100},{gender:"mixed",age:"mixed"});
     
+    southeast.loyalty.player = 50;
+    
     
     worldMap.coords[1][1].units = [northwest];
     worldMap.coords[1][2].units = [northeast];

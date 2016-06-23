@@ -649,7 +649,7 @@ var handlers = {
   selectPop: function(i) {
   	var pop = worldMap.coords[view.focusX][view.focusY].units[i];
   	if (pop.loyalty.player > 0) {
-  		console.log(pop);
+  		view.displayGuidance(pop);
   	}
   },
   
@@ -675,6 +675,8 @@ var handlers = {
   },
   
   processTurn() {
+  
+  	document.getElementById('uiGuidancePanel').style.display = "none";
     
     var uiNotificationsList = document.getElementById('uiNotificationsList');
     uiNotificationsList.innerHTML = "";
@@ -715,13 +717,9 @@ var handlers = {
     gameClock.turn++;
     
     view.refreshUi();
-  }
+  },
   
 };
-
-
-
-
 
 
 
@@ -851,6 +849,7 @@ var view = {
   displayMapTile: function(x,y) {
   
         var mapCell = document.createElement('td');
+        mapCell.className = "mapTile";
         
         // Tile Coloring
         
@@ -1332,6 +1331,26 @@ var view = {
       uiToggleNotificationsButton.innerHTML = "Expand";
       uiToggleHelpButton.innerHTML = "Reduce";
     }
+  },
+  
+  displayGuidance: function(pop) {
+  	document.getElementById('uiGuidancePanel').style.display = "inherit";
+  	document.getElementById('uiGuidancePopUp').innerHTML = pop.popUp();
+  },
+  
+  closeGuidancePanel: function() {
+  	document.getElementById('uiGuidancePanel').style.display = "none";
+  	console.log("Ping");
+  },
+  
+  selectGuidance(panel) {
+	document.getElementById('uiGuidanceDevelop').style.display = "none";
+	document.getElementById('uiGuidanceExperiment').style.display = "none";
+	document.getElementById('uiGuidanceWorship').style.display = "none";
+	document.getElementById('uiGuidanceExpedition').style.display = "none";
+	document.getElementById('uiGuidanceSplitMerge').style.display = "none";
+	document.getElementById('uiGuidanceEquip').style.display = "none";
+  	document.getElementById(panel).style.display = "inherit";
   },
   
 };

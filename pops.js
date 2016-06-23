@@ -100,8 +100,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   }
   
   this.popUp = function() {
+  
+  	var popUpText;
     
-    var popUpText = "<strong>"+this.name+"</strong>";
+    popUpText = "<h2>"+this.name+"</h2>";
     
     if (this.health < 100) {
       popUpText += " ("+Math.floor(this.health)+"% health)";
@@ -187,6 +189,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     
     popUpText += "<tr><td class='popupheader'>Producing:</td><td class='popupdata' colspan='2'>"+Math.floor(this.job.primaryEfficiency*this.population)+" "+this.job.primaryProduce.plural+" and a chance of "+secondaryProduceText+"</td></tr>";
+    
+    
+  
+  	if (this.loyalty.player > 0) {
+  		popUpText += "<tr><td colspan='3'><hr /><br />Click to give guidance</td></tr></table>" 
+  	}
+    
     popUpText += "</table>";
     
     return popUpText;
@@ -845,10 +854,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     if ((pop.demographics.gender === "mixed" || pop.demographics.gender === "Men" || pop.demographics.gender === "Women" || pop.demographics.gender === "Queers") && pop.population > 1) {
       notification = pop.name + " expels their breeders into a seperate population.";
       var newPop = pop.split(pop.name+" Breeders");
-      pop.demographics.gender = "Neuters";
       pop.values.neutrarchy = Math.min(100,pop.values.neutrarchy+10);
       newPop.values.neutrarchy = Math.max(0,newPop.values.neutrarchy-10);
-      if (newPop.population < 3 && Math.random() > 0.2) {
+      
+      
+      if (pop.demographics.gender === "Women" || pop.demographics.gender === "Men" || pop.demographics.gender === "Genderqueers") {
+      	newPop.demographics.gender = pop.demographics.gender;
+      } else if (newPop.population < 3 && Math.random() > 0.2) {
         newPop.demographics.gender = "Breeders";
       } else if (newPop.population < 3 && Math.random < .1) {
         newPop.demographics.gender = "Genderqueers";
@@ -862,6 +874,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       } else {
         newPop.demographics.gender = "Breeders";
       }
+      pop.demographics.gender = "Neuters";
       
       if (Math.random() < 1/newPop.population) {
         newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];

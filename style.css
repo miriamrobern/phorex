@@ -1,15 +1,5 @@
 /* Styles go here */
 
-.clear {
-  clear: both;
-}
-
-#introduction {
-  width: 50%;
-  margin-left: 25%;
-  margin-top: 5%;
-}
-
 body {
   background: #eee;
   font-family: sans-serif;
@@ -17,22 +7,8 @@ body {
   cursor: default;
 }
 
-td {
-  width: 500px;
-  text-align: center;
-}
-
-td:hover.mapTile {
-	border: 1px dotted red;
-}
-
-td.focusTile {
-	border: 1px solid red;
-}
-
-table {
-  border-spacing: 0px;
-  table-layout:fixed;
+.clear {
+  clear: both;
 }
 
 #banner {
@@ -46,6 +22,35 @@ h3.banner {
   font-family: sans-serif;
 }
 
+#introduction {
+  width: 50%;
+  margin: auto;
+  text-align: center;
+  font-size: 3em;
+}
+
+
+/* Map Stuff */
+
+td.mapTile {
+  width: 500px;
+  text-align: center;
+}
+
+td:hover.mapTile {
+	border: 1px dotted red;
+}
+
+td.focusTile {
+	border: 1px solid red;
+	text-align: center;
+}
+
+table {
+  border-spacing: 0px;
+  table-layout:fixed;
+}
+
 #worldMapTable {
   font-size:.25em; 
 }
@@ -55,13 +60,24 @@ h3.banner {
 	border: 10px solid #aaa;
 }
 
-#selectPane {
-  display: none;
-  width: 50%;
-  background: #fff;
-  border: 5px solid #555;
+#worldMapDiv {
+  background-color: khaki;
   padding: 10px;
-  margin: 10px 33% 0 33%;
+  width: 80%;
+  margin: auto;
+}
+
+#uiWorldMapExpansion {
+  float:right;
+}
+
+
+
+
+/* Set Up Stuff */
+
+#setupTable {
+	margin: auto;
 }
 
 .setupCell {
@@ -78,9 +94,23 @@ h3.banner {
   width: 20px;
 }
 
+#selectPane {
+  display: none;
+  width: 50%;
+  background: #fff;
+  border: 5px solid #555;
+  padding: 10px;
+  margin: 10px 33% 0 33%;
+}
 
+
+
+
+/* Primary User Interface */
 
 #uiTileDiv {
+	width: 80%;
+	margin: auto;
 }
 
 .uiPanel {
@@ -108,15 +138,6 @@ ul {
 #uiDate {
   background-color: cyan;
   text-align: right;
-}
-
-#worldMapDiv {
-  background-color: khaki;
-  padding: 10px;
-}
-
-#uiWorldMapExpansion {
-  float:right;
 }
 
 #uiTitleMinimap {
@@ -159,6 +180,15 @@ ul {
   float: right;
 }
 
+
+
+
+
+#uiTextWall {
+	width: 80%;
+	margin: auto;
+}
+
 .uiPullPanel {
   margin: 5px;
 }
@@ -192,7 +222,74 @@ ul {
 }
 
 
-/* Pop-Up  */
+
+
+
+/* Guidance Panel */
+
+#uiGuidancePanel {
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	color: #333;
+	border: 3px solid #777;
+	background: #ddd;
+	line-height: 1.2em;
+	padding: 10px;
+}
+
+#uiGuidanceTable {
+	width: 100%;
+}
+
+#uiGuidancePopUp {
+	width: 240px;
+	padding-right: 15px;
+	vertical-align: top;
+}
+
+#uiGuidanceCenter {
+	width: 240px;
+	text-align: left;
+	border-left: 2px solid #777;
+	border-right: 2px solid #777;
+	padding-left: 15px;
+	padding-right: 15px;
+	vertical-align: top;
+}
+
+#uiGuidanceRight {
+	text-align: left;
+	padding-left: 15px;
+	padding-right: 15px;
+	vertical-align: top;
+}
+
+#uiGuidanceClose {
+	width: 100px;
+	text-align: right;
+	vertical-align: top;
+	padding-left: 15px;
+}
+
+.uiGuidanceOption {
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin: 0px;
+}
+
+.uiGuidanceOption:hover {
+	background: #aaa;
+}
+
+
+
+
+
+/* Pop-Ups  */
 
 a.popup span {
   display:none;
@@ -229,6 +326,7 @@ a.popup:hover span {
 
 .popupbox {
   color: blue;
+  text-align: center;
 }
 
 .popupdata {
