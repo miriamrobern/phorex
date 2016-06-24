@@ -687,8 +687,16 @@ var handlers = {
     
   },
   
+  revealMap: function() {
+  	for (x = 0;x < worldMap.prefs.size_x;x++) {
+  		for (y = 0;y < worldMap.prefs.size_y;y++) {
+  			worldMap.coords[x][y].fog = 1;
+  		}
+  	}
+    view.displayWorldMap();
+  },
+  
   guidanceMapSelect: function(x,y) {
-  	console.log(x,y);
   	view.guidanceMapSelect(x,y);
   },
   
@@ -1362,9 +1370,138 @@ var view = {
   },
   
   displayGuidance: function(pop) {
+  	console.log("displayGuidance");
   	document.getElementById('uiGuidancePanel').style.display = "inherit";
   	document.getElementById('uiGuidancePopUp').innerHTML = pop.popUp();
+  	
+  	// Development
+  	
+  	// Experiments
+  	var uiGuidanceExperimentSelect = document.getElementById('uiGuidanceExperimentSelect');
+  	uiGuidanceExperimentSelect.innerHTML = '';
+  	
+  	var uiGuidanceExperimentCost = document.getElementById('uiGuidanceExperimentCost');
+  	var uiGuidanceExperimentCostButton = document.getElementById('uiGuidanceExperimentCostButton');
+  	
+  	if (pop.values.inquiry === undefined) {
+  		uiGuidanceExperimentCost.innerHTML = 100;
+  		uiGuidanceExperimentCostButton.innerHTML = 100;
+  	} else {
+  		uiGuidanceExperimentCost.innerHTML = Math.max(100-pop.values.inquiry,10);
+  		uiGuidanceExperimentCostButton.innerHTML = Math.max(100-pop.values.inquiry,10);
+  	}
+  	
+  	for (i in pop.inv) {
+  		var resource = document.createElement('option');
+  		var advances = [];
+  		for (a in dataResources[i].advances) {
+  			if (pop.advances[dataResources[i].advances[a].key] === undefined ) {
+  				advances.push(dataResources[i].advances[a].name);
+  			}
+  		}
+  		if (advances.length > 0) {
+  			var advancesText = " (might learn "
+  			for (a in advances) {
+  				advancesText += advances[a];
+  				if (a < advances.length-2) {
+  					advancesText += ", ";
+  				} else if (a == advances.length-2) {
+  					advancesText += ", or ";
+  				}
+  			}
+  			advancesText += ")";
+  		}
+  		if (pop.inv[i] >= 1) {
+			resource.text = Math.ceil(pop.inv[i]/5) + " " + dataResources[i].name + advancesText;
+			resource.value = i;
+			uiGuidanceExperimentSelect.appendChild(resource);
+  		}
+
+  	}
+  	
+  	// Worship
+  	
+  	var uiGuidanceEnactButton = document.getElementById('uiGuidanceEnactButton');
+  	var uiGuidanceSynthesizeButton = document.getElementById('uiGuidanceSynthesizeButton');
+  	var uiGuidanceEnactCostButton = document.getElementById('uiGuidanceEnactCostButton');
+  	var uiGuidanceDesignCostButton = document.getElementById('uiGuidanceDesignCostButton');
+  	var uiGuidanceSynthesizeCostButton = document.getElementById('uiGuidanceSynthesizeCostButton');
+  	var numRites = Object.keys(pop.rites).length+1;
+  	
+  	uiGuidanceEnactButton.disabled = true;
+  	uiGuidanceSynthesizeButton.disabled = true;
+  	
+  	if (numRites > 2) {
+  		uiGuidanceSynthesizeButton.disabled = false;
+  	} else if (numRites > 1) {
+  		uiGuidanceEnactButton.disabled = false;
+  	}
+  	
+  	if (pop.values.piety === undefined) {
+  		uiGuidanceEnactCostButton.innerHTML = 100;
+  		uiGuidanceDesignCostButton.innerHTML = 100*numRites;
+  		uiGuidanceSynthesizeCostButton.innerHTML = 100;
+  	} else {
+  		uiGuidanceEnactCostButton.innerHTML = Math.max(100-pop.values.piety,10);
+  		uiGuidanceDesignCostButton.innerHTML = Math.max((100-pop.values.piety)*numRites,10*numRites);
+  		uiGuidanceSynthesizeCostButton.innerHTML = Math.max(100-pop.values.piety,10);
+  	}
+  	
+  	var uiGuidanceEnactSelect = document.getElementById('uiGuidanceEnactSelect');
+  	var uiGuidanceSynthesisSelectA = document.getElementById('uiGuidanceSynthesisSelectA');
+  	var uiGuidanceSynthesisSelectB = document.getElementById('uiGuidanceSynthesisSelectB');
+  	uiGuidanceEnactSelect.innerHTML = '';
+  	uiGuidanceSynthesisSelectA.innerHTML = '';
+  	uiGuidanceSynthesisSelectB.innerHTML = '';
+  	for (i in pop.rites) {
+  		var rite = document.createElement('option');
+  		rite.text = pop.rites[i].name,pop;
+  		rite.value = i;
+  		var riteA = document.createElement('option');
+  		riteA.text = pop.rites[i].name,pop;
+  		riteA.value = i;
+  		var riteB = document.createElement('option');
+  		riteB.text = pop.rites[i].name,pop;
+  		riteB.value = i;
+  		uiGuidanceEnactSelect.appendChild(rite);
+  		uiGuidanceSynthesisSelectA.appendChild(riteA);
+  		uiGuidanceSynthesisSelectB.appendChild(riteB);
+  	}
+  	
+  	// Expeditions
   	view.refreshGuidanceMap();
+  	
+  	// Manage
+  	
+  	// Resources
+  	var uiGuidanceEquipSelect = document.getElementById('uiGuidanceEquipSelect');
+  	uiGuidanceEquipSelect.innerHTML = '';
+  	for (i in worldMap.coords[view.focusX][view.focusY].stocks) {
+  		var resource = document.createElement('option');
+  		var popInv = 0;
+  		var fullyEquipped = "";
+  		if (pop.inv[i] !== undefined) {
+  			popInv = pop.inv[i];
+  		}
+  		var resourceNum = Math.floor(Math.min(worldMap.coords[view.focusX][view.focusY].stocks[i],pop.population-popInv));
+  		if (popInv + resourceNum === pop.population) {
+  			fullyEquipped = " (fully equipped!)"
+  		}
+  		if (resourceNum >= 1) {
+  			resource.text = resourceNum + " " + dataResources[i].name + fullyEquipped;
+  			resource.value = i;
+  			uiGuidanceEquipSelect.appendChild(resource);
+  		}
+  	}
+  	
+  	var uiGuidanceDivestSelect = document.getElementById('uiGuidanceDivestSelect');
+  	uiGuidanceDivestSelect.innerHTML = '';
+  	for (i in pop.inv) {
+  		var resource = document.createElement('option');
+  		resource.text = Math.floor(pop.inv[i]) + " " + dataResources[i].name;
+  		resource.value = i;
+  		uiGuidanceDivestSelect.appendChild(resource);
+  	}
   },
   
   refreshGuidanceMap: function() {

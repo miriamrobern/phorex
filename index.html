@@ -89,6 +89,7 @@
        <button onclick="handlers.setLegendToPrecipitation()">Precipitation</button>
        <button onclick="handlers.setLegendToTemperature()">Temperature</button>
        <button onclick="handlers.setLegendToPopulation()">Population</button>
+       <button onclick="handlers.revealMap()">Reveal Map (spoilers!)</button>
      </div>
     
   </div>
@@ -158,27 +159,27 @@
     				<div id="uiGuidanceExperiment" hidden>
     					<h2>Conduct an Experiment</h2>
     					<p>You can guide the population to experiment with some of their resources in the hopes of learning a new advance.</p>
-    					<p>This population knows the following advances already: <span id="uiGuidanceKnownAdvances"></span>.</p>
-    					<select>
-    						<option>Lumber (might learn Forestry)</option>
-    						<option>Stone (might learn Construction or Excavation)</option>
-    						<option>Cowrie (might learn Finance or Jewelry)</option>
+    					<p>It will cost <span id="uiGuidanceExperimentCost"></span> points to guide this population to conduct an experiment.</p>
+    					<select id="uiGuidanceExperimentSelect">
     					</select>
-    					<button>Experiment!</button>
+    					<button>Experiment! (<span id="uiGuidanceExperimentCostButton"></span>pts)</button>
     				</div>
     				<div id="uiGuidanceWorship" hidden>
     					<h2>Worship</h2>
-    					<p>Populations can enact any rite they know, or you can guide them to sacrifice resources in an attempt to design a new rite.</p>
+    					<p>Populations can enact any rite they know, or you can guide them to sacrifice resources in an attempt to design a new rite.  Existing rites can be synthesized to create more powerful rites.</p>
     					<h3>Enact a Rite</h3>
-    					<select>
-    						<option>Dance of the Moth</option>
-    						<option>Parable of the Swan</option>
-    						<option>Song of the Rabbit</option>
-    					</select>
-    					<button>Enact!</button>
+    					<select id="uiGuidanceEnactSelect"></select>
+    					<button id='uiGuidanceEnactButton'>Enact! (<span id="uiGuidanceEnactCostButton"></span>pts)</button>
     					
-    					<h3></h3>
-    					<button>Design a New Rite</button>
+    					<h3>Designing Rites</h3>
+    					<p>Designing rites will sacrifice a random resource in the population's possession in an attempt to create a meaningful rite.</p>
+    					<button>Design a New Rite (<span id="uiGuidanceDesignCostButton"></span>pts)</button>
+    					
+    					<h3>Synthesize Rites</h3>
+    					<p>You can synthesize two different rites at a cost I haven't figured out yet.</p>
+    					<select id="uiGuidanceSynthesisSelectA"></select>
+    					<select id="uiGuidanceSynthesisSelectB"></select>
+    					<button id='uiGuidanceSynthesizeButton'>Synthesize! (<span id="uiGuidanceSynthesizeCostButton"></span>pts)</button>
     				</div>
     				<div id="uiGuidanceExpedition" hidden>
     					<h2>Mount an Expedition</h2>
@@ -212,18 +213,10 @@
     					<h2>Population Resources</h2>
     						<p>Equipping a population with a certain resource does not cost points and increases the population's loyalty.  Divesting a population of a certain resource <em>does</em> cost points and decreases the population's loyalty.  Populations which have been equipped or divested of resources will still act on their own initiative this season.</p>
     						<h3>Equip this Population</h3>
-							<select>
-								<option>Simple Tools</option>
-								<option>Lumber</option>
-								<option>Stone Axes</option>
-							</select>
+							<select id="uiGuidanceEquipSelect"></select>
 							<button>Equip!</button>
 							<h3>Divest this Population</h3>
-							<select>
-								<option>34 sacks of Food</option>
-								<option>12 Simple Tools</option>
-								<option>5 stacks of Lumber</option>
-							</select>
+							<select id="uiGuidanceDivestSelect"></select>
 							<button>Divest!</button>
     				</div>
     			</td>

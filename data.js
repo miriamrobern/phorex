@@ -199,7 +199,7 @@ var dataAdvances = {
   
   pyrotechnics: {
   	key: "pyrotechnics",
-    name: "Pyrotecnics",
+    name: "Pyrotechnics",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     1: 'Charcoal Burner',
     2: 'Smoker',
