@@ -521,7 +521,7 @@ var worldMap = {
     
   },
   
-  setupSelect: function(x,y) {
+  setupSelect: function(hereX,hereY) {
     
     var uiTileDiv=document.getElementById("uiTileDiv");
     uiTileDiv.style.display = 'inherit';
@@ -529,10 +529,23 @@ var worldMap = {
     var selectPane = document.getElementById('selectPane');
     selectPane.style.display = 'none';
     
-    for (i in worldMap.coords[x][y].units) {
-    	worldMap.coords[x][y].units[i].loyalty.player = 50;
+    var withinSight = worldMap.coords[hereX][hereY].units[0].withinSight();
+    
+    for (i in worldMap.coords[hereX][hereY].units) {
+    	worldMap.coords[hereX][hereY].units[i].loyalty.player = 50;
     }
-
+    
+    for (y = 0 ; y < worldMap.prefs.size_y; y++) {
+      for (x = 0 ; x < worldMap.prefs.size_x;x++) {
+      	worldMap.coords[x][y].fog = 0;
+      }
+    }
+    
+    for (i in withinSight) {
+    	if (withinSight[i].x > 0 && withinSight[i].x < worldMap.prefs.size_x && withinSight[i].y > 0 && withinSight[i].y < worldMap.prefs.size_y) {
+    		worldMap.coords[withinSight[i].x][withinSight[i].y].fog = 1;
+    	}
+    }
   },
   
   
@@ -674,6 +687,11 @@ var handlers = {
     
   },
   
+  guidanceMapSelect: function(x,y) {
+  	console.log(x,y);
+  	view.guidanceMapSelect(x,y);
+  },
+  
   processTurn() {
   
   	document.getElementById('uiGuidancePanel').style.display = "none";
@@ -730,6 +748,8 @@ var view = {
     
   focusX: '',
   focusY: '',
+  targetX: '',
+  targetY: '',
   mouseoverX: -1,
   mouseoverY: -1,
   
@@ -950,6 +970,14 @@ var view = {
         	mapCell.className = "focusTile";
         } else {
         	mapCell.className = "mapTile";
+        }
+        
+        // Fog
+        
+        if (worldMap.coords[x][y].fog === 0) {
+        	mapCell.classname = "";
+        	mapCell.innerHTML = "?";
+        	mapCell.setAttribute('bgcolor','#AAA');
         }
         
         return mapCell;
@@ -1336,6 +1364,40 @@ var view = {
   displayGuidance: function(pop) {
   	document.getElementById('uiGuidancePanel').style.display = "inherit";
   	document.getElementById('uiGuidancePopUp').innerHTML = pop.popUp();
+  	view.refreshGuidanceMap();
+  },
+  
+  refreshGuidanceMap: function() {
+	var mapTable = document.getElementById('uiGuidanceMapTable');
+    mapTable.innerHTML = '';
+    var cellAltitudeRelative = '';
+    var cellColor = '';
+    var cellBorder = '';
+      
+    for (y = view.focusY-7 ; y < view.focusY+8; y++) {
+      var mapRow = document.createElement('tr');
+      for (x = view.focusX-7 ; x < view.focusX+8;x++) {
+        if (x > -1 && y > -1 && x < worldMap.prefs.size_x && y< worldMap.prefs.size_y && worldMap.coords[x][y].fog === 1) {
+        	mapCell = view.displayMapTile(x,y);
+        	mapCell.innerHTML = "<a onclick='handlers.guidanceMapSelect("+x+","+y+")'>x</a>";
+        	
+        } else {
+        	var mapCell = document.createElement('td');
+        	mapCell.className = "mapTile";
+        	mapCell.setAttribute('bgcolor','#aaa');
+        	mapCell.innerHTML = "?";
+        }
+        
+        if (x === view.targetX && y === view.targetY) {
+        	mapCell.className = "targetTile";
+        }
+        
+        // Need to downshade / greyscale / something out-of-range tiles.
+        
+		mapRow.appendChild(mapCell);  
+      }
+      mapTable.appendChild(mapRow);
+    }  
   },
   
   closeGuidancePanel: function() {
@@ -1350,7 +1412,27 @@ var view = {
 	document.getElementById('uiGuidanceExpedition').style.display = "none";
 	document.getElementById('uiGuidanceSplitMerge').style.display = "none";
 	document.getElementById('uiGuidanceEquip').style.display = "none";
+	
   	document.getElementById(panel).style.display = "inherit";
+  	
+  	document.getElementById('uiGuidanceScoutButton').disabled = true;
+  	document.getElementById('uiGuidanceRaidButton').disabled = true;
+  	document.getElementById('uiGuidanceMigrateButton').disabled = true;
+  	
+  	view.targetX = -1;
+  	view.targetY = -1;
+    
   },
+  
+  guidanceMapSelect(x,y) {
+  	document.getElementById('uiGuidanceScoutButton').disabled= false;
+  	document.getElementById('uiGuidanceRaidButton').disabled= false;
+  	document.getElementById('uiGuidanceMigrateButton').disabled= false;
+  	
+  	view.targetX = x;
+  	view.targetY = y;
+  	view.refreshGuidanceMap();
+  },
+  
   
 };

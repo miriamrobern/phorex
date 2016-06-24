@@ -283,6 +283,63 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   };
   
+  this.withinSight = function() {
+  	
+  	var visible = [];
+  	
+  	visible.push({x:this.x,y:this.y});
+  	
+  	// East
+  	
+  	visible.push({x:this.x+1,y:this.y});
+  	if (worldMap.coords[this.x+1][this.y].altitude < worldMap.coords[this.x][this.y].altitude) {
+  		visible.push({x:this.x+2,y:this.y});
+  		if (worldMap.coords[this.x+2][this.y].altitude < worldMap.coords[this.x-1][this.y].altitude) {
+  			visible.push({x:this.x+3,y:this.y});
+  		}
+  	}
+  	
+  	// West
+  	
+  	visible.push({x:this.x-1,y:this.y});
+  	if (worldMap.coords[this.x-1][this.y].altitude < worldMap.coords[this.x][this.y].altitude) {
+  		visible.push({x:this.x-2,y:this.y});
+  		if (worldMap.coords[this.x-2][this.y].altitude < worldMap.coords[this.x-1][this.y].altitude) {
+  			visible.push({x:this.x-3,y:this.y});
+  		}
+  	}
+  	
+  	// South
+  	
+  	visible.push({x:this.x,y:this.y+1});
+  	if (worldMap.coords[this.x][this.y+1].altitude < worldMap.coords[this.x][this.y].altitude) {
+  		visible.push({x:this.x,y:this.y+2});
+  		if (worldMap.coords[this.x][this.y+2].altitude < worldMap.coords[this.x][this.y+1].altitude) {
+  			visible.push({x:this.x,y:this.y+3});
+  		}
+  	}
+  	
+  	// North
+  	
+  	visible.push({x:this.x,y:this.y-1});
+  	if (worldMap.coords[this.x][this.y-1].altitude < worldMap.coords[this.x][this.y].altitude) {
+  		visible.push({x:this.x,y:this.y-2});
+  		if (worldMap.coords[this.x][this.y-2].altitude < worldMap.coords[this.x][this.y-1].altitude) {
+  			visible.push({x:this.x,y:this.y-3});
+  		}
+  	}
+  	
+  	// Diagonals
+  	
+  	visible.push({x:this.x+1,y:this.y+1});
+  	visible.push({x:this.x+1,y:this.y-1});
+  	visible.push({x:this.x-1,y:this.y+1});
+  	visible.push({x:this.x-1,y:this.y-1});
+  	
+  	return visible;
+  	
+  };
+  
   this.split = function(name) {
     
     var newPop = new Pop();

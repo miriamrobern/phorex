@@ -285,6 +285,16 @@ ul {
 	background: #aaa;
 }
 
+#uiGuidanceMapTable {
+	font-size:.5em;
+	border: 10px solid #aaa;
+	}
+
+td.targetTile {
+	border: 2px solid lime;
+	text-align: center;
+}
+
 
 
 
