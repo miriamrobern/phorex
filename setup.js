@@ -1316,6 +1316,7 @@ var view = {
   refocus: function(x,y) {
     view.focusX = x;
     view.focusY = y;
+  	document.getElementById('uiGuidancePanel').style.display = "none";
   	view.displayWorldMap();
     view.refreshUi();
   },
@@ -1472,6 +1473,70 @@ var view = {
   	view.refreshGuidanceMap();
   	
   	// Manage
+  	var uiGuidanceSplitSelect = document.getElementById('uiGuidanceSplitSelect');
+  	var uiGuidanceMergeSelect = document.getElementById('uiGuidanceMergeSelect');
+  	uiGuidanceSplitSelect.innerHTML = '';
+  	uiGuidanceMergeSelect.innerHTML = '';
+  	var item;
+  	
+  	if (pop.values.matriarchy !== undefined) {
+  		item = document.createElement('option');
+  		item.text = "Expel Men (" + Math.max(10,100-pop.values.matriarchy) + "pts)";
+  		item.value = "matriarchy";
+  		uiGuidanceSplitSelect.appendChild(item);
+  	}
+  	
+  	if (pop.values.patriarchy !== undefined) {
+  		item = document.createElement('option');
+  		item.text = "Expel Women (" + Math.max(10,100-pop.values.patriarchy) + "pts)";
+  		item.value = "patriarchy";
+  		uiGuidanceSplitSelect.appendChild(item);
+  	}
+  	
+  	if (pop.values.neutrarchy !== undefined) {
+  		item = document.createElement('option');
+  		item.text = "Expel Breeders (" + Math.max(10,100-pop.values.neutrarchy) + "pts)";
+  		item.value = "neutrarchy";
+  		uiGuidanceSplitSelect.appendChild(item);
+  	}
+  	
+  	if (pop.values.authority !== undefined) {
+  		item = document.createElement('option');
+  		item.text = "Expel Low Status (" + Math.max(10,100-pop.values.authority) + "pts)";
+  		item.value = "authority";
+  		uiGuidanceSplitSelect.appendChild(item);
+  	}
+  	
+  	if (pop.values.piety !== undefined) {
+  		item = document.createElement('option');
+  		item.text = "Expel Heretics (" + Math.max(10,100-pop.values.piety) + "pts)";
+  		item.value = "piety";
+  		uiGuidanceSplitSelect.appendChild(item);
+  	}
+  	
+  	if (pop.values.aggression !== undefined) {
+  		item = document.createElement('option');
+  		item.text = "Expel the Weak (" + Math.max(10,100-pop.values.aggression) + "pts)";
+  		item.value = "aggression";
+  		uiGuidanceSplitSelect.appendChild(item);
+  	}
+  	
+  	var uiGuidanceMergeSelect = document.getElementById('uiGuidanceMergeSelect');
+  	uiGuidanceMergeSelect.innerHTML = '';
+  	
+  	for (i in worldMap.coords[view.focusX][view.focusY].units) {
+  		item = document.createElement('option');
+  		item.text = worldMap.coords[view.focusX][view.focusY].units[i].name;
+  		item.value = i
+  		if (pop.people === worldMap.coords[view.focusX][view.focusY].units[i].people && pop !== worldMap.coords[view.focusX][view.focusY].units[i]) {
+  			item.text += " (unknown cost)";
+  			uiGuidanceMergeSelect.appendChild(item);
+  		} else if (pop.advances.cosmopolitain > 0) { // can merge without regard to people
+  			item.text += " (unknown cost)";
+  			uiGuidanceMergeSelect.appendChild(item);
+  		}
+  		
+  	}
   	
   	// Resources
   	var uiGuidanceEquipSelect = document.getElementById('uiGuidanceEquipSelect');

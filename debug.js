@@ -41,17 +41,20 @@ var testMap = {
     // pop(name,people,population,x,y,prestige,values,demographics,dispositions,equipment,health,movement,job)
     
     southeast = new Pop("Southeasterners",south,22,2,2,100,{aggression: 100, piety: 100},{gender:"mixed",age:"mixed"});
-    northwest = new Pop("Northwesterners",north,11,1,1,1,{aggression: 100, piety: 100},{gender:"mixed",age:"mixed"});
-    northeast = new Pop("Northeasterners",north,50,1,2,50,{aggression: 100, piety: 100},{gender:"mixed",age:"mixed"});
-    southwest = new Pop("Southwesterners",south,21,2,1,21,{aggression: 100, piety: 100},{gender:"mixed",age:"mixed"});
+    northwest = new Pop("Northwesterners",north,11,2,2,1,{aggression: 100, matriarchy: 100},{gender:"mixed",age:"mixed"});
+    northeast = new Pop("Northeasterners",north,50,2,2,50,{aggression: 100, patriarchy: 100},{gender:"mixed",age:"mixed"});
+    southwest = new Pop("Southwesterners",south,21,2,2,21,{aggression: 100, neutrarchy: 100, authority:10},{gender:"mixed",age:"mixed"});
     
     southeast.loyalty.player = 50;
+    northwest.loyalty.player = 50;
+    northeast.loyalty.player = 50;
+    southwest.loyalty.player = 50;
     
     
-    worldMap.coords[1][1].units = [northwest];
-    worldMap.coords[1][2].units = [northeast];
-    worldMap.coords[2][2].units = [southeast];
-    worldMap.coords[2][1].units = [southwest];
+    worldMap.coords[1][1].units = [];
+    worldMap.coords[1][2].units = [];
+    worldMap.coords[2][2].units = [southeast,northwest,northeast,southwest];
+    worldMap.coords[2][1].units = [];
     worldMap.coords[2][2].sites = [dataSites.theWilds,dataSites.fruitGrove,dataSites.cowrieBeach];
     worldMap.coords[1][1].sites = [dataSites.theWilds,dataSites.grazingLand,dataSites.river];
     worldMap.coords[1][2].sites = [dataSites.theWilds,dataSites.outcropping,dataSites.peatBog];
