@@ -1373,13 +1373,25 @@ var view = {
     var cellAltitudeRelative = '';
     var cellColor = '';
     var cellBorder = '';
+    
+    var withinRange = worldMap.coords[view.focusX][view.focusY].units[0].withinRange();
+    var withinRangeObjects = [];
+    
+    for (i in withinRange) {
+    	withinRangeObjects.push(worldMap.coords[withinRange[i].x][withinRange[i].y])
+    }
       
     for (y = view.focusY-7 ; y < view.focusY+8; y++) {
       var mapRow = document.createElement('tr');
       for (x = view.focusX-7 ; x < view.focusX+8;x++) {
-        if (x > -1 && y > -1 && x < worldMap.prefs.size_x && y< worldMap.prefs.size_y && worldMap.coords[x][y].fog === 1) {
+        if (x > -1 && y > -1 && x < worldMap.prefs.size_x && y< worldMap.prefs.size_y && worldMap.coords[x][y].fog === 1 && withinRangeObjects.indexOf(worldMap.coords[x][y]) != -1) {
         	mapCell = view.displayMapTile(x,y);
         	mapCell.innerHTML = "<a onclick='handlers.guidanceMapSelect("+x+","+y+")'>x</a>";
+        	
+        } else if (x > -1 && y > -1 && x < worldMap.prefs.size_x && y< worldMap.prefs.size_y && worldMap.coords[x][y].fog === 1) {
+        	mapCell = view.displayMapTile(x,y);
+        	mapCell.innerHTML = "o";
+        	// color shift code here
         	
         } else {
         	var mapCell = document.createElement('td');
@@ -1392,8 +1404,6 @@ var view = {
         	mapCell.className = "targetTile";
         }
         
-        // Need to downshade / greyscale / something out-of-range tiles.
-        
 		mapRow.appendChild(mapCell);  
       }
       mapTable.appendChild(mapRow);
@@ -1402,7 +1412,6 @@ var view = {
   
   closeGuidancePanel: function() {
   	document.getElementById('uiGuidancePanel').style.display = "none";
-  	console.log("Ping");
   },
   
   selectGuidance(panel) {
