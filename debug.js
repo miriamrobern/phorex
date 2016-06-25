@@ -55,7 +55,7 @@ var testMap = {
     worldMap.coords[1][2].units = [];
     worldMap.coords[2][2].units = [southeast,northwest,northeast,southwest];
     worldMap.coords[2][1].units = [];
-    worldMap.coords[2][2].sites = [dataSites.theWilds,dataSites.fruitGrove,dataSites.cowrieBeach];
+    worldMap.coords[2][2].sites = [dataSites.theWilds,dataSites.fruitGrove,dataSites.cowrieBeach,dataSites.knappery];
     worldMap.coords[1][1].sites = [dataSites.theWilds,dataSites.grazingLand,dataSites.river];
     worldMap.coords[1][2].sites = [dataSites.theWilds,dataSites.outcropping,dataSites.peatBog];
     worldMap.coords[2][1].sites = [dataSites.theWilds,dataSites.clayDeposit,dataSites.pond];
@@ -68,7 +68,7 @@ var testMap = {
     pops.push(northeast);
     pops.push(northwest);
     
-    southeast.advances = {failures:80, butchery:1, carpentry:2, };
+    southeast.advances = {failures:80, manufacture:3, caribouHerding:1, };
 
     
     view.focusX = 2;

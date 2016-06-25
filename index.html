@@ -5,8 +5,11 @@
     <title>Phorex</title>
     <link rel="stylesheet" href="style.css">
     <script src="data.js"></script>
-    <script src="setup.js"></script>
+    <script src="handlers.js"></script>
+    <script src="view.js"></script>
+    <script src="worldMap.js"></script>
     <script src="pops.js"></script>
+    <script src="smallStuff.js"></script>
     <script src="debug.js"></script>
   </head>
 
@@ -146,14 +149,14 @@
     			<td id="uiGuidanceRight">
     				<div id="uiGuidanceDevelop" hidden>
     					<h2>Develop the Tile</h2>
-    					<p>Any population may prospect in an attempt to discover heretofore unknown natural resources, however each successive discovery is less likely than the last.  Once a population has discovered or learned advances, they can spend resources to build new work sites, civic structures, and places of worship.</p>
-    					<button>Prospect!</button>
+    					<p>Any population may prospect in an attempt to discover heretofore unknown natural resources, however each successive discovery is less likely than the last.  Once a population has discovered or learned advances, they can spend resources to build new work sites, civic structures, and places of worship.  Prospecting costs guidance points, but Building does not.  Building earns the population Prestige.</p>
+    					<h3>Prospecting</h3>
+    					<p>The next prospecting attempt on this tile has a <span id="uiGuidanceProspectChance"></span>% chance of success.  The search will consume <span id="uiGuidanceProspectConsumes"></span> resources, successful or not.</p>
+    					<button id = 'uiGuidanceProspectButton'>Prospect! (<span id="uiGuidanceProspectCostButton"></span>pts)</button>
     					<br />
-    					<select>
-    						<option>Building One (costs 10 Cowrie)</option>
-    						<option>Building Two (costs 10 Stone)</option>
-    						<option>Building Three (costs 10 Lumber)</option>
-    					</select>
+    					<h3>Building</h3>
+    					<p></p>
+    					<select id='uiGuidanceBuildSelect'></select>
     					<button>Build!</button>
     				</div>
     				<div id="uiGuidanceExperiment" hidden>
