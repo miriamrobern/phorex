@@ -340,6 +340,7 @@ var dataSites = {
     primaryEfficiency: 1.1,
     secondaryProduce: [dataResources.simpleTool,dataResources.fur,dataResources.lumber,dataResources.bone,dataResources.stone],
     secondaryEfficiency: 0.1,
+    baseCapacity: 200,
   },
     
   shallows: {
@@ -351,6 +352,7 @@ var dataSites = {
     primaryEfficiency: 1.3,
     secondaryProduce: [dataResources.simpleTool,dataResources.lumber,dataResources.bone],
     secondaryEfficiency: 0.2,
+    baseCapacity: 100,
   },
     
   river: {
@@ -362,6 +364,7 @@ var dataSites = {
     primaryEfficiency: 1.3,
     secondaryProduce: [dataResources.simpleTool,dataResources.lumber,dataResources.cowrie],
     secondaryEfficiency: 0.2,
+    baseCapacity: 100,
   },
     
   pond: {
@@ -373,6 +376,7 @@ var dataSites = {
     primaryEfficiency: 2,
     secondaryProduce: [dataResources.food,dataResources.simpleTool],
     secondaryEfficiency: 0.2,
+    baseCapacity: 100,
   },
     
   clayDeposit: {
@@ -384,6 +388,7 @@ var dataSites = {
     primaryEfficiency: 0.5,
     secondaryProduce: [dataResources.stone,dataResources.simpleTool],
     secondaryEfficiency: 0.2,
+    baseCapacity: 100,
   },
     
   grazingLand: {
@@ -395,6 +400,7 @@ var dataSites = {
     primaryEfficiency: 1.3,
     secondaryProduce: [dataResources.simpleTool,dataResources.bone,dataResources.fur],
     secondaryEfficiency: 0.2,
+    baseCapacity: 100,
   },
     
   outcropping: {
@@ -406,6 +412,7 @@ var dataSites = {
     primaryEfficiency: .5,
     secondaryProduce: [dataResources.simpleTool],
     secondaryEfficiency: .2,
+    baseCapacity: 100,
   },
     
   hardwoodGrove: {
@@ -417,6 +424,7 @@ var dataSites = {
     primaryEfficiency: .5,
     secondaryProduce: [dataResources.simpleTool,dataResources.food,dataResources.bone,dataResources.fur],
     secondaryEfficiency: 0.2,
+    baseCapacity: 100,
   },
     
   fruitGrove: {
@@ -428,6 +436,7 @@ var dataSites = {
     primaryEfficiency: 1.3,
     secondaryProduce: [dataResources.water,dataResources.simpleTool,dataResources.lumber],
     secondaryEfficiency: 0.2,
+    baseCapacity: 100,
   },
     
   oasis: {
@@ -439,6 +448,7 @@ var dataSites = {
     primaryEfficiency: 1,
     secondaryProduce: [dataResources.food,dataResources.bone,dataResources.lumber],
     secondaryEfficiency: 0.5,
+    baseCapacity: 100,
   },
     
   cenote: {
@@ -450,6 +460,7 @@ var dataSites = {
     primaryEfficiency: 1,
     secondaryProduce: [dataResources.food,dataResources.bone,dataResources.clay,dataResources.stone],
     secondaryEfficiency: 0.5,
+    baseCapacity: 100,
   },
     
   canyon: {
@@ -461,6 +472,7 @@ var dataSites = {
     primaryEfficiency: 0.5,
     secondaryProduce: [dataResources.food,dataResources.water,dataResources.lumber,dataResources.bone],
     secondaryEfficiency: 0.5,
+    baseCapacity: 100,
   },
     
   peatBog: {
@@ -472,6 +484,7 @@ var dataSites = {
     primaryEfficiency: .3,
     secondaryProduce: [dataResources.bone,dataResources.stone,dataResources.food,dataResources.simpleTool],
     secondaryEfficiency: 1,
+    baseCapacity: 100,
   },
     
   cowrieBeach: {
@@ -484,6 +497,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.simpleTool,dataResources.lumber,dataResources.bone],
     secondaryEfficiency: .5,
     upgradeAdvance: dataAdvances.butchery,
+    baseCapacity: 100,
   },
     
   knappery: {

@@ -382,7 +382,7 @@ var worldMap = {
         if (x > 1 && y > 1 && x < worldMap.prefs.size_x-1 && y < worldMap.prefs.size_y-1) {
           if (worldMap.coords[x+1][y].altitude < 0 || worldMap.coords[x][y+1].altitude < 0 || worldMap.coords[x-1][y].altitude < 0 || worldMap.coords[x][y-1].altitude < 0 ) {
             if (Math.random() < 0.3 ) {
-              worldMap.coords[x][y].sites.splice(1,1,[dataSites.cowrieBeach,dataSites.shallows][Math.floor(Math.random()*2)]);
+              worldMap.coords[x][y].sites.splice(1,1,{site:[dataSites.cowrieBeach,dataSites.shallows][Math.floor(Math.random()*2)],capacity:100});
             }          
         }
         

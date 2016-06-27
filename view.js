@@ -633,10 +633,20 @@ var view = {
   	uiGuidanceProspectChance.innerHTML = Math.floor(100 / ( currentSites + 4 ) );
   	uiGuidanceProspectConsumes.innerHTML = currentSites*10 + " Food and " + currentSites*5 + " Simple Tools";
   	
+  	if (pop.inv.food > currentSites*10 && pop.inv.simpleTool > currentSites*5) {
+  		uiGuidanceProspectButton.disabled = false;
+  	}
+  	
   	if (pop.values.inquiry === undefined) {
   		uiGuidanceProspectCostButton.innerHTML = 100;
+  		if (gameClock.guidancePoints < 100) {
+  			uiGuidanceProspectButton.disabled = true;
+  		}
   	} else {
   		uiGuidanceProspectCostButton.innerHTML = Math.max(100-pop.values.inquiry,10);
+  		if (gameClock.guidancePoints < Math.max(100-pop.values.inquiry,10)) {
+  			uiGuidanceProspectButton.disabled = true;  			
+  		}
   	}
   	
   	var uiGuidanceBuildSelect = document.getElementById('uiGuidanceBuildSelect');
@@ -649,8 +659,6 @@ var view = {
   		existingSites.push(worldMap.coords[pop.x][pop.y].sites[i].site);
   	}
   	
-  	console.log(existingSites);
-  	
   	for (i in pop.advances) {
   		if (i !== "failures") {
 	  		for (l = 1;l < pop.advances[i]+1;l++) {
@@ -660,8 +668,6 @@ var view = {
   			}
   		}
   	}
-  	
-  	// This needs to disable options which the population cannot afford
   	
   	for (i in canBuild) {
   		var item = document.createElement('option');

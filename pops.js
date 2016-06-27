@@ -400,12 +400,46 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   };
   
   this.prospect = function() {
-  	console.log("Prospect!");
+ 	var site;
+  	var naturalSites = worldMap.coords[this.x][this.y].biome.naturalSites;
+  	var currentSites = [];
+  	var potentialSites = [];
+  	for (i in worldMap.coords[this.x][this.y].sites) {
+  		currentSites.push(worldMap.coords[this.x][this.y].sites[i].site);
+  	}
+  	if (Math.random() < 1 / ( currentSites.length + 4 ) ) {
+  		for (i in naturalSites) {
+  			if (currentSites.indexOf(naturalSites[i]) === -1) {
+  				potentialSites.push(naturalSites[i]);
+  			}
+  		}
+  		site = potentialSites[Math.floor(Math.random()*potentialSites.length)];
+  	}
+  	
+  	if (site === undefined)  {
+  		notification = this.name + " prospects for another work site but finds nothing, wasting " + currentSites.length*10 + " Food and " + currentSites.length*5 + " Simple Tools in the process.";
+  	} else {
+  		notification = this.name + " prospects for a new work site and discovers a " + site.name + ".  " + currentSites.length*10 + " Food and " + currentSites.length*5 + " Simple Tools are consumed in the process.";
+  		worldMap.coords[this.x][this.y].sites.push({site:site,capacity:site.baseCapacity});
+  	}
+  	this.inv.food -= currentSites.length*10;
+  	this.inv.simpleTool -= currentSites.length*5;
+  	if (this.values.inquiry == undefined) {
+  		gameClock.guidancePoints -= 100;
+  	} else {
+	  	gameClock.guidancePoints -= 100 - this.values.inquiry;
+	}
+	
+	this.notify(notification);
+  	
+  	view.refreshPeoplePanel();
+  	view.refreshLandPanel();
+  	view.refreshMinimapPanel();
+  	view.displayGuidance(this);
   };
   
   this.build = function(site) {
   	site = dataSites[site];
-  	
   	for (i in site.buildCost) {
   		if (this.inv[i] > site.buildCost[i]) {
   			this.inv[i] -= site.buildCost[i];
