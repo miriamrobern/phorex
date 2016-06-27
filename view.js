@@ -494,6 +494,9 @@ var view = {
     var dateYear = gameClock.year();
     uiTitleDate.innerHTML = dateSeason + ", Year "+ dateYear + "; Turn " + gameClock.turn;
     
+    var uiGuidancePoints = document.getElementById('uiGuidancePoints');
+    uiGuidancePoints.innerHTML = gameClock.guidancePoints;
+    
     var minimapTable = document.getElementById('minimapTable');
     minimapTable.innerHTML = '';
     var cellAltitudeRelative = '';
@@ -617,11 +620,18 @@ var view = {
   },
   
   displayGuidance: function(pop) {
+  	view.focusPop = pop;
   	document.getElementById('uiGuidancePanel').style.display = "inherit";
   	document.getElementById('uiGuidancePopUp').innerHTML = pop.popUp();
   	
   	// Development
   	var uiGuidanceProspectCostButton = document.getElementById('uiGuidanceProspectCostButton');
+  	var uiGuidanceProspectChance = document.getElementById('uiGuidanceProspectChance');
+  	var uiGuidanceProspectConsumes = document.getElementById('uiGuidanceProspectConsumes');
+  	var currentSites = worldMap.coords[view.focusX][view.focusY].sites.length;
+  	
+  	uiGuidanceProspectChance.innerHTML = Math.floor(100 / ( currentSites + 4 ) );
+  	uiGuidanceProspectConsumes.innerHTML = currentSites*10 + " Food and " + currentSites*5 + " Simple Tools";
   	
   	if (pop.values.inquiry === undefined) {
   		uiGuidanceProspectCostButton.innerHTML = 100;
@@ -724,9 +734,9 @@ var view = {
   		uiGuidanceDesignCostButton.innerHTML = 100*numRites;
   		uiGuidanceSynthesizeCostButton.innerHTML = 100;
   	} else {
-  		uiGuidanceEnactCostButton.innerHTML = Math.max(100-pop.values.piety,10);
-  		uiGuidanceDesignCostButton.innerHTML = Math.max((100-pop.values.piety)*numRites,10*numRites);
-  		uiGuidanceSynthesizeCostButton.innerHTML = Math.max(100-pop.values.piety,10);
+  		uiGuidanceEnactCostButton.innerHTML = Math.ceil(Math.max(100-pop.values.piety,10));
+  		uiGuidanceDesignCostButton.innerHTML = Math.ceil(Math.max((100-pop.values.piety)*numRites,10*numRites));
+  		uiGuidanceSynthesizeCostButton.innerHTML = Math.ceil(Math.max(100-pop.values.piety,10));
   	}
   	
   	var uiGuidanceEnactSelect = document.getElementById('uiGuidanceEnactSelect');
@@ -762,42 +772,42 @@ var view = {
   	
   	if (pop.values.matriarchy !== undefined) {
   		item = document.createElement('option');
-  		item.text = "Expel Men (" + Math.max(10,100-pop.values.matriarchy) + "pts)";
+  		item.text = "Expel Men (" + Math.max(10,100-pop.values.matriarchy) + "G)";
   		item.value = "matriarchy";
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
   	if (pop.values.patriarchy !== undefined) {
   		item = document.createElement('option');
-  		item.text = "Expel Women (" + Math.max(10,100-pop.values.patriarchy) + "pts)";
+  		item.text = "Expel Women (" + Math.max(10,100-pop.values.patriarchy) + "G)";
   		item.value = "patriarchy";
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
   	if (pop.values.neutrarchy !== undefined) {
   		item = document.createElement('option');
-  		item.text = "Expel Breeders (" + Math.max(10,100-pop.values.neutrarchy) + "pts)";
+  		item.text = "Expel Breeders (" + Math.max(10,100-pop.values.neutrarchy) + "G)";
   		item.value = "neutrarchy";
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
   	if (pop.values.authority !== undefined) {
   		item = document.createElement('option');
-  		item.text = "Expel Low Status (" + Math.max(10,100-pop.values.authority) + "pts)";
+  		item.text = "Expel Low Status (" + Math.max(10,100-pop.values.authority) + "G)";
   		item.value = "authority";
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
   	if (pop.values.piety !== undefined) {
   		item = document.createElement('option');
-  		item.text = "Expel Heretics (" + Math.max(10,100-pop.values.piety) + "pts)";
+  		item.text = "Expel Heretics (" + Math.max(10,100-pop.values.piety) + "G)";
   		item.value = "piety";
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
   	if (pop.values.aggression !== undefined) {
   		item = document.createElement('option');
-  		item.text = "Expel the Weak (" + Math.max(10,100-pop.values.aggression) + "pts)";
+  		item.text = "Expel the Weak (" + Math.max(10,100-pop.values.aggression) + "G)";
   		item.value = "aggression";
   		uiGuidanceSplitSelect.appendChild(item);
   	}

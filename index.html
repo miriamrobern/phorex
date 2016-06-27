@@ -149,72 +149,75 @@
     			<td id="uiGuidanceRight">
     				<div id="uiGuidanceDevelop" hidden>
     					<h2>Develop the Tile</h2>
-    					<p>Any population may prospect in an attempt to discover heretofore unknown natural resources, however each successive discovery is less likely than the last.  Once a population has discovered or learned advances, they can spend resources to build new work sites, civic structures, and places of worship.  Prospecting costs guidance points, but Building does not.  Building earns the population Prestige.</p>
-    					<h3>Prospecting</h3>
-    					<p>The next prospecting attempt on this tile has a <span id="uiGuidanceProspectChance"></span>% chance of success.  The search will consume <span id="uiGuidanceProspectConsumes"></span> resources, successful or not.</p>
-    					<button id = 'uiGuidanceProspectButton'>Prospect! (<span id="uiGuidanceProspectCostButton"></span>pts)</button>
+    					<p class="guidance">Any population may prospect in an attempt to discover heretofore unknown natural resources, however each successive discovery is less likely than the last.  Once a population has discovered or learned advances, they can spend resources to build new work sites, civic structures, and places of worship.</p>
+    					<h3 class="guidance">Prospecting</h3>
+    					<p class="guidance">A successful prospecting attempt will discover a random natural work site on this tile.  Prospecting on this tile has a <span id="uiGuidanceProspectChance"></span>% chance of success.  The search will consume <span id="uiGuidanceProspectConsumes"></span>, successful or not.</p>
+    					<button id = 'uiGuidanceProspectButton' onclick='handlers.uiGuidanceProspectButton()'>Prospect! (<span id="uiGuidanceProspectCostButton"></span>G)</button>
     					<br />
-    					<h3>Building</h3>
-    					<p></p>
+    					<h3 class="guidance">Building</h3>
+    					<p class="guidance">Directing a population to build something does not cost Guidance points.  Constructing any building earns the population 20 Prestige.</p>
     					<select id='uiGuidanceBuildSelect'></select>
-    					<button>Build!</button>
+    					<button onclick='handlers.uiGuidanceBuildButton()'>Build!</button>
     				</div>
     				<div id="uiGuidanceExperiment" hidden>
     					<h2>Conduct an Experiment</h2>
-    					<p>You can guide the population to experiment with some of their resources in the hopes of learning a new advance.</p>
-    					<p>It will cost <span id="uiGuidanceExperimentCost"></span> points to guide this population to conduct an experiment.</p>
-    					<select id="uiGuidanceExperimentSelect">
-    					</select>
-    					<button>Experiment! (<span id="uiGuidanceExperimentCostButton"></span>pts)</button>
+    					<p class="guidance">You can guide the population to experiment with some of their resources in the hopes of learning a new advance.</p>
+    					<p class="guidance">It will cost <span id="uiGuidanceExperimentCost"></span> points to guide this population to conduct an experiment.</p>
+    					<select id="uiGuidanceExperimentSelect"></select>
+    					<button onclick='handlers.uiGuidanceExperimentButton()'>Experiment! (<span id="uiGuidanceExperimentCostButton"></span>G)</button>
     				</div>
     				<div id="uiGuidanceWorship" hidden>
     					<h2>Worship</h2>
-    					<p>Populations can enact any rite they know, or you can guide them to sacrifice resources in an attempt to design a new rite.  Existing rites can be synthesized to create more powerful rites.</p>
-    					<h3>Enact a Rite</h3>
+    					<p class="guidance">Populations can enact any rite they know, or you can guide them to sacrifice resources in an attempt to design a new rite.  Existing rites can be synthesized to create more powerful rites.</p>
+    					<h3 class="guidance">Enact a Rite</h3>
+    					<p class="guidance">The population may enact any rite that it knows, influencing other populations on the tile.  There is a chance that one of these populations will learn the rite themselves.</p>
     					<select id="uiGuidanceEnactSelect"></select>
-    					<button id='uiGuidanceEnactButton'>Enact! (<span id="uiGuidanceEnactCostButton"></span>pts)</button>
+    					<button id='uiGuidanceEnactButton' onclick='handlers.uiGuidanceEnactButton()'>Enact! (<span id="uiGuidanceEnactCostButton"></span>G)</button>
     					
-    					<h3>Designing Rites</h3>
-    					<p>Designing rites will sacrifice a random resource in the population's possession in an attempt to create a meaningful rite.</p>
-    					<button>Design a New Rite (<span id="uiGuidanceDesignCostButton"></span>pts)</button>
+    					<h3 class="guidance">Designing Rites</h3>
+    					<p class="guidance">Designing rites will sacrifice a random resource in the population's possession in an attempt to create a meaningful rite.</p>
+    					<button onclick='handlers.uiGuidanceDesignButton()'>Design a New Rite (<span id="uiGuidanceDesignCostButton"></span>G)</button>
     					
-    					<h3>Synthesize Rites</h3>
-    					<p>You can synthesize two different rites at a cost I haven't figured out yet.</p>
+    					<h3 class="guidance">Synthesize Rites</h3>
+    					<p class="guidance">You can synthesize two different rites at a cost I haven't figured out yet.</p>
     					<select id="uiGuidanceSynthesisSelectA"></select>
     					<select id="uiGuidanceSynthesisSelectB"></select>
-    					<button id='uiGuidanceSynthesizeButton'>Synthesize! (<span id="uiGuidanceSynthesizeCostButton"></span>pts)</button>
+    					<button id='uiGuidanceSynthesizeButton' onclick='handlers.uiGuidanceSynthesizeButton()'>Synthesize! (<span id="uiGuidanceSynthesizeCostButton"></span>G)</button>
     				</div>
     				<div id="uiGuidanceExpedition" hidden>
     					<h2>Mount an Expedition</h2>
-    					<p>You can send this population to another tile within its range.  They can go as scouts, as raiders, or as migrants.</p>
-    					<p>Tiles within range are marked with an 'x' while those beyond your population's range are marked with an 'o'.</p>
+    					<p class="guidance">You can send this population to another tile within its range.  They can go as scouts, as raiders, or as migrants.</p>
+    					<p class="guidance">Tiles within range are marked with an 'x' while those beyond your population's range are marked with an 'o'.</p>
     					<table id="uiGuidanceMapTable"></table>
     					<hr />
-    					<button id="uiGuidanceScoutButton">Send as Scouts</button>
-    					<button id="uiGuidanceRaidButton">Send as Raiding Party</button>
-    					<button id="uiGuidanceMigrateButton">Send as Migrants</button>
+    					<button id="uiGuidanceScoutButton" onclick='handlers.uiGuidanceScoutButton()'>Send as Scouts</button>
+    					<button id="uiGuidanceRaidButton" onclick='handlers.uiGuidanceRaidButton()'>Send as Raiding Party</button>
+    					<button id="uiGuidanceMigrateButton" onclick='handlers.uiGuidanceMigrateButton()'>Send as Migrants</button>
     				</div>
     				<div id="uiGuidanceSplitMerge" hidden>
     					<h2>Manage this Population</h2>
-    						<p>Renaming a population costs nothing.  Splitting or merging populations is restricted by the populations' values and demographics.  The less they'd like the split or merge, the more it will cost you.</p>
-							<h3>Rename this Population</h3>
-							<input type='text' /> <button>Rename</button>
-							<h3>Split the Population</h3>
+    						<p class="guidance">Renaming a population costs nothing.  Splitting or merging populations is restricted by the populations' values and demographics.  The less they'd like the split or merge, the more it will cost you.</p>
+							<h3 class="guidance">Rename this Population</h3>
+							<input type='text' id='uiGuidanceRenameField' /> <button onclick='handlers.uiGuidanceRenameButton()'>Rename</button>
+							<h3 class="guidance">Split the Population</h3>
 							<select id='uiGuidanceSplitSelect'></select>
-							<button>Split!</button>
-							<h3>Merge this Population with Another</h3>
+							<button onclick='handlers.uiGuidanceSplitButton()'>Split!</button>
+							<h3 class="guidance">Merge this Population with Another</h3>
 							<select id='uiGuidanceMergeSelect'></select>
-							<button>Merge!</button>
+							<button onclick='handlers.uiGuidanceMergeButton()'>Merge!</button>
     				</div>
     				<div id="uiGuidanceEquip" hidden>
     					<h2>Population Resources</h2>
-    						<p>Equipping a population with a certain resource does not cost points and increases the population's loyalty.  Divesting a population of a certain resource <em>does</em> cost points and decreases the population's loyalty.  Populations which have been equipped or divested of resources will still act on their own initiative this season.</p>
-    						<h3>Equip this Population</h3>
+    						<p class="guidance">Changes to population resources occur immediately.  Populations which have been equipped or divested of resources will still act on their own initiative this season.</p>
+    						<h3 class="guidance">Equip this Population</h3>
+    						<p class="guidance">You may give the population resources from the stockpile.  Equipping a population with a certain resource does not cost points and increases the population's prestige and loyalty.</p>
 							<select id="uiGuidanceEquipSelect"></select>
-							<button>Equip!</button>
-							<h3>Divest this Population</h3>
+							<button onclick='handlers.uiGuidanceEquipButton()'>Equip!</button>
+							<h3 class="guidance">Divest this Population</h3>
+							<p class="guidance">You may guide the population to give up resources and add them to the communal stockpile.  Divesting a population of a certain resource <em>does</em> cost points as well as decreases the population's prestige and loyalty.</p>
 							<select id="uiGuidanceDivestSelect"></select>
-							<button>Divest!</button>
+							<button onclick='handlers.uiGuidanceDivestButton()'>Divest! (10G)</button>
+							<p class="guidance">Equipment changes occur immediately.</p>
     				</div>
     			</td>
     			<td id="uiGuidanceClose">
@@ -239,6 +242,7 @@
       </div>
       <div class="uiPanel" id="uiPanelMinimap">
         <h2 class="uiTitle" id="uiTitleDate">The Present</h2>
+        <p><strong>Guidance Points: </strong> <span id="uiGuidancePoints"></span>G</p>
         <button id="uiNextTurn" onclick="handlers.processTurn()">Next Season</button>
 		<hr class="clear" />
         <table id="minimapTable"></table>

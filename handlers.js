@@ -140,6 +140,84 @@ var handlers = {
   	view.guidanceMapSelect(x,y);
   },
   
+  uiGuidanceProspectButton: function() {
+  	view.focusPop.prospect();
+  },
+  
+  uiGuidanceBuildButton: function() {
+  	var building = document.getElementById('uiGuidanceBuildSelect').value;
+  	view.focusPop.build(building);
+  },
+  
+  uiGuidanceExperimentButton: function() {
+  	var uiGuidanceExperimentSelect = document.getElementById('uiGuidanceExperimentSelect');
+  	var resource = uiGuidanceExperimentSelect.options[uiGuidanceExperimentSelect.selectedIndex].value;
+  	view.focusPop.experiment(resource);
+  },
+  
+  uiGuidanceEnactButton: function() {
+  	var uiGuidanceEnactSelect = document.getElementById('uiGuidanceEnactSelect');
+  	var rite = uiGuidanceEnactSelect.options[uiGuidanceEnactSelect.selectedIndex].value;
+  	view.focusPop.enact(rite); // or should this be rite.enact()?
+  },
+  
+  uiGuidanceDesignButton: function() {
+  	view.focusPop.design();
+  },
+  
+  uiGuidanceSynthesizeButton: function() {
+  	var uiGuidanceSynthesisSelectA = document.getElementById('uiGuidanceSynthesisSelectA');
+  	var uiGuidanceSynthesisSelectB = document.getElementById('uiGuidanceSynthesisSelectB');
+  	var riteA = uiGuidanceSynthesisSelectA.options[uiGuidanceSynthesisSelectA.selectedIndex].value;
+  	var riteB = uiGuidanceSynthesisSelectB.options[uiGuidanceSynthesisSelectB.selectedIndex].value;
+  	view.focusPop.synthesize(riteA,riteB);
+  },
+  
+  uiGuidanceScoutButton: function() {
+  	var targetX = view.targetX;
+  	var targetY = view.targetY;
+  	view.focusPop.scout(x,y);
+  },
+  
+  uiGuidanceRaidButton: function() {
+  	var targetX = view.targetX;
+  	var targetY = view.targetY;
+  	view.focusPop.raid(x,y);
+  },
+  
+  uiGuidanceMigrateButton: function() {
+  	var targetX = view.targetX;
+  	var targetY = view.targetY;
+  	view.focusPop.migrate(x,y);
+  },
+  
+  uiGuidanceRenameButton: function() {
+  	var uiGuidanceRenameField=document.getElementById('uiGuidanceRenameField');
+  	var newName = uiGuidanceRenameField.value;
+  	view.focusPop.rename(newName);
+  },
+  
+  uiGuidanceSplitButton: function() {
+  	var splitType=document.getElementById('uiGuidanceSplitSelect').value;
+  	view.focusPop.splitByType(splitType);
+  },
+  
+  uiGuidanceMergeButton: function() {
+  	view.focusPop.mergeByType(0);
+  },
+  
+  uiGuidanceEquipButton: function() {
+  	var uiGuidanceEquipSelect = document.getElementById('uiGuidanceEquipSelect');
+  	var resource = uiGuidanceEquipSelect.options[uiGuidanceEquipSelect.selectedIndex].value;
+  	view.focusPop.equip(resource);
+  },
+  
+  uiGuidanceDivestButton: function() {
+  	var uiGuidanceDivestSelect = document.getElementById('uiGuidanceDivestSelect');
+  	var resource = uiGuidanceDivestSelect.options[uiGuidanceDivestSelect.selectedIndex].value;
+  	view.focusPop.divest(resource);
+  },
+  
   processTurn() {
   
   	document.getElementById('uiGuidancePanel').style.display = "none";
@@ -181,6 +259,8 @@ var handlers = {
     }
     
     gameClock.turn++;
+    
+    gameClock.guidancePoints = 100;
     
     view.refreshUi();
   },

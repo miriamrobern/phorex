@@ -295,7 +295,13 @@ td.targetTile {
 	text-align: center;
 }
 
+h3.guidance {
+	margin-bottom: 0px;
+}
 
+p.guidance {
+	margin-top: 0px;
+}
 
 
 

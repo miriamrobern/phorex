@@ -2,6 +2,7 @@ var notificationLog = [];
 
 var gameClock = {
   turn: 0,
+  guidancePoints: 100,
   
   year: function() {
     return Math.floor(gameClock.turn/4);

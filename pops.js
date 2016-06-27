@@ -168,11 +168,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     var invText = '';
     
-    for (i in this.inv) {
-      invText += Math.floor(this.inv[i]) + " " + dataResources[i].name + "<br />";
-      if (i < this.inv.length - 1) {
-        invText += ", ";
-      }
+    for (i in this.inv ) {
+    	if (this.inv[i] > 0) {
+    		invText += Math.floor(this.inv[i]) + " " + dataResources[i].name + "<br />";
+    	}
     }
     
     popUpText += "<tr><td class='popupheader'>Stocks:</td><td class='popupdata' colspan='2'>"+invText+"</td></tr>";
@@ -399,6 +398,98 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     return newPop;
     
   };
+  
+  this.prospect = function() {
+  	console.log("Prospect!");
+  };
+  
+  this.build = function(site) {
+  	console.log("Build ",site);
+  	};
+  
+  this.experiment = function(sacrifice) {
+  	console.log("Experiment with ",sacrifice);
+  	};
+  	
+  this.enact = function(rite) {
+  	console.log("Enact ",rite);
+  	};
+  
+  this.design = function() {
+  	console.log("Design a rite!");
+  	};
+  	
+  this.synthesize = function(riteA,riteB) {
+  	console.log("Synthesize ",riteA,riteB);
+  	};
+  	
+  this.scout = function(x,y) {
+  	console.log("Scout ",x,y);
+  	};
+  
+  this.raid = function(x,y) {
+  	console.log("Raid ",x,y);
+  	};
+  
+  this.migrate = function(x,y) {
+  	console.log("Migrate ",x,y);
+  	};
+  
+  this.rename = function(newName) {
+  	this.name = newName;
+  	view.refreshPeoplePanel();
+  	view.closeGuidancePanel();
+  	};
+  
+  this.splitByType = function(splitType) {
+  	console.log("Split by type ",splitType);
+  	};
+  
+  this.mergeByType = function(mergeType,mergeTarget) {
+  	console.log("Merge with ",mergeTarget," via ",mergeType);
+  	};
+  
+  this.equip = function(resource) {  	
+  	if (worldMap.coords[this.x][this.y].stocks[resource] > this.population - this.inv[resource]) {
+  		this.prestige += 5 * (this.population - this.inv[resource])/this.population;
+  		this.loyalty.player++;
+  		worldMap.coords[this.x][this.y].stocks[resource] -= this.population - this.inv[resource];
+  		this.inv[resource] = this.population;
+  	} else if (this.inv[resource] !== undefined) {
+  		this.prestige +=  5*worldMap.coords[this.x][this.y].stocks[resource]/this.population;
+  		this.loyalty.player++;
+  		this.inv[resource] += worldMap.coords[this.x][this.y].stocks[resource];
+  		worldMap.coords[this.x][this.y].stocks[resource] = 0;
+  	} else {
+  		this.prestige +=  5*worldMap.coords[this.x][this.y].stocks[resource]/this.population;
+  		this.loyalty.player++;
+  		this.inv[resource] = worldMap.coords[this.x][this.y].stocks[resource];
+  		worldMap.coords[this.x][this.y].stocks[resource] = 0;
+  	}
+  	
+  	view.refreshPeoplePanel();
+  	view.refreshLandPanel();
+  	view.displayGuidance(this);
+  	};
+  
+  this.divest = function(resource) {
+  	
+  	this.loyalty.player--;
+  	this.prestige -= 5;
+  	if (worldMap.coords[this.x][this.y].stocks[resource] === undefined) {
+  		worldMap.coords[this.x][this.y].stocks[resource] = this.inv[resource];
+  	} else {
+  		worldMap.coords[this.x][this.y].stocks[resource] += this.inv[resource];
+  	}
+  	this.inv[resource] = 0;
+  	gameClock.guidancePoints -= 10;
+  	
+  	view.refreshPeoplePanel();
+  	view.refreshLandPanel();
+  	view.refreshMinimapPanel();
+  	view.displayGuidance(this);
+  	
+  	};
   
   this.work = function() {
     
@@ -705,6 +796,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   this.impulse.jobChange = function(pop) {
     
+    // Rewrite to use pop.jobChange(site);
     // Presently random; needs to take mats&tools into account at least
     // Extra credit: value of the primary resources to be produced?
     
@@ -731,6 +823,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     
     if ((pop.demographics.gender === "mixed" || pop.demographics.gender === "Breeders") && pop.population > 1) {
+    
+      // this is the matriarchy split function - pop.splitByType('matriarchy');
       notification = pop.name + " expels their men into a seperate population.";
       var newPop = pop.split(pop.name+" Men");
       pop.demographics.gender = "Women";
@@ -744,10 +838,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       } else {
         newPop.demographics.gender = "Men";
       }
-      
       if (Math.random() < 1/newPop.population) {
         newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
       }
+      // end matriarchy split
       
     } else if (pop.demographics.gender === "Women" && targets.length > 0) {
       var targetPop = targets[Math.floor(Math.random()*targets.length)];
@@ -822,6 +916,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     
     if ((pop.demographics.gender === "mixed" || pop.demographics.gender === "Breeders") && pop.population > 1) {
+    
+      // this is the patriarchy split - pop.splitByType('patriarchy');
       notification = pop.name + " expels their women into a seperate population.";
       var newPop = pop.split(pop.name+" Women");
       pop.demographics.gender = "Men";
@@ -835,10 +931,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       } else {
         newPop.demographics.gender = "Women";
       }
-      
       if (Math.random() < 1/newPop.population) {
         newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
       }
+      // end matriarchy split
       
     } else if (pop.demographics.gender === "Men" && targets.length > 0) {
       var targetPop = targets[Math.floor(Math.random()*targets.length)];
@@ -911,12 +1007,12 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     
     if ((pop.demographics.gender === "mixed" || pop.demographics.gender === "Men" || pop.demographics.gender === "Women" || pop.demographics.gender === "Queers") && pop.population > 1) {
+
+	  // this is the neutrarchy split function - pop.splitByType('neutrarchy');
       notification = pop.name + " expels their breeders into a seperate population.";
       var newPop = pop.split(pop.name+" Breeders");
       pop.values.neutrarchy = Math.min(100,pop.values.neutrarchy+10);
       newPop.values.neutrarchy = Math.max(0,newPop.values.neutrarchy-10);
-      
-      
       if (pop.demographics.gender === "Women" || pop.demographics.gender === "Men" || pop.demographics.gender === "Genderqueers") {
       	newPop.demographics.gender = pop.demographics.gender;
       } else if (newPop.population < 3 && Math.random() > 0.2) {
@@ -934,13 +1030,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         newPop.demographics.gender = "Breeders";
       }
       pop.demographics.gender = "Neuters";
-      
       if (Math.random() < 1/newPop.population) {
         newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
       }
-      
       newPop.population += Math.floor(pop.population/2);
       pop.population -= Math.floor(pop.population/2);
+      // end neutrarchy split
+      
       
     } else if (pop.demographics.gender === "Neuters" && targets.length > 0) {
       var targetPop = targets[Math.floor(Math.random()*targets.length)];
@@ -1010,24 +1106,22 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
       
     if (pop.population > 1 && targets.length < 1 && superiors.length < 2) {
+    
+      // this is the authority split - pop.splitByType('authority');
       var lowClassName = ["Low-caste ","Abject ","Poor ","Lesser ","Debased "][Math.floor(Math.random()*5)] ;
       var newPop = pop.split();
       newPop.name = lowClassName + pop.name;
       newPop.prestige -= 20;
       pop.prestige += 20;
-      // Lower authoritarian Loyalties
-      
       if (Math.random() > 1/newPop.population) {
         newPop.demographics.gender = ["Men","Women","Genderqueer","Neuter"][Math.floor(Math.random()*4)];
       }
-      
       if (Math.random() > 1/newPop.population) {
         newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
       }
-      
       pop.loyalty.player *= 0.8;
-      
       notification = pop.name + " expels its less prestigious members into a new population.";
+      // end authority split
       
     } else if (targets.length < 1 && superiors.length > 0) {
       var targetPop = superiors[Math.floor(Math.random()*superiors.length)]
@@ -1093,19 +1187,19 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     
     if (Math.random()< 1/(1+pop.rites.length) ) { // attempt to create new rite
-      var sacrifice = Object.keys(pop.inv)[Math.floor(Math.random()*Object.keys(pop.inv).length)];
-      var sacrificeNum = Math.ceil(pop.inv[sacrifice]/5);
-      pop.inv[sacrifice] -= sacrificeNum;
-      
-      if (Math.random() < 0.2) {
-        
-        var newRite = new Rite(pop,sacrifice);
-        pop.rites.push(newRite);
-        
-        notification = pop.name + " sacrifices " + sacrificeNum + " " + dataResources[sacrifice].plural + " to develop a new religious rite, the " + newRite.name + ".";
-      } else {
-        notification = pop.name + " sacrifices " + sacrificeNum + " " + dataResources[sacrifice].plural + " in minor religious rites.";
-      }
+    	
+    	// this is the design function - pop.design();
+		var sacrifice = Object.keys(pop.inv)[Math.floor(Math.random()*Object.keys(pop.inv).length)];
+		var sacrificeNum = Math.ceil(pop.inv[sacrifice]/5);
+		pop.inv[sacrifice] -= sacrificeNum;
+		if (Math.random() < 0.2) {
+			var newRite = new Rite(pop,sacrifice);
+			pop.rites.push(newRite);
+			notification = pop.name + " sacrifices " + sacrificeNum + " " + dataResources[sacrifice].plural + " to develop a new religious rite, the " + newRite.name + ".";
+		} else {
+			notification = pop.name + " sacrifices " + sacrificeNum + " " + dataResources[sacrifice].plural + " in minor religious rites.";
+		}
+      	// end design function
       
     // } else if (Math.random() < 1 / localRites.length) { // syncretize rites
     //   notifiction = pop.name + "merges two rites to make a stronger rite!";
@@ -1122,13 +1216,14 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   this.impulse.inquiry = function(pop) {
     
-    // Needs Prospecting on the top and addition of Values on the bototm
+    // Needs Prospecting on the top and addition of Values on the bottom
     
     var sacrifice = Object.keys(pop.inv)[Math.floor(Math.random()*Object.keys(pop.inv).length)];
     var sacrificeNum = Math.ceil(pop.inv[sacrifice]/5);
     pop.inv[sacrifice] -= sacrificeNum;
     potentialAdvances = [];
     
+    // this is the experiment function - pop.experiment(sacrificeNum,sacrifice);
     for (i in dataResources[sacrifice].advances) {
       var terrainCheck = 1;
       if (terrainCheck === 1) {
@@ -1137,7 +1232,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     var potentialAdvances = dataResources[sacrifice].advances;
     var advance = potentialAdvances[Math.floor(Math.random()*potentialAdvances.length)];
-    
+
     if (Math.random()*100 < sacrificeNum + pop.advances.failures && advance !== undefined) {     
       if (pop.advances[advance.name] === undefined) {
         pop.advances[advance.key] = 1;
@@ -1311,9 +1406,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       }
     }
     
+    // this is a special case of the changeJob function - pop.changeJob(potentialSites[Math.floor(Math.random()*potentialSites.length)]);
     pop.job = potentialSites[Math.floor(Math.random()*potentialSites.length)];
-    
     notification = pop.name + " decides to produce food working as " + pop.job.job + "s.";
+    
   };
   
   this.impulse.migration = function(pop) {
@@ -1322,6 +1418,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	
   	if (tiles.length > 0) {
   		var targetTile = tiles[Math.floor(Math.random()*tiles.length)];
+  		
+  		// this is the migrate function - pop.migrate(targetTile);
   		var oldTile = worldMap.coords[pop.x][pop.y];
   		oldTile.units.splice(oldTile.units.indexOf(pop),1);
   		pop.name.x = targetTile.x;
