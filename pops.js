@@ -94,7 +94,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   }
   
   if (job === undefined) {
-    this.job = dataSites.theWilds;
+    this.job = worldMap.coords[x][y].sites[0];
   } else {
     this.job = job;
   }
@@ -176,7 +176,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     popUpText += "<tr><td class='popupheader'>Stocks:</td><td class='popupdata' colspan='2'>"+invText+"</td></tr>";
     popUpText += "<tr><td colspan='3'><hr /></td></tr>";
-    popUpText += "<tr><td class='popupheader'>Task:</td><td class='popupdata' colspan='2'>"+this.job.job+"</td></tr>";
+    popUpText += "<tr><td class='popupheader'>Task:</td><td class='popupdata' colspan='2'>"+this.job.site.job+"</td></tr>";
     
     var secondaryProduceText = '';
     
@@ -187,7 +187,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       }
     }
     
-    popUpText += "<tr><td class='popupheader'>Producing:</td><td class='popupdata' colspan='2'>"+Math.floor(this.job.primaryEfficiency*this.population)+" "+this.job.primaryProduce.plural+" and a chance of "+secondaryProduceText+"</td></tr>";
+    popUpText += "<tr><td class='popupheader'>Producing:</td><td class='popupdata' colspan='2'>"+Math.floor(this.job.site.primaryEfficiency*this.population)+" "+this.job.site.primaryProduce.plural+" and a chance of "+secondaryProduceText+"</td></tr>";
     
     
   
@@ -341,7 +341,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   this.split = function(name) {
     
-    var newPop = new Pop();
+    var newPop = new Pop(undefined,undefined,0,this.x,this.y);
     var split = Math.random()*0.2 + 0.4;
     
     if (name === undefined) {
@@ -404,7 +404,22 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   };
   
   this.build = function(site) {
-  	console.log("Build ",site);
+  	site = dataSites[site];
+  	
+  	for (i in site.buildCost) {
+  		if (this.inv[i] > site.buildCost[i]) {
+  			this.inv[i] -= site.buildCost[i];
+  		} else {
+  			worldMap.coords[this.x][this.y].stocks[i] -= site.buildCost[i] - this.inv[i];
+  			this.inv[i] = 0;
+  		}
+  	}
+  	
+  	worldMap.coords[this.x][this.y].sites.push({site:site,capacity:site.baseCapacity});
+  	
+  	view.refreshPeoplePanel();
+  	view.refreshLandPanel();
+  	view.displayGuidance(this);
   	};
   
   this.experiment = function(sacrifice) {
@@ -494,7 +509,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.work = function() {
     
     var notification = '';
-    var job = this.job;
+    var job = this.job.site;
     var matsCheck = 0;
     var toolsCheck = 0;
     var materialCost = '';
@@ -754,11 +769,11 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       impulse.migration =  this.prestige * -1 ;
     }
     
-    if (this.job.primaryProduce === dataResources.food) {
+    if (this.job.site.primaryProduce === dataResources.food) {
     	impulse.jobChange = (this.inv.food/this.population)*100 - Math.random()*100 ;
     }
     
-    if (this.inv.food < 1 && worldMap.coords[this.x][this.y].stocks.food < 1 && this.job.primaryProduce != dataResources.food) {
+    if (this.inv.food < 1 && worldMap.coords[this.x][this.y].stocks.food < 1 && this.job.site.primaryProduce != dataResources.food) {
       impulse.growFood = Math.random()*100;
     }
     
@@ -805,7 +820,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     pop.job = newJob;
     
-    notification = pop.name + " decide to start working as " + newJob.job + "s.";
+    notification = pop.name + " decide to start working as " + newJob.site.job + "s.";
   };
   
   this.impulse.matriarchy = function(pop) {
@@ -1401,14 +1416,14 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     var potentialSites = [];
     
     for (var i in worldMap.coords[pop.x][pop.y].sites) {
-      if (worldMap.coords[pop.x][pop.y].sites[i].primaryProduce === dataResources.food) {
+      if (worldMap.coords[pop.x][pop.y].sites[i].site.primaryProduce === dataResources.food) {
         potentialSites.push(worldMap.coords[pop.x][pop.y].sites[i]);
       }
     }
     
     // this is a special case of the changeJob function - pop.changeJob(potentialSites[Math.floor(Math.random()*potentialSites.length)]);
     pop.job = potentialSites[Math.floor(Math.random()*potentialSites.length)];
-    notification = pop.name + " decides to produce food working as " + pop.job.job + "s.";
+    notification = pop.name + " decides to produce food working as " + pop.job.site.job + "s.";
     
   };
   

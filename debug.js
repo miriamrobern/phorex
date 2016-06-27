@@ -34,6 +34,14 @@ var testMap = {
     worldMap.coords[1][2].altitude = 2;
     worldMap.coords[2][1].altitude = 2;
     worldMap.coords[2][2].altitude = 2;
+    worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.fruitGrove,capacity:100},{site:dataSites.cowrieBeach,capacity:100},{site:dataSites.knappery,capacity:100}];
+    worldMap.coords[1][1].sites = [dataSites.theWilds,dataSites.grazingLand,dataSites.river];
+    worldMap.coords[1][2].sites = [dataSites.theWilds,dataSites.outcropping,dataSites.peatBog];
+    worldMap.coords[2][1].sites = [dataSites.theWilds,dataSites.clayDeposit,dataSites.pond];
+    worldMap.coords[1][1].biome = dataBiomes.forest;
+    worldMap.coords[1][2].biome = dataBiomes.desert;
+    worldMap.coords[2][1].biome = dataBiomes.tundra;
+    worldMap.coords[2][2].biome = dataBiomes.shrubland;
     
     var south = new people("South",2,2);
     var north = new people("North",1,1);
@@ -45,24 +53,16 @@ var testMap = {
     northeast = new Pop("Northeasterners",north,50,2,2,50,{aggression: 100, patriarchy: 100},{gender:"mixed",age:"mixed"});
     southwest = new Pop("Southwesterners",south,21,2,2,21,{aggression: 100, neutrarchy: 100, authority:10},{gender:"mixed",age:"mixed"});
     
-    southeast.loyalty.player = 50;
-    northwest.loyalty.player = 50;
-    northeast.loyalty.player = 50;
-    southwest.loyalty.player = 50;
-    
     
     worldMap.coords[1][1].units = [];
     worldMap.coords[1][2].units = [];
     worldMap.coords[2][2].units = [southeast,northwest,northeast,southwest];
     worldMap.coords[2][1].units = [];
-    worldMap.coords[2][2].sites = [dataSites.theWilds,dataSites.fruitGrove,dataSites.cowrieBeach,dataSites.knappery];
-    worldMap.coords[1][1].sites = [dataSites.theWilds,dataSites.grazingLand,dataSites.river];
-    worldMap.coords[1][2].sites = [dataSites.theWilds,dataSites.outcropping,dataSites.peatBog];
-    worldMap.coords[2][1].sites = [dataSites.theWilds,dataSites.clayDeposit,dataSites.pond];
-    worldMap.coords[1][1].biome = dataBiomes.forest;
-    worldMap.coords[1][2].biome = dataBiomes.desert;
-    worldMap.coords[2][1].biome = dataBiomes.tundra;
-    worldMap.coords[2][2].biome = dataBiomes.shrubland;
+    
+    southeast.loyalty.player = 50;
+    northwest.loyalty.player = 50;
+    northeast.loyalty.player = 50;
+    southwest.loyalty.player = 50;
     pops.push(southeast);
     pops.push(southwest);
     pops.push(northeast);

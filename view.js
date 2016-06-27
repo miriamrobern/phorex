@@ -407,7 +407,7 @@ var view = {
       
       var popLi = document.createElement('li');
       var popPopUp = pop.popUp();
-      popLi.innerHTML = "<a onclick='handlers.selectPop("+i+")' class='popup'><strong>" + pop.name + ",</strong> " + pop.population + " " + pop.people.name + " " + pop.job.job + "s <span>" + popPopUp + "</span></a>";
+      popLi.innerHTML = "<a onclick='handlers.selectPop("+i+")' class='popup'><strong>" + pop.name + ",</strong> " + pop.population + " " + pop.people.name + " " + pop.job.site.job + "s <span>" + popPopUp + "</span></a>";
       uiPeopleList.appendChild(popLi);
       
       if (pop.lastSeason !== undefined) {
@@ -438,7 +438,7 @@ var view = {
     
     for (i in worldMap.coords[view.focusX][view.focusY].sites) {
       
-      site = worldMap.coords[view.focusX][view.focusY].sites[i];
+      site = worldMap.coords[view.focusX][view.focusY].sites[i].site;
       sitePopUp = "<strong>"+site.name+"</strong>";
       if (site.tools) {
       	sitePopUp += "<p>When equipped with "+site.tools.name+"s, the ";
@@ -643,11 +643,18 @@ var view = {
   	uiGuidanceBuildSelect.innerHTML = '';
   	
   	var canBuild = [];
+  	var existingSites = [];
+  	
+  	for (i in worldMap.coords[pop.x][pop.y].sites) {
+  		existingSites.push(worldMap.coords[pop.x][pop.y].sites[i].site);
+  	}
+  	
+  	console.log(existingSites);
   	
   	for (i in pop.advances) {
   		if (i !== "failures") {
 	  		for (l = 1;l < pop.advances[i]+1;l++) {
-	  			if (dataAdvances[i][l].type === "site" && worldMap.coords[pop.x][pop.y].sites.indexOf(dataSites[dataAdvances[i][l].key]) === -1) {
+	  			if (dataAdvances[i][l].type === "site" && existingSites.indexOf(dataSites[dataAdvances[i][l].key]) === -1) {
 	  				canBuild.push(dataAdvances[i][l].key);
 	  			}
   			}
@@ -657,14 +664,18 @@ var view = {
   	// This needs to disable options which the population cannot afford
   	
   	for (i in canBuild) {
+  		var item = document.createElement('option');
   		var buildCost = ' (cost:';
   		for (n in dataSites[canBuild[i]].buildCost) {
   			buildCost += " " + dataSites[canBuild[i]].buildCost[n] + " " + dataResources[n].name;
+  			if (dataSites[canBuild[i]].buildCost[n] < pop.inv[n] + worldMap.coords[pop.x][pop.y].stocks[n] || dataSites[canBuild[i]].buildCost[n] < worldMap.coords[pop.x][pop.y].stocks[n] || dataSites[canBuild[i]].buildCost[n] < pop.inv[n]) {
+  			} else {
+  				item.disabled = true;
+  			}
   		}
   		buildCost += ')';
-  		var item = document.createElement('option');
   		item.text = dataSites[canBuild[i]].name + buildCost;
-  		item.value = canBuild[i];
+  		item.value = canBuild[i];  		
   		uiGuidanceBuildSelect.appendChild(item);
   	}
   	

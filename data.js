@@ -322,6 +322,12 @@ var dataResources = {
     plural: "Bronze Axes",
   },
   
+  caribou: {
+    key: "caribou",
+    name: "Caribou",
+    plural: "head of Caribou",
+  },
+  
 };
 
 var dataSites = {
@@ -491,6 +497,7 @@ var dataSites = {
     secondaryEfficiency: .1,
     upgradeAdvance: dataAdvances.manufacture,
     buildCost: {simpleTool:10,stone:10},
+    baseCapacity: 20,
   },
     
   stoneArmory: {
@@ -504,6 +511,7 @@ var dataSites = {
     secondaryEfficiency: .1,
     upgradeAdvance: dataAdvances.manufacture,
     buildCost: {simpleTool:20,stone:10},
+    baseCapacity: 20,
   },
     
   bronzesmith: {
@@ -517,11 +525,26 @@ var dataSites = {
     secondaryEfficiency: .1,
     upgradeAdvance: dataAdvances.manufacture,
     buildCost: {simpleTool:10,bronze:10},
+    baseCapacity: 20,
   },
     
   caribouHerd: {
     name: 'Caribou Herd',
     job: 'Caribou Herder',
+    tools: '',
+    materials: [],
+    primaryProduce: dataResources.food,
+    primaryEfficiency: 0.9,
+    secondaryProduce: [dataResources.caribou],
+    secondaryEfficiency: 0.1,
+    upgradeAdvance: dataAdvances.caribouHerding,
+    buildCost: {fur:10},
+    baseCapacity: 20,
+  },
+  
+  caribouPaddock: {
+    name: 'Caribou Paddock',
+    job: 'Caribou Rancher',
     tools: '',
     materials: [dataResources.caribou],
     primaryProduce: dataResources.food,
@@ -529,8 +552,9 @@ var dataSites = {
     secondaryProduce: [dataResources.caribou],
     secondaryEfficiency: 1.1,
     upgradeAdvance: dataAdvances.caribouHerding,
-    buildCost: {fur:10},
-  },
+    buildCost: {lumber:10},
+    baseCapacity: 20,
+  }
   
 };
 
