@@ -143,7 +143,8 @@ var handlers = {
   uiGuidanceProspectButton: function() {
   	view.focusPop.prospect();
 
-	view.selectGuidance('uiGuidanceResult')  	
+	view.selectGuidance('uiGuidanceResult')  
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;	
   	view.refreshPeoplePanel();
   	view.refreshLandPanel();
   	view.refreshMinimapPanel();
@@ -155,6 +156,7 @@ var handlers = {
   	view.focusPop.build(building);
 
 	view.selectGuidance('uiGuidanceResult')
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
 	view.refreshPeoplePanel();
   	view.refreshLandPanel();
   	view.displayGuidance(view.focusPop);
@@ -178,12 +180,16 @@ var handlers = {
   	view.focusPop.enact(rite); // or should this be rite.enact()?
 
 	view.selectGuidance('uiGuidanceResult') 
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	view.refreshPeoplePanel();
   },
   
   uiGuidanceDesignButton: function() {
   	view.focusPop.design();
 
 	view.selectGuidance('uiGuidanceResult') 
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	view.refreshPeoplePanel();
   },
   
   uiGuidanceSynthesizeButton: function() {
@@ -194,6 +200,8 @@ var handlers = {
   	view.focusPop.synthesize(riteA,riteB);
 
 	view.selectGuidance('uiGuidanceResult') 
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	view.refreshPeoplePanel();
   },
   
   uiGuidanceScoutButton: function() {
@@ -201,7 +209,13 @@ var handlers = {
   	var targetY = view.targetY;
   	view.focusPop.scout(targetX,targetY);
 
+	view.refreshMinimapPanel();
+	view.displayWorldMap();
+	view.refreshGuidanceMap();
+
 	view.selectGuidance('uiGuidanceResult') 
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	view.refreshPeoplePanel();
   },
   
   uiGuidanceRaidButton: function() {
@@ -210,6 +224,8 @@ var handlers = {
   	view.focusPop.raid(targetX,targetY);
 
 	view.selectGuidance('uiGuidanceResult') 
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	view.refreshPeoplePanel();
   },
   
   uiGuidanceMigrateButton: function() {
@@ -221,6 +237,7 @@ var handlers = {
 	view.focusY = targetY;
 
 	view.selectGuidance('uiGuidanceResult') 
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
   	
 	view.refreshPeoplePanel();
 	view.refreshLandPanel();
@@ -228,8 +245,6 @@ var handlers = {
 	view.refreshWorshipPanel();
 	view.displayWorldMap();
 	view.refreshGuidanceMap();
-
-	view.selectGuidance('uiGuidanceResult') 
   },
   
   uiGuidanceRenameButton: function() {
@@ -243,24 +258,30 @@ var handlers = {
   	view.focusPop.splitByType(splitType);
 
 	view.selectGuidance('uiGuidanceResult') 
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	view.refreshPeoplePanel();
   },
   
   uiGuidanceMergeButton: function() {
   	view.focusPop.mergeByType(0);
 
 	view.selectGuidance('uiGuidanceResult') 
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	view.refreshPeoplePanel();
   },
   
   uiGuidanceEquipButton: function() {
   	var uiGuidanceEquipSelect = document.getElementById('uiGuidanceEquipSelect');
   	var resource = uiGuidanceEquipSelect.options[uiGuidanceEquipSelect.selectedIndex].value;
   	view.focusPop.equip(resource);
+	view.refreshPeoplePanel();
   },
   
   uiGuidanceDivestButton: function() {
   	var uiGuidanceDivestSelect = document.getElementById('uiGuidanceDivestSelect');
   	var resource = uiGuidanceDivestSelect.options[uiGuidanceDivestSelect.selectedIndex].value;
   	view.focusPop.divest(resource);
+	view.refreshPeoplePanel();
   },
   
   processTurn() {

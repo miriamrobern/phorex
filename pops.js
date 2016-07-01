@@ -484,7 +484,29 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	};
   	
   this.scout = function(x,y) {
-  	console.log("Scout ",x,y);
+  	var old = {x:0,y:0};
+  	var observations = 0;
+  	old.x = this.x;
+  	old.y = this.y
+  	this.x = x;
+  	this.y = y;
+	
+	if (this.loyalty.player > 0) {
+		var withinSight = this.withinSight();
+		for (t in withinSight) {
+			if (worldMap.coords[withinSight[t].x][withinSight[t].y].fog === 0) {
+				worldMap.coords[withinSight[t].x][withinSight[t].y].fog = 1;
+				observations++;
+			}
+		}
+	}
+	
+	this.x = old.x;
+	this.y = old.y;
+	this.advances.failures += observations;
+	
+	notification = this.name + " mounts a scouting expedition and comes home with tall tales. ("+observations+" observations)";
+  	this.notify(notification);
 	this.guided = 1;
   	};
   
@@ -509,6 +531,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 			worldMap.coords[withinSight[t].x][withinSight[t].y].fog = 1;
 		}
 	}
+	this.notify(notification);
 	this.guided = 1;
   		
   	};
@@ -517,7 +540,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	this.name = newName;
   	view.refreshPeoplePanel();
   	view.closeGuidancePanel();
-	this.guided = 1;
   	};
   
   this.splitByType = function(splitType) {
