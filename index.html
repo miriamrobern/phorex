@@ -190,9 +190,9 @@
     					<p class="guidance">Tiles within range are marked with an 'x' while those beyond your population's range are marked with an 'o'.</p>
     					<table id="uiGuidanceMapTable"></table>
     					<hr />
-    					<button id="uiGuidanceScoutButton" onclick='handlers.uiGuidanceScoutButton()'>Send as Scouts</button>
-    					<button id="uiGuidanceRaidButton" onclick='handlers.uiGuidanceRaidButton()'>Send as Raiding Party</button>
-    					<button id="uiGuidanceMigrateButton" onclick='handlers.uiGuidanceMigrateButton()'>Send as Migrants</button>
+    					<button id="uiGuidanceScoutButton" onclick='handlers.uiGuidanceScoutButton()'>Send as Scouts (<span id="uiGuidanceScoutCostButton"></span>G)</button>
+    					<button id="uiGuidanceRaidButton" onclick='handlers.uiGuidanceRaidButton()'>Send as Raiding Party (<span id="uiGuidanceRaidCostButton"></span>G)</button>
+    					<button id="uiGuidanceMigrateButton" onclick='handlers.uiGuidanceMigrateButton()'>Send as Migrants (<span id="uiGuidanceMigrateCostButton"></span>G)</button>
     				</div>
     				<div id="uiGuidanceSplitMerge" hidden>
     					<h2>Manage this Population</h2>
@@ -223,6 +223,7 @@
     					<h2>Result of your Guidance</h2>
     						<p>You've already provided guidance to this population for the season.  Here's what they did:</p>
     						<p id="uiGuidanceResultContent"></p>
+    						<p>You can give them more guidance next season.  In the mean time, you can still manage their Resources by clicking the <strong>Population Resources</strong> tab.</p>
     				</div>
     			</td>
     			<td id="uiGuidanceClose">

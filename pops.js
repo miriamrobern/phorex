@@ -286,57 +286,17 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.withinSight = function() {
   	
   	var visible = [];
+  	var sight = 3;
+  	var dist;
   	
-  	visible.push({x:this.x,y:this.y});
-  	
-  	// East
-  	
-  	visible.push({x:this.x+1,y:this.y});
-  	if (worldMap.coords[this.x+1][this.y].altitude < worldMap.coords[this.x][this.y].altitude) {
-  		visible.push({x:this.x+2,y:this.y});
-  		if (worldMap.coords[this.x+2][this.y].altitude < worldMap.coords[this.x-1][this.y].altitude) {
-  			visible.push({x:this.x+3,y:this.y});
+  	for (var x=this.x-sight; x<this.x+sight+1; x++) {
+  		for (var y=this.y-sight; y<this.y+sight+1; y++) {
+  			dist = Math.pow((this.x-x)*(this.x-x)+(this.y-y)*(this.y-y),.5);
+  			if (x > 0 && y > 0 && x < worldMap.prefs.size_x && y < worldMap.prefs.size_y && dist <= sight) {
+  				visible.push({x,y});
+  			}
   		}
   	}
-  	
-  	// West
-  	
-  	visible.push({x:this.x-1,y:this.y});
-  	if (worldMap.coords[this.x-1][this.y].altitude < worldMap.coords[this.x][this.y].altitude) {
-  		visible.push({x:this.x-2,y:this.y});
-  		if (worldMap.coords[this.x-2][this.y].altitude < worldMap.coords[this.x-1][this.y].altitude) {
-  			visible.push({x:this.x-3,y:this.y});
-  		}
-  	}
-  	
-  	// South
-  	
-  	visible.push({x:this.x,y:this.y+1});
-  	if (worldMap.coords[this.x][this.y+1].altitude < worldMap.coords[this.x][this.y].altitude) {
-  		visible.push({x:this.x,y:this.y+2});
-  		if (worldMap.coords[this.x][this.y+2].altitude < worldMap.coords[this.x][this.y+1].altitude) {
-  			visible.push({x:this.x,y:this.y+3});
-  		}
-  	}
-  	
-  	// North
-  	
-  	visible.push({x:this.x,y:this.y-1});
-  	if (worldMap.coords[this.x][this.y-1].altitude < worldMap.coords[this.x][this.y].altitude) {
-  		visible.push({x:this.x,y:this.y-2});
-  		if (worldMap.coords[this.x][this.y-2].altitude < worldMap.coords[this.x][this.y-1].altitude) {
-  			visible.push({x:this.x,y:this.y-3});
-  		}
-  	}
-  	
-  	// Diagonals
-  	
-  	visible.push({x:this.x+1,y:this.y+1});
-  	visible.push({x:this.x+1,y:this.y-1});
-  	visible.push({x:this.x-1,y:this.y+1});
-  	visible.push({x:this.x-1,y:this.y-1});
-  	
-  	// Filter through and remove any off the map
   	
   	return visible;
   	

@@ -648,6 +648,19 @@ var view = {
   	document.getElementById('uiGuidancePanel').style.display = "inherit";
   	document.getElementById('uiGuidancePopUp').innerHTML = pop.popUp();
   	
+	document.getElementById('uiGuidanceDevelop').style.display = "none";
+	document.getElementById('uiGuidanceExperiment').style.display = "none";
+	document.getElementById('uiGuidanceWorship').style.display = "none";
+	document.getElementById('uiGuidanceExpedition').style.display = "none";
+	document.getElementById('uiGuidanceSplitMerge').style.display = "none";
+	document.getElementById('uiGuidanceEquip').style.display = "none";
+	
+	if (view.focusPop.guided === 0) {
+		document.getElementById('uiGuidanceResult').style.display = "none";
+	} else {
+		document.getElementById('uiGuidanceResult').style.display = "inherit";
+	}
+  	
   	// Development
   	var uiGuidanceProspectCostButton = document.getElementById('uiGuidanceProspectCostButton');
   	var uiGuidanceProspectChance = document.getElementById('uiGuidanceProspectChance');
@@ -803,6 +816,13 @@ var view = {
   	
   	// Expeditions
   	view.refreshGuidanceMap();
+  	var uiGuidanceScoutCostButton = document.getElementById('uiGuidanceScoutCostButton');
+  	var uiGuidanceRaidCostButton = document.getElementById('uiGuidanceRaidCostButton');
+  	var uiGuidanceMigrateCostButton = document.getElementById('uiGuidanceMigrateCostButton');
+  	
+  	uiGuidanceScoutCostButton.innerHTML = Math.ceil(Math.max(100-pop.values.inquiry,10));
+  	uiGuidanceRaidCostButton.innerHTML = Math.ceil(Math.max(100-pop.values.aggression,10));
+  	uiGuidanceMigrateCostButton.innerHTML = Math.ceil(Math.max(50+pop.prestige,10));
   	
   	// Manage
   	var uiGuidanceSplitSelect = document.getElementById('uiGuidanceSplitSelect');
