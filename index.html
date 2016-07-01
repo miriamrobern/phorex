@@ -139,6 +139,7 @@
     			<td id="uiGuidanceCenter">
     				<h2>Guidance</h3>
     				<p>Select one of the following options:</p>
+						<h3 class="uiGuidanceOption" onclick="view.selectGuidance('uiGuidanceAssign')">Assign a New Job</h3>
 						<h3 class="uiGuidanceOption" onclick="view.selectGuidance('uiGuidanceDevelop')">Develop this Tile</h3>
 						<h3 class="uiGuidanceOption" onclick="view.selectGuidance('uiGuidanceExperiment')">Conduct an Experiment</h3>
 						<h3 class="uiGuidanceOption" onclick="view.selectGuidance('uiGuidanceWorship')">Worship</h3>
@@ -147,6 +148,13 @@
 						<h3 class="uiGuidanceOption" onclick="view.selectGuidance('uiGuidanceEquip')">Population Resources</h3>
     			</td>
     			<td id="uiGuidanceRight">
+    				<div id="uiGuidanceAssign" hidden>
+    					<h2>Assign a New Job</h2>
+    					<p>You may assign this population to work at a different work site.  The site must have enough space for the entire population or else it will be over-harvested and degrade.</p>
+    					<p>By default, assigning to a new job does not cost any Guidance points, although some Policies may change this.</p>
+    					<select id="uiGuidanceAssignSelect"></select>
+    					<button onclick="handlers.uiGuidanceAssignButton()">Assign!</button>
+    				</div>
     				<div id="uiGuidanceDevelop" hidden>
     					<h2>Develop the Tile</h2>
     					<p class="guidance">Any population may prospect in an attempt to discover heretofore unknown natural resources, however each successive discovery is less likely than the last.  Once a population has discovered or learned advances, they can spend resources to build new work sites, civic structures, and places of worship.</p>

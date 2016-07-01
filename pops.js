@@ -51,7 +51,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   }
   
   if (demographics === undefined) {
-    this.demographics = {age:"mixed",gender: "mixed"};
+    this.demographics = {age:"mixed", fertility: "mixed", gender: "mixed"};
   } else {
     this.demographics = demographics;
   }
@@ -362,6 +362,15 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
   };
   
+  this.assign = function(newJob) {
+  	this.job = newJob;
+  	
+  	notification = this.name + " decides to start working as " + this.job.site.job + ".";
+	
+	this.notify(notification);
+	this.guided = 1;
+  };
+  
   this.prospect = function() {
  	var site;
   	var naturalSites = worldMap.coords[this.x][this.y].biome.naturalSites;
@@ -543,8 +552,132 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	};
   
   this.splitByType = function(splitType) {
-  	console.log("Split by type ",splitType);
+  	
+  	if (splitType === "matriarchy") {
+  		notification = this.name + " expels their men into a separate population.";
+		var newPop = this.split(this.name+" Men");
+		this.demographics.gender = "Women";
+		this.values.matriarchy = Math.min(100,this.values.matriarchy+10);
+		newPop.values.matriarchy = Math.max(0,newPop.values.matriarchy-10);
+		if (newPop.population < 3 && Math.random() > 0.2) {
+			newPop.demographics.gender = "Men";
+		} else if (newPop.population < 3) {
+			newPop.demographics.gender = "Genderqueers";
+			newPop.name = pop.name + " Queers" ;
+		} else {
+			newPop.demographics.gender = "Men";
+		}
+		if (Math.random() < 1/newPop.population) {
+			newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
+		}
+  		
+  	} else if (splitType === "patriarchy") {
+		notification = this.name + " expels their women into a seperate population.";
+		var newPop = this.split(this.name+" Women");
+		this.demographics.gender = "Men";
+		this.values.patriarchy = Math.min(100,this.values.patriarchy+10);
+		newPop.values.patriarchy = Math.max(0,newPop.values.patriarchy-10);
+		if (newPop.population < 3 && Math.random() > 0.2) {
+			newPop.demographics.gender = "Women";
+		} else if (newPop.population < 3) {
+			newPop.demographics.gender = "Genderqueers";
+			newPop.name = this.name + " Queers" ;
+		} else {
+			newPop.demographics.gender = "Women";
+		}
+		if (Math.random() < 1/newPop.population) {
+			newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
+		}
+  		
+  	} else if (splitType === "neutrarchy") {
+		notification = this.name + " expels their breeders into a seperate population.";
+		var newPop = this.split(this.name+" Breeders");
+		this.values.neutrarchy = Math.min(100,this.values.neutrarchy+10);
+		newPop.values.neutrarchy = Math.max(0,newPop.values.neutrarchy-10);
+		if (this.demographics.gender === "Women" || this.demographics.gender === "Men" || this.demographics.gender === "Genderqueers") {
+			newPop.demographics.gender = this.demographics.gender;
+		} else if (newPop.population < 3 && Math.random() > 0.2) {
+			newPop.demographics.gender = "mixed";
+		} else if (newPop.population < 3 && Math.random < .1) {
+			newPop.demographics.gender = "Genderqueers";
+			newPop.name = this.name + " Queers" ;
+		} else if (newPop.population < 3 && Math.random < .5) {
+			newPop.demographics.gender = "Men";
+			newPop.name = this.name + " Men" ;
+		} else if (newPop.population < 3 ) {
+			newPop.demographics.gender = "Women";
+			newPop.name = this.name + " Women" ;
+		} else {
+			newPop.demographics.gender = "mixed";
+		}
+		this.demographics.gender = "Neuters";
+		newPop.demographics.fertility = "Breeder";
+		this.demographics.fertility = "Celibate";
+		if (Math.random() < 1/newPop.population && newPop.demographics.age === "mixed") {
+			newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
+		}
+		newPop.population += Math.floor(this.population/2);
+		this.population -= Math.floor(this.population/2);
+  		
+  	} else if (splitType === "piety") {
+  		notification = this.name + " expels its heretics into a separate population.";
+  		
+		var lowClassName = ["Apostate ","Heretical ","Confused ","Antinomian ","Deluded "][Math.floor(Math.random()*5)] ;
+		var newPop = this.split();
+		newPop.name = lowClassName + this.name;
+		this.values.piety += 20;
+		newPop.values.piety += 20;
+		if (Math.random() > 1/newPop.population && newPop.demographics.gender === "mixed") {
+			newPop.demographics.gender = ["Men","Women","Genderqueer","Neuter"][Math.floor(Math.random()*4)];
+		}
+		if (Math.random() > 1/newPop.population && newPop.demographics.age === "mixed") {
+			newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
+		}
+		for (i in this.loyalty) {
+			this.loyalty[i] *= 0.8;
+		}
+		
+  	} else if (splitType === "authority") {
+  		notification = this.name + " expels its less prestigious members into a new population.";
+  		
+		var lowClassName = ["Low-caste ","Abject ","Poor ","Lesser ","Debased "][Math.floor(Math.random()*5)] ;
+		var newPop = this.split();
+		newPop.name = lowClassName + this.name;
+		newPop.prestige -= 20;
+		this.prestige += 20;
+		this.values.authority += 20;
+		newPop.values.authority += 10;
+		if (Math.random() > 1/newPop.population && newPop.demographics.gender === "mixed") {
+			newPop.demographics.gender = ["Men","Women","Genderqueer","Neuter"][Math.floor(Math.random()*4)];
+		}
+		if (Math.random() > 1/newPop.population && newPop.demographics.age === "mixed") {
+			newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
+		}
+		for (i in this.loyalty) {
+			this.loyalty[i] *= 0.8;
+		}
+  		
+  	} else if (splitType === "aggression") {
+  		notification = this.name + " expels its weakest members into a new population.";
+  		
+		var lowClassName = ["Honorless ","Weak ","Defenseless ","Pacifist ","Civilian "][Math.floor(Math.random()*5)] ;
+		var newPop = this.split();
+		newPop.name = lowClassName + this.name;
+		this.values.aggression += 20;
+		newPop.values.aggression -= 20;
+		if (Math.random() > 1/newPop.population && newPop.demographics.gender === "mixed") {
+			newPop.demographics.gender = ["Men","Women","Genderqueer","Neuter"][Math.floor(Math.random()*4)];
+		}
+		if (Math.random() > 1/newPop.population && newPop.demographics.age === "mixed") {
+			newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
+		}
+		for (i in this.loyalty) {
+			this.loyalty[i] *= 0.8;
+		}
+  	}
+  	
 	this.guided = 1;
+	newPop.guided = 1;
   	};
   
   this.mergeByType = function(mergeType,mergeTarget) {
@@ -926,24 +1059,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     if ((pop.demographics.gender === "mixed" || pop.demographics.gender === "Breeders") && pop.population > 1) {
     
-      // this is the matriarchy split function - pop.splitByType('matriarchy');
-      notification = pop.name + " expels their men into a seperate population.";
-      var newPop = pop.split(pop.name+" Men");
-      pop.demographics.gender = "Women";
-      pop.values.matriarchy = Math.min(100,pop.values.matriarchy+10);
-      newPop.values.matriarchy = Math.max(0,newPop.values.matriarchy-10);
-      if (newPop.population < 3 && Math.random() > 0.2) {
-        newPop.demographics.gender = "Men";
-      } else if (newPop.population < 3) {
-        newPop.demographics.gender = "Genderqueers";
-        newPop.name = pop.name + " Queers" ;
-      } else {
-        newPop.demographics.gender = "Men";
-      }
-      if (Math.random() < 1/newPop.population) {
-        newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
-      }
-      // end matriarchy split
+      pop.splitByType("matriarchy");
       
     } else if (pop.demographics.gender === "Women" && targets.length > 0) {
       var targetPop = targets[Math.floor(Math.random()*targets.length)];
@@ -1019,24 +1135,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     if ((pop.demographics.gender === "mixed" || pop.demographics.gender === "Breeders") && pop.population > 1) {
     
-      // this is the patriarchy split - pop.splitByType('patriarchy');
-      notification = pop.name + " expels their women into a seperate population.";
-      var newPop = pop.split(pop.name+" Women");
-      pop.demographics.gender = "Men";
-      pop.values.patriarchy = Math.min(100,pop.values.patriarchy+10);
-      newPop.values.patriarchy = Math.max(0,newPop.values.patriarchy-10);
-      if (newPop.population < 3 && Math.random() > 0.2) {
-        newPop.demographics.gender = "Women";
-      } else if (newPop.population < 3) {
-        newPop.demographics.gender = "Genderqueers";
-        newPop.name = pop.name + " Queers" ;
-      } else {
-        newPop.demographics.gender = "Women";
-      }
-      if (Math.random() < 1/newPop.population) {
-        newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
-      }
-      // end matriarchy split
+      pop.splitByType("patriarchy");
       
     } else if (pop.demographics.gender === "Men" && targets.length > 0) {
       var targetPop = targets[Math.floor(Math.random()*targets.length)];
@@ -1108,39 +1207,12 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       }
     }
     
-    if ((pop.demographics.gender === "mixed" || pop.demographics.gender === "Men" || pop.demographics.gender === "Women" || pop.demographics.gender === "Queers") && pop.population > 1) {
+    if (pop.demographics.fertility === "mixed" && pop.population > 1) {
 
-	  // this is the neutrarchy split function - pop.splitByType('neutrarchy');
-      notification = pop.name + " expels their breeders into a seperate population.";
-      var newPop = pop.split(pop.name+" Breeders");
-      pop.values.neutrarchy = Math.min(100,pop.values.neutrarchy+10);
-      newPop.values.neutrarchy = Math.max(0,newPop.values.neutrarchy-10);
-      if (pop.demographics.gender === "Women" || pop.demographics.gender === "Men" || pop.demographics.gender === "Genderqueers") {
-      	newPop.demographics.gender = pop.demographics.gender;
-      } else if (newPop.population < 3 && Math.random() > 0.2) {
-        newPop.demographics.gender = "Breeders";
-      } else if (newPop.population < 3 && Math.random < .1) {
-        newPop.demographics.gender = "Genderqueers";
-        newPop.name = pop.name + " Queers" ;
-      } else if (newPop.population < 3 && Math.random < .5) {
-        newPop.demographics.gender = "Men";
-        newPop.name = pop.name + " Men" ;
-      } else if (newPop.population < 3 ) {
-        newPop.demographics.gender = "Women";
-        newPop.name = pop.name + " Women" ;
-      } else {
-        newPop.demographics.gender = "Breeders";
-      }
-      pop.demographics.gender = "Neuters";
-      if (Math.random() < 1/newPop.population) {
-        newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
-      }
-      newPop.population += Math.floor(pop.population/2);
-      pop.population -= Math.floor(pop.population/2);
-      // end neutrarchy split
+    
+      pop.splitByType("neutrarchy");      
       
-      
-    } else if (pop.demographics.gender === "Neuters" && targets.length > 0) {
+    } else if (pop.demographics.fertility === "Celibate" && targets.length > 0) {
       var targetPop = targets[Math.floor(Math.random()*targets.length)];
       var potentialTribute = Object.keys(targetPop.inv);
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];
@@ -1163,7 +1235,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
       notification = pop.name + " celebrates their celibates by exacting " + tributeNum + " " + dataResources[tribute].plural + " as tribute from the " + targetPop.name + ".";
       
-    } else if (pop.demographics.gender != "Neuters" && superiors.length > 0) {
+    } else if (pop.demographics.fertility != "Celibate" && superiors.length > 0) {
       var targetPop = superiors[Math.floor(Math.random()*superiors.length)];
       var potentialTribute = Object.keys(pop.inv);
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];
@@ -1209,21 +1281,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
     if (pop.population > 1 && targets.length < 1 && superiors.length < 2) {
     
-      // this is the authority split - pop.splitByType('authority');
-      var lowClassName = ["Low-caste ","Abject ","Poor ","Lesser ","Debased "][Math.floor(Math.random()*5)] ;
-      var newPop = pop.split();
-      newPop.name = lowClassName + pop.name;
-      newPop.prestige -= 20;
-      pop.prestige += 20;
-      if (Math.random() > 1/newPop.population) {
-        newPop.demographics.gender = ["Men","Women","Genderqueer","Neuter"][Math.floor(Math.random()*4)];
-      }
-      if (Math.random() > 1/newPop.population) {
-        newPop.demographics.age = ["Young","Middle-aged","Elderly"][Math.floor(Math.random()*3)];
-      }
-      pop.loyalty.player *= 0.8;
-      notification = pop.name + " expels its less prestigious members into a new population.";
-      // end authority split
+      pop.splitByType('authority');
+
       
     } else if (targets.length < 1 && superiors.length > 0) {
       var targetPop = superiors[Math.floor(Math.random()*superiors.length)]

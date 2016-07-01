@@ -140,6 +140,20 @@ var handlers = {
   	view.guidanceMapSelect(x,y);
   },
   
+  uiGuidanceAssignButton: function() {
+  	var i = document.getElementById('uiGuidanceAssignSelect').value;
+  	var newJob = worldMap.coords[view.focusX][view.focusY].sites[i];
+  	
+  	view.focusPop.assign(newJob);
+
+	view.selectGuidance('uiGuidanceResult') 
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+  	
+  	view.refreshPeoplePanel();
+  	view.refreshLandPanel();
+  	view.displayGuidance(view.focusPop);
+  },
+  
   uiGuidanceProspectButton: function() {
   	view.focusPop.prospect();
 

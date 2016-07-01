@@ -648,6 +648,7 @@ var view = {
   	document.getElementById('uiGuidancePanel').style.display = "inherit";
   	document.getElementById('uiGuidancePopUp').innerHTML = pop.popUp();
   	
+	document.getElementById('uiGuidanceAssign').style.display = "none";
 	document.getElementById('uiGuidanceDevelop').style.display = "none";
 	document.getElementById('uiGuidanceExperiment').style.display = "none";
 	document.getElementById('uiGuidanceWorship').style.display = "none";
@@ -660,6 +661,17 @@ var view = {
 	} else {
 		document.getElementById('uiGuidanceResult').style.display = "inherit";
 	}
+  	
+  	// Assign
+  	var uiGuidanceAssignSelect = document.getElementById('uiGuidanceAssignSelect');
+  	uiGuidanceAssignSelect.innerHTML = '';
+  	
+  	for (i in worldMap.coords[view.focusX][view.focusY].sites) {
+  		var item = document.createElement('option');
+  		item.text = "Produce " + worldMap.coords[view.focusX][view.focusY].sites[i].site.primaryProduce.plural + " as " + worldMap.coords[view.focusX][view.focusY].sites[i].site.job + "s at " + worldMap.coords[view.focusX][view.focusY].sites[i].site.name;
+  		item.value = i;
+  		uiGuidanceAssignSelect.appendChild(item);
+  	}
   	
   	// Development
   	var uiGuidanceProspectCostButton = document.getElementById('uiGuidanceProspectCostButton');
@@ -967,6 +979,7 @@ var view = {
   closeGuidancePanel: function() {
   	document.getElementById('uiGuidancePanel').style.display = "none";
   	
+	document.getElementById('uiGuidanceAssign').style.display = "none";
 	document.getElementById('uiGuidanceDevelop').style.display = "none";
 	document.getElementById('uiGuidanceExperiment').style.display = "none";
 	document.getElementById('uiGuidanceWorship').style.display = "none";
@@ -977,6 +990,7 @@ var view = {
   },
   
   selectGuidance(panel) {
+	document.getElementById('uiGuidanceAssign').style.display = "none";
 	document.getElementById('uiGuidanceDevelop').style.display = "none";
 	document.getElementById('uiGuidanceExperiment').style.display = "none";
 	document.getElementById('uiGuidanceWorship').style.display = "none";
