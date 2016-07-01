@@ -321,7 +321,9 @@ var handlers = {
     }
     
     for (i in popsByPrestige) {
-      popsByPrestige[i].impulse();
+    	if (popsByPrestige[i].guided === 0) {
+    		popsByPrestige[i].impulse();
+    	}
     }
     
     for (i in popsByPrestige) {

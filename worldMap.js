@@ -350,39 +350,39 @@ var worldMap = {
         } else if (worldMap.coords[x][y].temperature < 0) {
           worldMap.coords[x][y].biome = dataBiomes.tundra;
           site = dataBiomes.tundra.naturalSites[Math.floor(Math.random()*dataBiomes.tundra.naturalSites.length)] ;
-          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:100});
+          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
           
         } else if (worldMap.coords[x][y].precipitation > 200) {
           worldMap.coords[x][y].biome = dataBiomes.rainforest;
           site = dataBiomes.rainforest.naturalSites[Math.floor(Math.random()*dataBiomes.rainforest.naturalSites.length)] ;
-          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:100});
+          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
           
         } else if (worldMap.coords[x][y].precipitation < 50) {
           worldMap.coords[x][y].biome = dataBiomes.desert;
           site = dataBiomes.desert.naturalSites[Math.floor(Math.random()*dataBiomes.desert.naturalSites.length)] ;
-          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:100});
+          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
           
         } else if (worldMap.coords[x][y].temperature > 20) {
           worldMap.coords[x][y].biome = dataBiomes.savanna;
           site = dataBiomes.savanna.naturalSites[Math.floor(Math.random()*dataBiomes.savanna.naturalSites.length)] ;
-          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:100});
+          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
           
         } else if (worldMap.coords[x][y].precipitation > 100) {
           worldMap.coords[x][y].biome = dataBiomes.forest;
           site = dataBiomes.forest.naturalSites[Math.floor(Math.random()*dataBiomes.forest.naturalSites.length)] ;
-          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:100});
+          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
           
         } else {
           worldMap.coords[x][y].biome = dataBiomes.shrubland;
           site = dataBiomes.shrubland.naturalSites[Math.floor(Math.random()*dataBiomes.shrubland.naturalSites.length)] ;
-          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:100});
+          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
           
         }
         
         if (x > 1 && y > 1 && x < worldMap.prefs.size_x-1 && y < worldMap.prefs.size_y-1) {
           if (worldMap.coords[x+1][y].altitude < 0 || worldMap.coords[x][y+1].altitude < 0 || worldMap.coords[x-1][y].altitude < 0 || worldMap.coords[x][y-1].altitude < 0 ) {
             if (Math.random() < 0.3 ) {
-              worldMap.coords[x][y].sites.splice(1,1,{site:[dataSites.cowrieBeach,dataSites.shallows][Math.floor(Math.random()*2)],capacity:100});
+              worldMap.coords[x][y].sites.splice(1,1,{site:[dataSites.cowrieBeach,dataSites.shallows][Math.floor(Math.random()*2)],capacity:20+Math.floor(Math.random()*20)});
             }          
         }
         
