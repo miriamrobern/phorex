@@ -284,6 +284,10 @@ var handlers = {
 	view.refreshPeoplePanel();
   },
   
+  helpTopics: function() {
+  	document.getElementById('uiHelpContent').src="helpfiles/helptopics.html";
+  },
+  
   processTurn() {
   
   	document.getElementById('uiGuidancePanel').style.display = "none";

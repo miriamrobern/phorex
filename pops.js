@@ -8,7 +8,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.population = population;
   this.x = x;
   this.y = y;
-  this.lastSeason = this.name + " take their place in the pageant of history.";
+  this.lastSeason = this.name + " rally behind a new vision of the future.";
   this.loyalty = {player:0};
   this.guided = 0;
   
@@ -292,7 +292,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	for (var x=this.x-sight; x<this.x+sight+1; x++) {
   		for (var y=this.y-sight; y<this.y+sight+1; y++) {
   			dist = Math.pow((this.x-x)*(this.x-x)+(this.y-y)*(this.y-y),.5);
-  			if (x > 0 && y > 0 && x < worldMap.prefs.size_x && y < worldMap.prefs.size_y && dist <= sight) {
+  			if (x >= 0 && y >= 0 && x < worldMap.prefs.size_x && y < worldMap.prefs.size_y && dist <= sight) {
   				visible.push({x,y});
   			}
   		}
