@@ -150,6 +150,20 @@ ul {
   color: gold;  
 }
 
+.uiPop {
+}
+
+.uiPopUnguided {
+}
+
+.uiPopUnguided strong {
+	color: blue;
+}
+
+.uiPopGuided strong {
+	color:darkblue;
+}
+
 #uiTitleLand {
   background-color: darkgreen;
   color: khaki;  
@@ -219,6 +233,13 @@ ul {
 
 #uiToggleNotificationsButton {
   float:right;
+}
+
+.uiNotification {
+}
+
+.uiNotification:hover {
+	background: #aaa;
 }
 
 

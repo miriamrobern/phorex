@@ -24,6 +24,7 @@ var testMap = {
           sites: [],
           units: [],
           stocks: {},
+          fog: 1,
           
         });
       }
@@ -35,9 +36,9 @@ var testMap = {
     worldMap.coords[2][1].altitude = 2;
     worldMap.coords[2][2].altitude = 2;
     worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.fruitGrove,capacity:100},{site:dataSites.cowrieBeach,capacity:100},{site:dataSites.knappery,capacity:100}];
-    worldMap.coords[1][1].sites = [dataSites.theWilds,dataSites.grazingLand,dataSites.river];
-    worldMap.coords[1][2].sites = [dataSites.theWilds,dataSites.outcropping,dataSites.peatBog];
-    worldMap.coords[2][1].sites = [dataSites.theWilds,dataSites.clayDeposit,dataSites.pond];
+    worldMap.coords[1][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.grazingLand,capacity:100},{site:dataSites.river,capacity:100}];
+    worldMap.coords[1][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.outcropping,capacity:100},{site:dataSites.peatBog,capacity:100}];
+    worldMap.coords[2][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.clayDeposit,capacity:100},{site:dataSites.pond,capacity:100}];
     worldMap.coords[1][1].biome = dataBiomes.forest;
     worldMap.coords[1][2].biome = dataBiomes.desert;
     worldMap.coords[2][1].biome = dataBiomes.tundra;
@@ -48,10 +49,10 @@ var testMap = {
     
     // pop(name,people,population,x,y,prestige,values,demographics,dispositions,equipment,health,movement,job)
     
-    southeast = new Pop("Southeasterners",south,22,2,2,100,{aggression: 100, piety: 100},{gender:"mixed",age:"mixed"});
-    northwest = new Pop("Northwesterners",north,11,2,2,1,{aggression: 100, matriarchy: 100},{gender:"mixed",age:"mixed"});
-    northeast = new Pop("Northeasterners",north,50,2,2,50,{aggression: 100, patriarchy: 100},{gender:"mixed",age:"mixed"});
-    southwest = new Pop("Southwesterners",south,21,2,2,21,{aggression: 100, neutrarchy: 100, authority:10},{gender:"mixed",age:"mixed"});
+    southeast = new Pop("Southeasterners",south,22,2,2,100,{aggression: 100, inquiry: 100},{gender:"mixed",age:"mixed"});
+    northwest = new Pop("Northwesterners",north,11,2,2,1,{aggression: 100, inquiry: 100},{gender:"mixed",age:"mixed"});
+    northeast = new Pop("Northeasterners",north,50,2,2,50,{aggression: 100, inquiry: 100},{gender:"mixed",age:"mixed"});
+    southwest = new Pop("Southwesterners",south,21,2,2,21,{aggression: 100, inquiry: 100, authority:10},{gender:"mixed",age:"mixed"});
     
     
     worldMap.coords[1][1].units = [];
@@ -59,9 +60,10 @@ var testMap = {
     worldMap.coords[2][2].units = [southeast,northwest,northeast,southwest];
     worldMap.coords[2][1].units = [];
     
+    southwest.guided = 1;
+    
     southeast.loyalty.player = 50;
     northwest.loyalty.player = 50;
-    northeast.loyalty.player = 50;
     southwest.loyalty.player = 50;
     pops.push(southeast);
     pops.push(southwest);
@@ -69,6 +71,7 @@ var testMap = {
     pops.push(northwest);
     
     southeast.advances = {failures:80, manufacture:3, caribouHerding:1, };
+    southeast.inv.caribou = 10;
 
     
     view.focusX = 2;

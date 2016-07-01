@@ -219,6 +219,11 @@
 							<button onclick='handlers.uiGuidanceDivestButton()'>Divest! (10G)</button>
 							<p class="guidance">Equipment changes occur immediately.</p>
     				</div>
+    				<div id="uiGuidanceResult" hidden>
+    					<h2>Result of your Guidance</h2>
+    						<p>You've already provided guidance to this population for the season.  Here's what they did:</p>
+    						<p id="uiGuidanceResultContent"></p>
+    				</div>
     			</td>
     			<td id="uiGuidanceClose">
     				<button onclick="view.closeGuidancePanel()">Dismiss</button>
@@ -252,7 +257,10 @@
         <h2 class="uiTitle" id="uiTitleCivics">Civics</h2>
       	<p>There is no formal government here.</p>
         <h3 class="ui">Policies</h3>
-        <ul class="uiPolicies"></ul>
+        <ul class="uiPolicies">
+        	<li><strong>Movement</strong> is unrestricted.</li>
+        	<li><strong>Work</strong> is unrestricted.</li>
+        </ul>
         <h3 class="ui">Defenses</h3>
         <ul class="uiDefense"></ul>
       </div>

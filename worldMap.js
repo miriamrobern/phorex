@@ -510,6 +510,7 @@ var worldMap = {
     
     for (i in worldMap.coords[hereX][hereY].units) {
     	worldMap.coords[hereX][hereY].units[i].loyalty.player = 50;
+    	popsByPrestige.push(worldMap.coords[hereX][hereY].units[i]);
     }
     
     for (y = 0 ; y < worldMap.prefs.size_y; y++) {

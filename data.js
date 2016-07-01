@@ -326,6 +326,7 @@ var dataResources = {
     key: "caribou",
     name: "Caribou",
     plural: "head of Caribou",
+    advances: [dataAdvances.feminism],
   },
   
 };

@@ -142,27 +142,48 @@ var handlers = {
   
   uiGuidanceProspectButton: function() {
   	view.focusPop.prospect();
+
+	view.selectGuidance('uiGuidanceResult')  	
+  	view.refreshPeoplePanel();
+  	view.refreshLandPanel();
+  	view.refreshMinimapPanel();
+  	view.displayGuidance(view.focusPop);
   },
   
   uiGuidanceBuildButton: function() {
   	var building = document.getElementById('uiGuidanceBuildSelect').value;
   	view.focusPop.build(building);
+
+	view.selectGuidance('uiGuidanceResult')
+	view.refreshPeoplePanel();
+  	view.refreshLandPanel();
+  	view.displayGuidance(view.focusPop);
   },
   
   uiGuidanceExperimentButton: function() {
   	var uiGuidanceExperimentSelect = document.getElementById('uiGuidanceExperimentSelect');
   	var resource = uiGuidanceExperimentSelect.options[uiGuidanceExperimentSelect.selectedIndex].value;
   	view.focusPop.experiment(resource);
+
+	view.selectGuidance('uiGuidanceResult') 
+	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	
+  	view.refreshPeoplePanel();
+  	view.displayGuidance(view.focusPop);
   },
   
   uiGuidanceEnactButton: function() {
   	var uiGuidanceEnactSelect = document.getElementById('uiGuidanceEnactSelect');
   	var rite = uiGuidanceEnactSelect.options[uiGuidanceEnactSelect.selectedIndex].value;
   	view.focusPop.enact(rite); // or should this be rite.enact()?
+
+	view.selectGuidance('uiGuidanceResult') 
   },
   
   uiGuidanceDesignButton: function() {
   	view.focusPop.design();
+
+	view.selectGuidance('uiGuidanceResult') 
   },
   
   uiGuidanceSynthesizeButton: function() {
@@ -171,24 +192,44 @@ var handlers = {
   	var riteA = uiGuidanceSynthesisSelectA.options[uiGuidanceSynthesisSelectA.selectedIndex].value;
   	var riteB = uiGuidanceSynthesisSelectB.options[uiGuidanceSynthesisSelectB.selectedIndex].value;
   	view.focusPop.synthesize(riteA,riteB);
+
+	view.selectGuidance('uiGuidanceResult') 
   },
   
   uiGuidanceScoutButton: function() {
   	var targetX = view.targetX;
   	var targetY = view.targetY;
-  	view.focusPop.scout(x,y);
+  	view.focusPop.scout(targetX,targetY);
+
+	view.selectGuidance('uiGuidanceResult') 
   },
   
   uiGuidanceRaidButton: function() {
   	var targetX = view.targetX;
   	var targetY = view.targetY;
-  	view.focusPop.raid(x,y);
+  	view.focusPop.raid(targetX,targetY);
+
+	view.selectGuidance('uiGuidanceResult') 
   },
   
   uiGuidanceMigrateButton: function() {
   	var targetX = view.targetX;
   	var targetY = view.targetY;
-  	view.focusPop.migrate(x,y);
+  	view.focusPop.migrate(targetX,targetY);
+	
+	view.focusX = targetX;
+	view.focusY = targetY;
+
+	view.selectGuidance('uiGuidanceResult') 
+  	
+	view.refreshPeoplePanel();
+	view.refreshLandPanel();
+	view.refreshMinimapPanel();
+	view.refreshWorshipPanel();
+	view.displayWorldMap();
+	view.refreshGuidanceMap();
+
+	view.selectGuidance('uiGuidanceResult') 
   },
   
   uiGuidanceRenameButton: function() {
@@ -200,10 +241,14 @@ var handlers = {
   uiGuidanceSplitButton: function() {
   	var splitType=document.getElementById('uiGuidanceSplitSelect').value;
   	view.focusPop.splitByType(splitType);
+
+	view.selectGuidance('uiGuidanceResult') 
   },
   
   uiGuidanceMergeButton: function() {
   	view.focusPop.mergeByType(0);
+
+	view.selectGuidance('uiGuidanceResult') 
   },
   
   uiGuidanceEquipButton: function() {
@@ -226,7 +271,7 @@ var handlers = {
     uiNotificationsList.innerHTML = "";
     
     // Sort all populations by prestige so high-prestige pops go first everywhere
-    var popsByPrestige = [];
+    popsByPrestige = [];
     for (i in pops) {
       popsByPrestige.push(pops[i]);
     }
@@ -256,6 +301,7 @@ var handlers = {
     
     for (i in popsByPrestige) {
       popsByPrestige[i].season(popsByPrestige[i]);
+      popsByPrestige[i].guided = 0;
     }
     
     gameClock.turn++;

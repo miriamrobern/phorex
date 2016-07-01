@@ -1,5 +1,7 @@
 var notificationLog = [];
 
+var popsByPrestige = [];
+
 var gameClock = {
   turn: 0,
   guidancePoints: 100,

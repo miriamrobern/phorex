@@ -394,11 +394,9 @@ var view = {
   refreshPeoplePanel: function() {
     
     var uiPeopleList = document.getElementById("uiPeopleList");
-    var uiNotificationsList = document.getElementById('uiNotificationsList');
     
     uiPeopleList.innerHTML = "";
-    uiNotificationsList.innerHTML = "";
-    
+        
     worldMap.coords[view.focusX][view.focusY].units.sort(function(a,b){return b.prestige - a.prestige});
     
     for (i in worldMap.coords[view.focusX][view.focusY].units) {
@@ -408,13 +406,16 @@ var view = {
       var popLi = document.createElement('li');
       var popPopUp = pop.popUp();
       popLi.innerHTML = "<a onclick='handlers.selectPop("+i+")' class='popup'><strong>" + pop.name + ",</strong> " + pop.population + " " + pop.people.name + " " + pop.job.site.job + "s <span>" + popPopUp + "</span></a>";
-      uiPeopleList.appendChild(popLi);
       
-      if (pop.lastSeason !== undefined) {
-		  var notLi = document.createElement('li');
-		  notLi.innerHTML = pop.lastSeason;
-		  uiNotificationsList.appendChild(notLi);
+      if (pop.loyalty.player > 0 && pop.guided !== 1) {
+      	popLi.className = "uiPopUnguided";
+      } else if (pop.loyalty.player > 0) {
+      	popLi.className = "uiPopGuided";
+      } else {
+      	popLi.className = "uiPop";
       }
+      
+      uiPeopleList.appendChild(popLi);
 
     }
   },
@@ -425,6 +426,7 @@ var view = {
     var uiSitesList = document.getElementById("uiSitesList");
     var uiStocksList = document.getElementById("uiStocksList");
     var sitePopUp;
+    var workers;
     
     var here=worldMap.coords[view.focusX][view.focusY]
     uiLandShort.innerHTML = here.biome.name + " (" + Math.floor(here.altitude*900) + "m elevation, " + here.precipitation + "cm rainfall, " + here.temperature + "\u00B0 celsius)";
@@ -432,13 +434,11 @@ var view = {
     uiSitesList.innerHTML = "";
     uiStocksList.innerHTML = "";
     
-    var sitePopUp = function() {
-    	return site.name;
-    };
-    
     for (i in worldMap.coords[view.focusX][view.focusY].sites) {
       
       site = worldMap.coords[view.focusX][view.focusY].sites[i].site;
+      workers = 0;
+      capacity = worldMap.coords[view.focusX][view.focusY].sites[i].capacity;
       sitePopUp = "<strong>"+site.name+"</strong>";
       if (site.tools) {
       	sitePopUp += "<p>When equipped with "+site.tools.name+"s, the ";
@@ -462,10 +462,23 @@ var view = {
       	}
       }
       sitePopUp += ".</p>";
+      
+      for (u in here.units) {
+      	if (here.units[u].job === worldMap.coords[view.focusX][view.focusY].sites[i]) {
+      		workers += here.units[u].population;
+      	}
+      }
+      
+      if (workers > capacity) {
+      	sitePopUp += "<p><strong>This site is over capacity!</strong>  Unless " + (workers-capacity) + " workers move elsewhere, this site will be overharvested and lose capacity.</p>"
+      } else {
+      	sitePopUp += "<p>There are presently "+workers+" workers here, out of a capacity of "+capacity+" workers.</p>";
+      }
+      
       if (site.upgradeAdvance !== undefined) {
       	sitePopUp += "<p>Upgrades with the "+site.upgradeAdvance.name+" advance.</p>";
       }
-      siteText = "<a class='popup'>"+site.name+"<span>"+sitePopUp+"</span></a>" ;
+      siteText = "<a class='popup'>" + site.name + " (" + workers + "/" + capacity + ") <span>" + sitePopUp + "</span></a>" ;
       
       var sitesLi = document.createElement('li');
       sitesLi.innerHTML = siteText;
@@ -559,6 +572,17 @@ var view = {
   },
   
   refreshNotificationsPanel: function() {
+    var uiNotificationsList = document.getElementById('uiNotificationsList');
+    uiNotificationsList.innerHTML = '';
+  
+  	for (i in popsByPrestige) {
+  		if (popsByPrestige[i].loyalty.player > 0) {
+  			var notLi = document.createElement('li');
+  			notLi.innerHTML = "<a onclick='view.refocus("+popsByPrestige[i].x+","+popsByPrestige[i].y+")'>"+popsByPrestige[i].lastSeason+"</a>";
+  			notLi.className = "uiNotification";
+  			uiNotificationsList.appendChild(notLi);
+  		}
+  	}
     
   },
   
@@ -668,7 +692,7 @@ var view = {
   			}
   		}
   	}
-  	
+  	  	
   	for (i in canBuild) {
   		var item = document.createElement('option');
   		var buildCost = ' (cost:';
@@ -922,6 +946,14 @@ var view = {
   
   closeGuidancePanel: function() {
   	document.getElementById('uiGuidancePanel').style.display = "none";
+  	
+	document.getElementById('uiGuidanceDevelop').style.display = "none";
+	document.getElementById('uiGuidanceExperiment').style.display = "none";
+	document.getElementById('uiGuidanceWorship').style.display = "none";
+	document.getElementById('uiGuidanceExpedition').style.display = "none";
+	document.getElementById('uiGuidanceSplitMerge').style.display = "none";
+	document.getElementById('uiGuidanceEquip').style.display = "none";
+	document.getElementById('uiGuidanceResult').style.display = "none";
   },
   
   selectGuidance(panel) {
@@ -931,8 +963,13 @@ var view = {
 	document.getElementById('uiGuidanceExpedition').style.display = "none";
 	document.getElementById('uiGuidanceSplitMerge').style.display = "none";
 	document.getElementById('uiGuidanceEquip').style.display = "none";
+	document.getElementById('uiGuidanceResult').style.display = "none";
 	
-  	document.getElementById(panel).style.display = "inherit";
+	if (view.focusPop.guided === 0 || panel === "uiGuidanceEquip") {
+		document.getElementById(panel).style.display = "inherit";
+	} else {
+		document.getElementById('uiGuidanceResult').style.display = "inherit";
+	}
   	
   	document.getElementById('uiGuidanceScoutButton').disabled = true;
   	document.getElementById('uiGuidanceRaidButton').disabled = true;

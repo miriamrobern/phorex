@@ -8,8 +8,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.population = population;
   this.x = x;
   this.y = y;
-  this.lastSeason;
+  this.lastSeason = this.name + " take their place in the pageant of history.";
   this.loyalty = {player:0};
+  this.guided = 0;
   
   if (prestige === undefined) {
     this.prestige = Math.floor(Math.random()*100);
@@ -335,6 +336,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	visible.push({x:this.x-1,y:this.y+1});
   	visible.push({x:this.x-1,y:this.y-1});
   	
+  	// Filter through and remove any off the map
+  	
   	return visible;
   	
   };
@@ -431,11 +434,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 	}
 	
 	this.notify(notification);
-  	
-  	view.refreshPeoplePanel();
-  	view.refreshLandPanel();
-  	view.refreshMinimapPanel();
-  	view.displayGuidance(this);
+	this.guided = 1;
   };
   
   this.build = function(site) {
@@ -449,53 +448,126 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   		}
   	}
   	
-  	worldMap.coords[this.x][this.y].sites.push({site:site,capacity:site.baseCapacity});
+  	this.prestige += 20;
   	
-  	view.refreshPeoplePanel();
-  	view.refreshLandPanel();
-  	view.displayGuidance(this);
+  	worldMap.coords[this.x][this.y].sites.push({site:site,capacity:site.baseCapacity});
+  	notification = this.name + "builds a "+ dataSites[site].name + ".";
+  	
+  	this.notify(notification);
+	this.guided = 1;
   	};
+  	
+  	
   
   this.experiment = function(sacrifice) {
-  	console.log("Experiment with ",sacrifice);
+
+	// The only to-do here is that pops can learn advances well beyond the range of useful advances (Forestry 47).
+  	
+  	var potentialAdvances = [];
+  	var sacrificeNum = Math.ceil(this.inv[sacrifice]/5);
+	this.inv[sacrifice] -= sacrificeNum;
+  	
+  	for (i in dataResources[sacrifice].advances) {
+    	var terrainCheck = 1;
+    	if (terrainCheck === 1) {
+        	potentialAdvances.push(dataResources[sacrifice].advances[i]);
+      	}
+    }
+    var advance = potentialAdvances[Math.floor(Math.random()*potentialAdvances.length)];
+
+    if (Math.random()*100 < sacrificeNum + this.advances.failures && advance !== undefined) {     
+      if (this.advances[advance.name] === undefined) {
+        this.advances[advance.key] = 1;
+      } else {
+        this.advances[advance.key]++;
+      }
+      this.advances.failures = 0;
+      var advanceLevel = dataAdvances[advance.key][this.advances[advance.key]];
+      
+      if (advanceLevel === undefined) {
+      	console.log("Reached End of the Advance ",advance.key);
+      } else if(advanceLevel.type === "value") {
+      	// Learned new value
+      	if (this.values[advanceLevel.key] === undefined) {
+      		this.values[advanceLevel.key] = Math.floor(100*Math.random());
+      	} else {
+      		this.values[advanceLevel.key] += 10;
+      	}
+      }
+      
+      notification = this.name + " destroys " + sacrificeNum + " " + dataResources[sacrifice].plural + " in an experiment.  They discover "+advance.name+".";      
+    } else {
+      this.advances.failures++;
+      notification = this.name + " destroys " + sacrificeNum + " " + dataResources[sacrifice].plural + " in an experiment.  It yields only negative data.";
+    }
+    
+    this.notify(notification);
+	this.guided = 1;
+  	
   	};
+  	
+  	
   	
   this.enact = function(rite) {
   	console.log("Enact ",rite);
+	this.guided = 1;
   	};
   
   this.design = function() {
   	console.log("Design a rite!");
+	this.guided = 1;
   	};
   	
   this.synthesize = function(riteA,riteB) {
   	console.log("Synthesize ",riteA,riteB);
+	this.guided = 1;
   	};
   	
   this.scout = function(x,y) {
   	console.log("Scout ",x,y);
+	this.guided = 1;
   	};
   
   this.raid = function(x,y) {
   	console.log("Raid ",x,y);
+	this.guided = 1;
   	};
   
   this.migrate = function(x,y) {
-  	console.log("Migrate ",x,y);
+  	var targetTile = worldMap.coords[x][y];
+  	var oldTile = worldMap.coords[this.x][this.y];
+	oldTile.units.splice(oldTile.units.indexOf(this),1);
+	this.x = x;
+	this.y = y;
+	this.prestige = Math.floor((this.prestige + 50)/2);
+	targetTile.units.push(this);
+	notification = this.name + " migrates to a new area."
+	
+	if (this.loyalty.player > 0) {
+		var withinSight = this.withinSight();
+		for (t in withinSight) {
+			worldMap.coords[withinSight[t].x][withinSight[t].y].fog = 1;
+		}
+	}
+	this.guided = 1;
+  		
   	};
   
   this.rename = function(newName) {
   	this.name = newName;
   	view.refreshPeoplePanel();
   	view.closeGuidancePanel();
+	this.guided = 1;
   	};
   
   this.splitByType = function(splitType) {
   	console.log("Split by type ",splitType);
+	this.guided = 1;
   	};
   
   this.mergeByType = function(mergeType,mergeTarget) {
   	console.log("Merge with ",mergeTarget," via ",mergeType);
+	this.guided = 1;
   	};
   
   this.equip = function(resource) {  	
@@ -867,7 +939,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         targets.push(worldMap.coords[pop.x][pop.y].units[i]);
       } else if (worldMap.coords[pop.x][pop.y].units[i].demographics.gender === "Women") {
         superiors.push(worldMap.coords[pop.x][pop.y].units[i]);
-        
       }
     }
     
@@ -1265,35 +1336,15 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   this.impulse.inquiry = function(pop) {
     
-    // Needs Prospecting on the top and addition of Values on the bottom
+    var currentSites = worldMap.coords[pop.x][pop.y].sites;
     
-    var sacrifice = Object.keys(pop.inv)[Math.floor(Math.random()*Object.keys(pop.inv).length)];
-    var sacrificeNum = Math.ceil(pop.inv[sacrifice]/5);
-    pop.inv[sacrifice] -= sacrificeNum;
-    potentialAdvances = [];
-    
-    // this is the experiment function - pop.experiment(sacrificeNum,sacrifice);
-    for (i in dataResources[sacrifice].advances) {
-      var terrainCheck = 1;
-      if (terrainCheck === 1) {
-        potentialAdvances.push(dataResources[sacrifice].advances[i]);
-      }
-    }
-    var potentialAdvances = dataResources[sacrifice].advances;
-    var advance = potentialAdvances[Math.floor(Math.random()*potentialAdvances.length)];
-
-    if (Math.random()*100 < sacrificeNum + pop.advances.failures && advance !== undefined) {     
-      if (pop.advances[advance.name] === undefined) {
-        pop.advances[advance.key] = 1;
-      } else {
-        pop.advances[advance.key]++;
-      }
-      pop.advances.failures = 0;
-      notification = pop.name + " destroys " + sacrificeNum + " " + dataResources[sacrifice].plural + " in an experiment.  They discover an "+advance.name+".";      
+    if (pop.inv.food > currentSites.length*10 && pop.inv.simpleTool > currentSites.length*5) {
+    	pop.prospect();
     } else {
-      pop.advances.failures++;
-      notification = pop.name + " destroys " + sacrificeNum + " " + dataResources[sacrifice].plural + " in an experiment.  It yields only negative data.";
+		var sacrifice = Object.keys(pop.inv)[Math.floor(Math.random()*Object.keys(pop.inv).length)];
+		pop.experiment(sacrifice);
     }
+    
     
   };
   
@@ -1468,14 +1519,16 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	if (tiles.length > 0) {
   		var targetTile = tiles[Math.floor(Math.random()*tiles.length)];
   		
+  		pop.migrate(targetTile.x,targetTile.y);
+  		
   		// this is the migrate function - pop.migrate(targetTile);
-  		var oldTile = worldMap.coords[pop.x][pop.y];
-  		oldTile.units.splice(oldTile.units.indexOf(pop),1);
-  		pop.name.x = targetTile.x;
-  		pop.name.y = targetTile.y;
-  		pop.prestige = Math.floor((pop.prestige + 50)/2);
-  		targetTile.tile.units.push(pop);
-  		notification = pop.name + " migrates to a new area."
+//   		var oldTile = worldMap.coords[pop.x][pop.y];
+//   		oldTile.units.splice(oldTile.units.indexOf(pop),1);
+//   		pop.name.x = targetTile.x;
+//   		pop.name.y = targetTile.y;
+//   		pop.prestige = Math.floor((pop.prestige + 50)/2);
+//   		targetTile.tile.units.push(pop);
+//   		notification = pop.name + " migrates to a new area."
   		
   		// Adjust fog for PC populations
   		
