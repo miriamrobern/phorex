@@ -638,7 +638,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   		notification += this.name + " finds an undefended stockpile!"
   		spoilsPileNum = 2;
 	} else if (targetPop === undefined) {
-		notification = this.name + " cannot find a vulnerable target.";
+		notification += this.name + " cannot find a vulnerable target.";
   	} else if (raidForce > 2 * targetPop.defense() ) {
   		spoilsPopNum = 1.5;
   		spoilsPileNum = 1.5;
@@ -670,13 +670,21 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 	if (spoilsPileNum !== 0 ) {
 	
 		pileLoot = Object.keys(targetTile.stocks);
-		popLoot = Object.keys(targetPop.inv);
+		if (targetPop === undefined) {
+			popLoot = [];
+		} else {
+			popLoot = Object.keys(targetPop.inv);
+		}
 	
 		spoilsPile = pileLoot[Math.floor(Math.random()*pileLoot.length)]
 		spoilsPop = popLoot[Math.floor(Math.random()*popLoot.length)]
 	
 		spoilsPileNum *= targetTile.stocks[spoilsPile] / 2;
-		spoilsPopNum *= targetPop.inv[spoilsPop] / 2;
+		if (targetPop === undefined) {
+			spoilsPopNum = 0;
+		} else {
+			spoilsPopNum *= targetPop.inv[spoilsPop] / 2;
+		}
 
 		spoilsPopNum = Math.floor(spoilsPopNum*100)/100;
 		spoilsPileNum = Math.floor(spoilsPileNum*100)/100;
@@ -694,10 +702,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 			targetPop.inv[spoilsPop] -= spoilsPopNum;
 		} else if (spoilsPop === undefined) {
 			spoilsText = " They add their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile.";
-			raidTarget.lastSeason += " The raiders carry off " + spoilsPileNum + " " + dataResources[spoilsPile].plural + " from the stockpile.  ";
 			pop.prestige += 10;
-			if (worldMap.coords[this][this.y].stocks[spoilsPile] === undefined) {
-				worldMap.coords[this][this.y].stocks[spoilsPile] = spoilsPileNum;
+			if (worldMap.coords[this.x][this.y].stocks[spoilsPile] === undefined) {
+				worldMap.coords[this.x][this.y].stocks[spoilsPile] = spoilsPileNum;
 			} else {
 				worldMap.coords[this.x][this.y].stocks[spoilsPile] += spoilsPileNum;
 			}
@@ -720,12 +727,14 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 			targetTile.stocks[spoilsPile] -= spoilsPileNum;
 		}
 
-		targetPop.prestige -= 5;
-		targetPop.values.aggression += 2;
+		if (targetPop !== undefined) {
+			targetPop.prestige -= 5;
+			targetPop.values.aggression += 2;
 
-		// Add raiders to raidTarget's dispositions shit-list
-		targetPop.dispositions.negative.shift();
-		targetPop.dispositions.negative.push(this);
+			// Add raiders to raidTarget's dispositions shit-list
+			targetPop.dispositions.negative.shift();
+			targetPop.dispositions.negative.push(this);
+		}
 	
 		notification += spoilsText;
 	}
@@ -1625,147 +1634,44 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   	var tiles = pop.withinRange();
   	var raidDestination;
+  	var undefendedTiles = [];
+  	var potentialTargets = [];
   	var raidTargets = [];
-  	var weakTargets = [];
   	var hatedTargets = [];
-  	var raidForce = pop.force();
-  	var targetDefense = 0;
-  	var raidTarget;
+  	var targetPop;
+  	var targetPile;
+  	var pile = 0;
   	
-  	if (tiles.length > 0) {
-  		raidDestination = tiles[Math.floor(Math.random()*tiles.length)].tile
-  		raidTargets = raidDestination.units;
-  	} else if (worldMap.coords[pop.x][pop.y].units.length > 1) {
-  		raidDestination = worldMap.coords[pop.x][pop.y];
-  		raidTargets = raidDestination.units;
-  	} else {
-  		pop.impulse.authority(pop);
-  	}
-  	
-  	for (i in raidTargets) {
-  		targetDefense = raidTargets[i].defense();
-  		if (raidTargets[i] != pop && raidForce > targetDefense*0.8) {
-  			weakTargets.push(raidTargets[i]);
+  	for (i in tiles) {
+  		potentialTargets = potentialTargets.concat(tiles[i].tile.units);
+  		pile = 0;
+  		for (n in tiles[i].tile.stocks) {
+  			pile += tiles[i].tile.stocks[n];
+  		}
+  		if (tiles[i].tile.units.length === 0 && pile > 0) {
+  			undefendedTiles.push({x:tiles[i].x,y:tiles[i].y});
   		}
   	}
-  	
-  	// Add additional entries for weak targets already on the raiders' shit-list  	
-  	for (i in weakTargets) {
-  		hatedTargets = hatedTargets.concat(pop.dispositions.negative.filter(function(pop) {return pop === weakTargets[i]}));
-  	}
-  	weakTargets = weakTargets.concat(hatedTargets);
 
-  	raidTarget = weakTargets[Math.floor(Math.random()*weakTargets.length)];
+  	// Add additional entries to potentialTargets if they appear on the raiders' shit-list
+  	for (i in potentialTargets) {
+  		hatedTargets = hatedTargets.concat(pop.dispositions.negative.filter(function(pop) {return pop === potentialTargets[i]}));
+  	}
+  	potentialTargets = potentialTargets.concat(hatedTargets);
   	
-  	if (raidDestination !== undefined && raidTargets.length === 0) {
-  		notification = pop.name + " mounts a raid to ("+raidDestination.x+","+raidDestination.y+") and finds an undefended stockpile.";
-  		
-  		// Plunder the stockpile
-  		
-  	} else if (raidTarget === undefined && raidTargets.length > 0) {
-  		raidTarget = raidTargets[Math.floor(Math.random()*raidTargets.length)];
-  		notification = pop.name + " mounts a raid but finds the " + raidTarget.name + " far too formidable to fight.";
-  		
-  		// Arm Up?
-  		
-  	} else if (raidTarget !== undefined) {
-  		notification = pop.name + " mounts a raid on the " + raidTarget.name + ".  ";
-  		var potentialSpoilsPop = Object.keys(raidTarget.inv);
-  		var potentialSpoilsPile = Object.keys(raidDestination.stocks);
-  		var spoilsPop = potentialSpoilsPop[Math.floor(Math.random()*potentialSpoilsPop.length)];
-  		var spoilsPile = potentialSpoilsPile[Math.floor(Math.random()*potentialSpoilsPile.length)];
-  		var spoilsPopNum = raidTarget.inv[spoilsPop] / 2;
-  		var spoilsPileNum = raidDestination.stocks[spoilsPile] / 2;
-  		var spoilsText;
-  		
-  		if (raidForce/targetDefense > 2) { // crit success
-  			spoilsPopNum *= 1.5;
-  			spoilsPileNum *= 1.5;
-  			raidTarget.health -= 30;
-  			
-  			notification = notification + "They trounce the defenders and return at "+Math.floor(pop.health)+"% health.";
-  			raidTarget.lastSeason += "The "+pop.name+" trounce them in a raid, reducing their health to "+raidTarget.health+"%.";
-  		} else if (raidForce/targetDefense > 1) { // success
-  			spoilsPopNum *= 1;
-  			spoilsPileNum *= 1;
-  			pop.health -= 10;
-  			raidTarget.health -= 20;
-  			
-  			notification = notification + "They defeat the defenders and return at "+Math.floor(pop.health)+"% health.";
-  			raidTarget.lastSeason += "The "+pop.name+" defeat them in a raid, reducing their health to "+raidTarget.health+"%.";
-  		} else if (raidForce/targetDefense > .5) { // weak hit
-  			spoilsPopNum *= 0;
-  			spoilsPileNum *= 1;
-  			pop.health -= 20;
-  			raidTarget.health -= 10;
-  			
-  			notification = notification + "They struggle against the defenders and return at "+Math.floor(pop.health)+"% health.";
-  			raidTarget.lastSeason += "The "+pop.name+" struggle against them in a raid, reducing their health to "+raidTarget.health+"%.";
-  		} else { // crit fail / routed
-  			spoilsPopNum = 0;
-  			spoilsPileNum = 0;
-  			pop.health -= 30;
-  			notification = notification + pop.name + " are routed!  They return home without any spoils and at "+Math.floor(pop.health)+"% health.";
-  			raidTarget.lastSeason += "The "+pop.name+" attempt a raid against them, but are repulsed!";
-  		}
-  		
-  		if (spoilsPileNum !== 0 ) {
-  		
-			spoilsPopNum = Math.floor(spoilsPopNum*100)/100;
-			spoilsPileNum = Math.floor(spoilsPileNum*100)/100;
-		
-			if (spoilsPop === undefined && spoilsPile === undefined) {
-				spoilsText = "Their targets, however, had nothing to take as spoils.";
-			} else if (spoilsPop === undefined) {
-				spoilsText = "They keep " + spoilsPopNum + " of the " +raidTarget.name+ "'s " + dataResources[spoilsPop].plural + " as spoils.";
-				raidTarget.lastSeason += "The raiders carry off " + spoilsPopNum + " " + dataResources[spoilsPop].plural + " from the "+raidTarget.name+".  ";
-				if (pop.inv[spoilsPop] === undefined) {
-					pop.inv[spoilsPop] = spoilsPopNum;
-				} else {
-					pop.inv[spoilsPop] += spoilsPopNum;
-				}
-				raidTarget.inv[spoilsPop] -= spoilsPopNum;
-			} else if (spoilsPile === undefined) {
-				spoilsText = "They add their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile.";
-				raidTarget.lastSeason += "The raiders carry off " + spoilsPileNum + " " + dataResources[spoilsPile].plural + " from the stockpile.  ";
-				pop.prestige += 10;
-				if (worldMap.coords[pop.x][pop.y].stocks[spoilsPile] === undefined) {
-					worldMap.coords[pop.x][pop.y].stocks[spoilsPile] = spoilsPileNum;
-				} else {
-					worldMap.coords[pop.x][pop.y].stocks[spoilsPile] += spoilsPileNum;
-				}
-				raidDestination.stocks[spoilsPile] -= spoilsPileNum;
-			} else {
-				spoilsText = "They add a portion of their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile and keep " + spoilsPopNum + " of the " +raidTarget.name+ "'s " + dataResources[spoilsPop].plural + " for themselves.";
-				raidTarget.lastSeason += "The raiders carry off " + spoilsPileNum + " " + dataResources[spoilsPile].plural + " from the stockpile and " + spoilsPopNum + " " + dataResources[spoilsPop].plural + " from the "+raidTarget.name+".  ";
-				pop.prestige += 10;
-				if (pop.inv[spoilsPop] === undefined) {
-					pop.inv[spoilsPop] = spoilsPopNum;
-				} else {
-					pop.inv[spoilsPop] += spoilsPopNum;
-				}
-				if (worldMap.coords[pop.x][pop.y].stocks[spoilsPile] === undefined) {
-					worldMap.coords[pop.x][pop.y].stocks[spoilsPile] = spoilsPileNum;
-				} else {
-					worldMap.coords[pop.x][pop.y].stocks[spoilsPile] += spoilsPileNum;
-				}
-				raidTarget.inv[spoilsPop] -= spoilsPopNum;
-				raidDestination.stocks[spoilsPile] -= spoilsPileNum;
-			}
-		
-			raidTarget.prestige -= 5;
-			raidTarget.values.aggression += 2;
-		
-			// Add raiders to raidTarget's dispositions shit-list
-			raidTarget.dispositions.negative.shift();
-			raidTarget.dispositions.negative.push(pop);
-		
-			notification = notification + " " + spoilsText;
-  		}
-  		
+  	targetPop = potentialTargets[Math.floor(Math.random()*potentialTargets.length)];
+  	targetPile = undefendedTiles[Math.floor(Math.random()*undefendedTiles.length)];
+  	
+  	if (targetPop === undefined && targetPile === undefined & pop.population > 1) {
+  		pop.splitByType("aggression");
+  	} else if (targetPop === undefined && targetPile === undefined) {
+  		notification = pop.name + ' has no targets and is alone with futilely aggressive thoughts.';
+  	} else if (targetPile !== undefined) {
+  		pop.raid(targetPile.x,targetPile.y);
+  	} else if (targetPop !== undefined) {
+  		pop.raid(targetPop.x,targetPop.y);
   	}
   	
-  	// Fog
   	    
   };
   
@@ -1794,20 +1700,12 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   		
   		pop.migrate(targetTile.x,targetTile.y);
   		
-  		// this is the migrate function - pop.migrate(targetTile);
-//   		var oldTile = worldMap.coords[pop.x][pop.y];
-//   		oldTile.units.splice(oldTile.units.indexOf(pop),1);
-//   		pop.name.x = targetTile.x;
-//   		pop.name.y = targetTile.y;
-//   		pop.prestige = Math.floor((pop.prestige + 50)/2);
-//   		targetTile.tile.units.push(pop);
-//   		notification = pop.name + " migrates to a new area."
-  		
-  		// Adjust fog for PC populations
-  		
   	} else {
   		notification = pop.name + " wants to migrate away, but there is nowhere to go.";
-  		// Reduce Loyalty
+  		
+  		if (pop.loyalty.player !== undefined) {
+  			pop.loyalty.player = Math.floor(pop.loyalty.player/2);
+  		}
   	}
   };
   

@@ -665,6 +665,8 @@ var view = {
   	// Assign
   	var uiGuidanceAssignSelect = document.getElementById('uiGuidanceAssignSelect');
   	uiGuidanceAssignSelect.innerHTML = '';
+  	var uiGuidanceAssignCostButton = document.getElementById('uiGuidanceAssignCostButton');
+  	uiGuidanceAssignCostButton.innerHTML = Math.max(10,Math.ceil(view.focusPop.prestige));
   	
   	for (i in worldMap.coords[view.focusX][view.focusY].sites) {
   		var item = document.createElement('option');
