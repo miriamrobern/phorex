@@ -37,7 +37,13 @@ function Rite(pop,sacrifice) {
   this.icon = [this.icon.charAt(0).toUpperCase() + this.icon.slice(1)];
   this.form = [riteForms[Math.floor(Math.random()*riteForms.length)]];
   this.adjective = [riteAdjectives[Math.floor(Math.random()*riteAdjectives.length)]];
-  this.name =  this.form[0] + " of the " + this.adjective[0] + " " + this.icon[0];
+  
+  if (Math.random() > 0.5 ) {
+	 this.name =  this.form[0] + " of the " + this.adjective[0] + " " + this.icon[0];
+  } else {
+	 this.name =  this.form[0] + " of the " + this.icon[0];
+	 this.adjective = [];
+  }
   
   var potentialValues = Object.keys(pop.values);
   var valueName = potentialValues[Math.floor(Math.random()*potentialValues.length)];
@@ -53,8 +59,9 @@ function Rite(pop,sacrifice) {
     var ritePopUp = '';
     var moralList = '';
     var itemsList = '';
+    var practitioners = '';
     
-    for (var n in this.moral) {
+    for (n in this.moral) {
 		moralList += ['an abject rejection of ','a thorough disgust with ','a disdain of ','dislike of ','a nuanced dismissal of ','mild approval of ','a strong value for ','a fervent adulation of ','an incredible valuation of ','an obsession with ','a fanatical devotion to '][Math.floor(this.moral[n].valueNum/10)]
     	moralList += this.moral[n].value;
 		if (n < this.moral.length - 2 ) {
@@ -64,14 +71,25 @@ function Rite(pop,sacrifice) {
 		}
     }
     
-    for (var n in this.items) {
+    for (n in this.items) {
       itemsList += this.items[n].name;
       if (n < this.items.length - 2 ) {
         itemsList += ", ";
       } else if (n == this.items.length - 2 ) {
       	itemsList += ", and ";
       }
-    }    
+    }
+    
+    for (n in this.practitioners) {
+    	if (this.practitioners[n].x === view.focusX && this.practitioners[n].y === view.focusY) {
+    		practitioners += this.practitioners[n].name;
+    		if (n < this.practitioners.length - 2 ) {
+    			practitioners += ", ";
+    		} else if (n == this.practitioners.length - 2 ) {
+    			practitioners += ", and ";
+    		}
+    	}
+    }
     
     ritePopUp += "<strong>"+this.name+"</strong>";
     
@@ -79,13 +97,15 @@ function Rite(pop,sacrifice) {
     
     ritePopUp += "<p>Full enactment requires " + itemsList + ".</p><p>It has a power of " + this.power + ".</p>";
     
+    ritePopUp += "<p>This rite is practiced by " + practitioners + ".</p>";
+    
     return ritePopUp;
   };
 
   
   this.enact = function(pop) {
     var items = 0;
-    var notification = pop.name + " performs the " +this.name+ " rite.  ";
+    notification = pop.name + " performs the " +this.name+ " rite.  ";
     var distortion = 0;
     for (i in this.items) {
       if (pop.inv[this.items[i].key] > 0 ) {

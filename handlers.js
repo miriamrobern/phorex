@@ -191,7 +191,7 @@ var handlers = {
   uiGuidanceEnactButton: function() {
   	var uiGuidanceEnactSelect = document.getElementById('uiGuidanceEnactSelect');
   	var rite = uiGuidanceEnactSelect.options[uiGuidanceEnactSelect.selectedIndex].value;
-  	view.focusPop.enact(rite); // or should this be rite.enact()?
+  	view.focusPop.rites[rite].enact(view.focusPop);
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
