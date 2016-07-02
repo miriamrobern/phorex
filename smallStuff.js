@@ -28,6 +28,7 @@ var rites = [];
 function Rite(pop,sacrifice) {
   
   var riteForms = ["Parable","Feast","Ritual","Dance","Song","Secret","Mystery","Teachings","Myth","Fable","Koan","Story","Tale","Passion"];
+  var riteAdjectives = ["Hungry","Dying","Wise","Laughing","Learned","Ancient","Eternal","Starving","Thirsty","Compassionate","Foolish"];
   var riteIcons = [];
   riteIcons = riteIcons.concat(worldMap.coords[pop.x][pop.y].biome.flora);
   riteIcons = riteIcons.concat(worldMap.coords[pop.x][pop.y].biome.fauna);
@@ -35,10 +36,12 @@ function Rite(pop,sacrifice) {
   this.icon = riteIcons[Math.floor(Math.random()*riteIcons.length)];
   this.icon = [this.icon.charAt(0).toUpperCase() + this.icon.slice(1)];
   this.form = [riteForms[Math.floor(Math.random()*riteForms.length)]];
-  this.name =  this.form[0] + " of the " + this.icon[0];
+  this.adjective = [riteAdjectives[Math.floor(Math.random()*riteAdjectives.length)]];
+  this.name =  this.form[0] + " of the " + this.adjective[0] + " " + this.icon[0];
   
   var potentialValues = Object.keys(pop.values);
-  this.moral = [{value: potentialValues[Math.floor(Math.random()*potentialValues.length)], valueNum: Math.max(0,Math.min(100,Math.floor(pop.values[this.valueName])))}];
+  var valueName = potentialValues[Math.floor(Math.random()*potentialValues.length)];
+  this.moral = [{value: valueName, valueNum: Math.max(0,Math.min(100,Math.floor(pop.values[valueName])))}];
   
   this.power = Math.floor(Math.random()*20);
   
@@ -48,24 +51,33 @@ function Rite(pop,sacrifice) {
   
   this.popUp = function() {
     var ritePopUp = '';
+    var moralList = '';
     var itemsList = '';
-    var valueNumDescriptor = ['an abject rejection','a thorough disgust','a disdain','dislike','a nuanced dismissal','mild approval','a strong value','a fervent adulation','an incredible valuation','an obsession','a fanatical devotion'][Math.floor(this.valueNum/10)]
     
-    for (n in this.items) {
-      itemsList = itemsList + this.items[n].name;
-      if (n < this.items-1) {
-        itemsList = itemsList + ", ";
-      }
+    for (var n in this.moral) {
+		moralList += ['an abject rejection of ','a thorough disgust with ','a disdain of ','dislike of ','a nuanced dismissal of ','mild approval of ','a strong value for ','a fervent adulation of ','an incredible valuation of ','an obsession with ','a fanatical devotion to '][Math.floor(this.moral[n].valueNum/10)]
+    	moralList += this.moral[n].value;
+		if (n < this.moral.length - 2 ) {
+			moralList += ", ";
+		} else if (n == this.moral.length - 2 ) {
+			moralList += ", and ";
+		}
     }
     
+    for (var n in this.items) {
+      itemsList += this.items[n].name;
+      if (n < this.items.length - 2 ) {
+        itemsList += ", ";
+      } else if (n == this.items.length - 2 ) {
+      	itemsList += ", and ";
+      }
+    }    
     
-    ritePopUp = ritePopUp + "<strong>"+this.name+"</strong>";
+    ritePopUp += "<strong>"+this.name+"</strong>";
     
-    ritePopUp = ritePopUp + "<p>This rite promotes " + valueNumDescriptor + " (" + this.valueNum + ") of " + this.valueName + ".</p>";
+    ritePopUp += "<p>This rite promotes " + moralList + ".</p>";
     
-    ritePopUp = ritePopUp + "<p>Full enactment requires " + itemsList + ".</p>";
-    
-    ritePopUp = ritePopUp + "<p>It has a power of " + this.power + ".</p>";
+    ritePopUp += "<p>Full enactment requires " + itemsList + ".</p><p>It has a power of " + this.power + ".</p>";
     
     return ritePopUp;
   };

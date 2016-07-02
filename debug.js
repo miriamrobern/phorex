@@ -49,7 +49,7 @@ var testMap = {
     
     // pop(name,people,population,x,y,prestige,values,demographics,dispositions,equipment,health,movement,job)
     
-    southeast = new Pop("Southeasterners",south,22,2,2,100,{piety: 100, inquiry: 50, authority: 25, aggression: 1},{gender:"mixed",age:"mixed"});
+    southeast = new Pop("Southeasterners",south,22,2,2,100,{piety: 99, inquiry: 50, authority: 25, aggression: 1},{gender:"mixed",age:"mixed"});
     northwest = new Pop("Northwesterners",north,11,2,2,1,{piety: 100, aggression: 100},{gender:"mixed",age:"mixed"});
     northeast = new Pop("Northeasterners",north,50,2,2,50,{piety: 100, aggression: 50},{gender:"mixed",age:"mixed"});
     southwest = new Pop("Southwesterners",south,21,2,2,21,{piety: 100, aggression: 25},{gender:"mixed",age:"mixed"});

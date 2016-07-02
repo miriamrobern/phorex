@@ -525,8 +525,15 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	if (newRite.icon.length > 4) {
   		newRite.icon.pop();
   	}
+  	newRite.adjective = riteA.adjective.concat(riteB.adjective);
+  	newRite.adjective.sort(function() {return Math.floor(Math.random()*2)});
+  	if (newRite.adjective.length > 2) {
+  		newRite.adjective.pop();
+  	}
+  	var disposableAdjectives = newRite.adjective.slice();
   	var icons = '';
   	for (i in newRite.icon) {
+  		if (Math.random()*2 < disposableAdjectives.length) {icons += disposableAdjectives.pop() + " "}
   		icons += newRite.icon[i]
   		if (i < newRite.icon.length-2) {
   			icons += ", the ";
@@ -535,8 +542,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   		}
   	}
   	
-  	if (newRite.icon.length === 2 && Math.random() > .33) {
-  		icons = newRite.icon[0] + " against the " + newRite.icon[1];
+  	if (newRite.icon.length === 2 && Math.random() < 0.33) {
+  		disposableAdjectives = newRite.adjective.slice();
+  		icons = '';
+  		if (Math.random()*2 < disposableAdjectives.length) {icons += disposableAdjectives.pop() + " "}
+  		icons += newRite.icon[0] + " against the ";
+  		if (Math.random()*2 < disposableAdjectives.length) {icons += disposableAdjectives.pop() + " "}
+  		icons += newRite.icon[1];
   	}
   	
   	newRite.name = newRite.form + " of the " + icons;
