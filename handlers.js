@@ -247,7 +247,7 @@ var handlers = {
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
 	view.refreshPeoplePanel();
 	view.refreshLandPanel();
-	view.displayGuidance();
+	view.displayGuidance(view.focusPop);
   },
   
   uiGuidanceMigrateButton: function() {

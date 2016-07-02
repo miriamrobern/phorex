@@ -604,6 +604,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	var targetPop;
   	var raidForce = this.force();
   	var potentialTargets = [];
+  	var hatedTargets = [];
   	var pileLoot;
   	var popLoot;
 	var spoilsPile;
@@ -621,7 +622,11 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   		}
   	} 
   	
-  	// Do the filter thing with the shit-list
+  	// Add additional entries to potentialTargets if they appear on the raiders' shit-list
+  	for (i in potentialTargets) {
+  		hatedTargets = hatedTargets.concat(pop.dispositions.negative.filter(function(pop) {return pop === potentialTargets[i]}));
+  	}
+  	potentialTargets = potentialTargets.concat(hatedTargets);
   	
   	targetPop = potentialTargets[Math.floor(Math.random()*potentialTargets.length)];
   	
@@ -664,68 +669,83 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	
 	if (spoilsPileNum !== 0 ) {
 	
-	pileLoot = Object.keys(targetTile.stocks);
-	popLoot = Object.keys(targetPop.inv);
+		pileLoot = Object.keys(targetTile.stocks);
+		popLoot = Object.keys(targetPop.inv);
 	
-	spoilsPile = pileLoot[Math.floor(Math.random()*pileLoot.length)]
-	spoilsPop = popLoot[Math.floor(Math.random()*popLoot.length)]
+		spoilsPile = pileLoot[Math.floor(Math.random()*pileLoot.length)]
+		spoilsPop = popLoot[Math.floor(Math.random()*popLoot.length)]
 	
-	spoilsPileNum *= targetTile.stocks[spoilsPile] / 2;
-	spoilsPopNum *= targetPop.inv[spoilsPop] / 2;
+		spoilsPileNum *= targetTile.stocks[spoilsPile] / 2;
+		spoilsPopNum *= targetPop.inv[spoilsPop] / 2;
 
-	spoilsPopNum = Math.floor(spoilsPopNum*100)/100;
-	spoilsPileNum = Math.floor(spoilsPileNum*100)/100;
+		spoilsPopNum = Math.floor(spoilsPopNum*100)/100;
+		spoilsPileNum = Math.floor(spoilsPileNum*100)/100;
 
-	if (spoilsPop === undefined && spoilsPile === undefined) {
-		spoilsText = " Their targets, however, had nothing to take as spoils.";
-	} else if (spoilsPile === undefined) {
-		spoilsText = " They keep " + spoilsPopNum + " of the " +targetPop.name+ "'s " + dataResources[spoilsPop].plural + " as spoils.";
-		targetPop.lastSeason += " The raiders carry off " + spoilsPopNum + " " + dataResources[spoilsPop].plural + " from the "+targetPop.name+".  ";
-		if (this.inv[spoilsPop] === undefined) {
-			this.inv[spoilsPop] = spoilsPopNum;
+		if (spoilsPop === undefined && spoilsPile === undefined) {
+			spoilsText = " Their targets, however, had nothing to take as spoils.";
+		} else if (spoilsPile === undefined) {
+			spoilsText = " They keep " + spoilsPopNum + " of the " +targetPop.name+ "'s " + dataResources[spoilsPop].plural + " as spoils.";
+			targetPop.lastSeason += " The raiders carry off " + spoilsPopNum + " " + dataResources[spoilsPop].plural + " from the "+targetPop.name+".  ";
+			if (this.inv[spoilsPop] === undefined) {
+				this.inv[spoilsPop] = spoilsPopNum;
+			} else {
+				this.inv[spoilsPop] += spoilsPopNum;
+			}
+			targetPop.inv[spoilsPop] -= spoilsPopNum;
+		} else if (spoilsPop === undefined) {
+			spoilsText = " They add their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile.";
+			raidTarget.lastSeason += " The raiders carry off " + spoilsPileNum + " " + dataResources[spoilsPile].plural + " from the stockpile.  ";
+			pop.prestige += 10;
+			if (worldMap.coords[this][this.y].stocks[spoilsPile] === undefined) {
+				worldMap.coords[this][this.y].stocks[spoilsPile] = spoilsPileNum;
+			} else {
+				worldMap.coords[this.x][this.y].stocks[spoilsPile] += spoilsPileNum;
+			}
+			targetTile.stocks[spoilsPile] -= spoilsPileNum;
 		} else {
-			this.inv[spoilsPop] += spoilsPopNum;
+			spoilsText = " They add a portion of their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile and keep " + spoilsPopNum + " of the " +targetPop.name+ "'s " + dataResources[spoilsPop].plural + " for themselves.";
+			targetPop.lastSeason += " The raiders carry off " + spoilsPileNum + " " + dataResources[spoilsPile].plural + " from the stockpile and " + spoilsPopNum + " " + dataResources[spoilsPop].plural + " from the "+targetTile.name+".  ";
+			this.prestige += 10;
+			if (this.inv[spoilsPop] === undefined) {
+				this.inv[spoilsPop] = spoilsPopNum;
+			} else {
+				this.inv[spoilsPop] += spoilsPopNum;
+			}
+			if (worldMap.coords[this.x][this.y].stocks[spoilsPile] === undefined) {
+				worldMap.coords[this.x][this.y].stocks[spoilsPile] = spoilsPileNum;
+			} else {
+				worldMap.coords[this.x][this.y].stocks[spoilsPile] += spoilsPileNum;
+			}
+			targetPop.inv[spoilsPop] -= spoilsPopNum;
+			targetTile.stocks[spoilsPile] -= spoilsPileNum;
 		}
-		targetPop.inv[spoilsPop] -= spoilsPopNum;
-	} else if (spoilsPop === undefined) {
-		spoilsText = " They add their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile.";
-		raidTarget.lastSeason += " The raiders carry off " + spoilsPileNum + " " + dataResources[spoilsPile].plural + " from the stockpile.  ";
-		pop.prestige += 10;
-		if (worldMap.coords[this][this.y].stocks[spoilsPile] === undefined) {
-			worldMap.coords[this][this.y].stocks[spoilsPile] = spoilsPileNum;
-		} else {
-			worldMap.coords[this.x][this.y].stocks[spoilsPile] += spoilsPileNum;
-		}
-		targetTile.stocks[spoilsPile] -= spoilsPileNum;
-	} else {
-		spoilsText = " They add a portion of their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile and keep " + spoilsPopNum + " of the " +targetPop.name+ "'s " + dataResources[spoilsPop].plural + " for themselves.";
-		targetPop.lastSeason += " The raiders carry off " + spoilsPileNum + " " + dataResources[spoilsPile].plural + " from the stockpile and " + spoilsPopNum + " " + dataResources[spoilsPop].plural + " from the "+targetTile.name+".  ";
-		this.prestige += 10;
-		if (this.inv[spoilsPop] === undefined) {
-			this.inv[spoilsPop] = spoilsPopNum;
-		} else {
-			this.inv[spoilsPop] += spoilsPopNum;
-		}
-		if (worldMap.coords[this.x][this.y].stocks[spoilsPile] === undefined) {
-			worldMap.coords[this.x][this.y].stocks[spoilsPile] = spoilsPileNum;
-		} else {
-			worldMap.coords[this.x][this.y].stocks[spoilsPile] += spoilsPileNum;
-		}
-		targetPop.inv[spoilsPop] -= spoilsPopNum;
-		targetTile.stocks[spoilsPile] -= spoilsPileNum;
+
+		targetPop.prestige -= 5;
+		targetPop.values.aggression += 2;
+
+		// Add raiders to raidTarget's dispositions shit-list
+		targetPop.dispositions.negative.shift();
+		targetPop.dispositions.negative.push(this);
+	
+		notification += spoilsText;
 	}
-
-	targetPop.prestige -= 5;
-	targetPop.values.aggression += 2;
-
-	// Add raiders to raidTarget's dispositions shit-list
-	targetPop.dispositions.negative.shift();
-	targetPop.dispositions.negative.push(this);
 	
 	// Fog
-
-	notification += spoilsText;
-}
+	
+	if (this.loyalty.player > 0) {	
+		var old = {x:0,y:0};
+		old.x = this.x;
+		old.y = this.y
+		this.x = x;
+		this.y = y;
+		var withinSight = this.withinSight();
+		for (t in withinSight) {
+			worldMap.coords[withinSight[t].x][withinSight[t].y].fog = 1;
+		}
+	
+		this.x = old.x;
+		this.y = old.y;
+	}
   	
   	
 	this.guided = 1;
