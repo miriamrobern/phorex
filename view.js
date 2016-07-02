@@ -790,6 +790,7 @@ var view = {
   	uiGuidanceSynthesizeButton.disabled = true;
   	
   	if (numRites > 2) {
+  		uiGuidanceEnactButton.disabled = false;
   		uiGuidanceSynthesizeButton.disabled = false;
   	} else if (numRites > 1) {
   		uiGuidanceEnactButton.disabled = false;
@@ -843,21 +844,21 @@ var view = {
   	uiGuidanceMergeSelect.innerHTML = '';
   	var item;
   	
-  	if (pop.values.matriarchy !== undefined) {
+  	if (pop.values.matriarchy !== undefined && pop.demographics.gender !== "Women" && pop.demographics.gender !== "Men") {
   		item = document.createElement('option');
   		item.text = "Expel Men (" + Math.max(10,100-pop.values.matriarchy) + "G)";
   		item.value = "matriarchy";
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
-  	if (pop.values.patriarchy !== undefined) {
+  	if (pop.values.patriarchy !== undefined && pop.demographics.gender !== "Men" && pop.demographics.gender !== "Women") {
   		item = document.createElement('option');
   		item.text = "Expel Women (" + Math.max(10,100-pop.values.patriarchy) + "G)";
   		item.value = "patriarchy";
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
-  	if (pop.values.neutrarchy !== undefined) {
+  	if (pop.values.neutrarchy !== undefined && pop.demographics.fertility === "mixed") {
   		item = document.createElement('option');
   		item.text = "Expel Breeders (" + Math.max(10,100-pop.values.neutrarchy) + "G)";
   		item.value = "neutrarchy";

@@ -58,10 +58,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   if (dispositions === undefined) {
   	this.dispositions = {};
-    this.dispositions.positive = [undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined];
-    this.dispositions.negative = [undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined];
+    this.dispositions.positive = Array(20);
+    this.dispositions.negative = Array(20);;
   } else {
-    this.dispositions = dispositions;
+    this.dispositions = dispositions; // does this need to be with a .slice()?
   }
   
   if (advances === undefined) {
@@ -483,14 +483,76 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	};
   
   this.design = function() {
-  	console.log("Design a rite!");
+  	
+  	var resources = [];
+  	for (i in Object.keys(this.inv)) {
+  		if (this.inv[Object.keys(this.inv)[i]] > 1)
+  			 resources.push(Object.keys(this.inv)[i]);
+  	}
+  	var sacrifice = resources[Math.floor(Math.random()*resources.length)];
+  	var sacrificeNum = Math.ceil(this.inv[sacrifice] / 5 )
+  	this.inv[sacrifice] -= sacrificeNum;
+  	
+  	if (Math.random() < 0.2) {
+  		var newRite = new Rite(this,sacrifice);
+  		this.rites.push(newRite);
+  		notification = this.name + " sacrifices " + sacrificeNum + " " + sacrifice + " and develop a new major rite, " + newRite.name + ".";
+  	} else {
+  		notification = this.name + " sacrifices " + sacrificeNum + " " + sacrifice + " in minor religious rites.";
+  	}
 	this.guided = 1;
   	};
   	
+  	
+  	
   this.synthesize = function(riteA,riteB) {
   	console.log("Synthesize ",riteA,riteB);
+  	
+  	var newRite = new Rite(this,dataResources.caribou);
+  	this.rites.push(newRite);
+  	this.rites.splice(this.rites.indexOf(riteA),1);
+  	this.rites.splice(this.rites.indexOf(riteB),1);
+  	
+  	if (Math.random() > 0.5) {
+  		newRite.form = riteA.form;
+  	} else {
+  		newRite.form = riteB.form;
+  	}
+  	
+  	newRite.icon = riteA.icon.concat(riteB.icon);
+  	newRite.icon = newRite.icon.filter(function(item,pos) {return newRite.icon.indexOf(item) == pos});
+  	newRite.icon.sort(function() {return Math.floor(Math.random()*2)});
+  	if (newRite.icon.length > 4) {
+  		newRite.icon.pop();
+  	}
+  	var icons = '';
+  	for (i in newRite.icon) {
+  		icons += newRite.icon[i]
+  		if (i < newRite.icon.length-2) {
+  			icons += ", the ";
+  		} else if (i == newRite.icon.length-2) {
+  			icons += " and the ";
+  		}
+  	}
+  	
+  	if (newRite.icon.length === 2 && Math.random() > .33) {
+  		icons = newRite.icon[0] + " against the " + newRite.icon[1];
+  	}
+  	
+  	newRite.name = newRite.form + " of the " + icons;
+  	
+  	newRite.power = Math.ceil(0.66 * (riteA.power + riteB.power));  	
+  	newRite.moral = riteA.moral.concat(riteB.moral);
+  	
+  	newRite.items = riteA.items.concat(riteB.items);
+  	newRite.items = newRite.items.filter(function(item,pos) {return newRite.items.indexOf(item) == pos});
+  	
+  	notification = this.name + " synthesized " + riteA.name + " and " + riteB.name + " to create " + newRite.name + ".";
 	this.guided = 1;
   	};
+  	
+  	
+  	
   	
   this.scout = function(x,y) {
   	var old = {x:0,y:0};

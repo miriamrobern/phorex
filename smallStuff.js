@@ -33,13 +33,12 @@ function Rite(pop,sacrifice) {
   riteIcons = riteIcons.concat(worldMap.coords[pop.x][pop.y].biome.fauna);
   
   this.icon = riteIcons[Math.floor(Math.random()*riteIcons.length)];
-  this.icon = this.icon.charAt(0).toUpperCase() + this.icon.slice(1);
-  this.form = riteForms[Math.floor(Math.random()*riteForms.length)];
-  this.name =  this.form + " of the " + this.icon;
+  this.icon = [this.icon.charAt(0).toUpperCase() + this.icon.slice(1)];
+  this.form = [riteForms[Math.floor(Math.random()*riteForms.length)]];
+  this.name =  this.form[0] + " of the " + this.icon[0];
   
   var potentialValues = Object.keys(pop.values);
-  this.valueName = potentialValues[Math.floor(Math.random()*potentialValues.length)];
-  this.valueNum = Math.max(0,Math.min(100,Math.floor(pop.values[this.valueName])));
+  this.moral = [{value: potentialValues[Math.floor(Math.random()*potentialValues.length)], valueNum: Math.max(0,Math.min(100,Math.floor(pop.values[this.valueName])))}];
   
   this.power = Math.floor(Math.random()*20);
   
@@ -74,68 +73,52 @@ function Rite(pop,sacrifice) {
   
   this.enact = function(pop) {
     var items = 0;
+    var notification = pop.name + " performs the " +this.name+ " rite.  ";
+    var distortion = 0;
     for (i in this.items) {
       if (pop.inv[this.items[i].key] > 0 ) {
         items++;
         pop.inv[this.items[i].key]--;
-        notification = notification + " " + dataResources[this.items[i].key].name + " is sacrificed.";
+        notification += " " + dataResources[this.items[i].key].name + " is sacrificed.  ";
       }
     }
+    var efficacy = (items+1) / (this.items.length+1);
+    var audience = worldMap.coords[pop.x][pop.y].units;
     
-    if (items === this.items.length) {
-      for (i in worldMap.coords[pop.x][pop.y].units) {
-        if (worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] > this.valueNum) {
-          notification = notification + " " + worldMap.coords[pop.x][pop.y].units[i].name + "'s " + this.valueName + " is chastened."
-          if (worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] === undefined) {
-            worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] = this.valueNum;
-          } else {
-            worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] -= this.power;
-          }
-        } else {
-          notification = notification + " " + worldMap.coords[pop.x][pop.y].units[i].name + "'s " + this.valueName + " is encouraged."
-          if (worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] === undefined) {
-            worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] = this.valueNum;
-          } else {
-            worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] += this.power;
-          }
-        }
-      }
-      this.power--;
-    } else {
-      for (i in worldMap.coords[pop.x][pop.y].units) {
-        if (worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] > this.valueNum) {
-          notification = notification + " " + worldMap.coords[pop.x][pop.y].units[i].name + "'s " + this.valueName + " is chastened."
-          if (worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] === undefined) {
-            worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] = this.valueNum;
-          } else {
-            worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] -= Math.floor(this.power/2);
-          }
-        } else {
-          notification = notification + " " + worldMap.coords[pop.x][pop.y].units[i].name + "'s " + this.valueName + " is encouraged."
-          if (worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] === undefined) {
-            worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] = this.valueNum;
-          } else {
-            worldMap.coords[pop.x][pop.y].units[i].values[this.valueName] += Math.floor(this.power/2);
-          }
-        }
-      }
-      this.power--;
-      notification = notification + "  Without the ritual components, the rite is less effective.";
+    for (i in audience) {
+    	for (v in this.moral) {
+    		if (audience[i].values[this.moral[v].value] === undefined) {
+    			notification += audience[i].name + " learns about " + this.moral[v].value + ".  ";
+    			distortion = [-20,-10,-5,5,10,20][Math.floor(Math.random()*6)] / efficacy;
+    			audience[i].values[this.moral[v].value] = this.moral[v].valueNum + distortion;
+    		} else if (audience[i].values[this.moral[v].value] > this.moral[v].valueNum) {
+    			notification += audience[i].name + "'s " + this.moral[v].value + " is chastened.  ";
+    			audience[i].values[this.moral[v].value] -= Math.floor(this.power * efficacy);
+    		} else {
+    			notification += audience[i].name + "'s " + this.moral[v].value + " is encouraged.  ";
+    			audience[i].values[this.moral[v].value] += Math.ceil(this.power * efficacy);
+    		}
+    	}
     }
     
+    if (items < this.items.length) {notification += "  Without the ritual components, the rite is less effective.  "};
+    
+    this.power--;
     if (this.power < 1) {
-      notification = notification + " The rite's power has been expended."
+      notification = notification + "The rite's power has been expended.  "
       for (practitioner in this.practitioners) {
         this.practitioners[practitioner].rites.splice(this.practitioners[practitioner].rites.indexOf(this),1);
       }
     } else if (Math.random() > 0.7 && worldMap.coords[pop.x][pop.y].units.length > 1) {
-      var potentialPops = worldMap.coords[pop.x][pop.y].units;
+      var potentialPops = worldMap.coords[pop.x][pop.y].units.slice();
       potentialPops.splice(potentialPops.indexOf(pop),1);
       var newPop = potentialPops[Math.floor(Math.random()*potentialPops.length)];
       newPop.rites.push(this);
       this.practitioners.push(newPop);
       notification = notification + newPop.name + " studies the rite and learns it.";
     }
+    
+    pop.notify(notification);
     
   }
 }

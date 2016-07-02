@@ -49,10 +49,10 @@ var testMap = {
     
     // pop(name,people,population,x,y,prestige,values,demographics,dispositions,equipment,health,movement,job)
     
-    southeast = new Pop("Southeasterners",south,22,2,2,100,{aggression: 100, matriarchy: 100, neutrarchy: 100, authority: 100},{gender:"mixed",age:"mixed"});
-    northwest = new Pop("Northwesterners",north,11,2,2,1,{matriarchy: 100, patriarchy: 100},{gender:"mixed",age:"mixed"});
-    northeast = new Pop("Northeasterners",north,50,2,2,50,{aggression: 100, matriarchy: 100},{gender:"mixed",age:"mixed"});
-    southwest = new Pop("Southwesterners",south,21,2,2,21,{aggression: 100, matriarchy: 100, authority:10},{gender:"mixed",age:"mixed"});
+    southeast = new Pop("Southeasterners",south,22,2,2,100,{piety: 100, inquiry: 50, authority: 25, aggression: 1},{gender:"mixed",age:"mixed"});
+    northwest = new Pop("Northwesterners",north,11,2,2,1,{piety: 100, aggression: 100},{gender:"mixed",age:"mixed"});
+    northeast = new Pop("Northeasterners",north,50,2,2,50,{piety: 100, aggression: 50},{gender:"mixed",age:"mixed"});
+    southwest = new Pop("Southwesterners",south,21,2,2,21,{piety: 100, aggression: 25},{gender:"mixed",age:"mixed"});
     
     
     worldMap.coords[1][1].units = [];
@@ -60,7 +60,10 @@ var testMap = {
     worldMap.coords[2][2].units = [southeast,northwest,northeast,southwest];
     worldMap.coords[2][1].units = [];
     
-    southwest.guided = 1;
+    var rite1 = new Rite(southeast,"caribou");
+    var rite2 = new Rite(southeast,"bone");
+    southeast.rites.push(rite1);
+    southeast.rites.push(rite2);
     
     southeast.loyalty.player = 50;
     northwest.loyalty.player = 50;

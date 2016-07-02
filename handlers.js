@@ -204,18 +204,20 @@ var handlers = {
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
 	view.refreshPeoplePanel();
+	view.refreshWorshipPanel();
   },
   
   uiGuidanceSynthesizeButton: function() {
   	var uiGuidanceSynthesisSelectA = document.getElementById('uiGuidanceSynthesisSelectA');
   	var uiGuidanceSynthesisSelectB = document.getElementById('uiGuidanceSynthesisSelectB');
-  	var riteA = uiGuidanceSynthesisSelectA.options[uiGuidanceSynthesisSelectA.selectedIndex].value;
-  	var riteB = uiGuidanceSynthesisSelectB.options[uiGuidanceSynthesisSelectB.selectedIndex].value;
+  	var riteA = view.focusPop.rites[uiGuidanceSynthesisSelectA.options[uiGuidanceSynthesisSelectA.selectedIndex].value];
+  	var riteB = view.focusPop.rites[uiGuidanceSynthesisSelectB.options[uiGuidanceSynthesisSelectB.selectedIndex].value];
   	view.focusPop.synthesize(riteA,riteB);
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
 	view.refreshPeoplePanel();
+	view.refreshWorshipPanel();
   },
   
   uiGuidanceScoutButton: function() {
