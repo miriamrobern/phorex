@@ -335,7 +335,7 @@ var dataSites = {
   theWilds: {
     name: 'The Wilds',
     job: 'hunter-gatherer',
-    tools: '',
+    tools: [],
     materials: [],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.1,
@@ -347,7 +347,7 @@ var dataSites = {
   shallows: {
     name: 'Shallows',
     job: 'fisher',
-    tools: dataResources.simpleTool,
+    tools: [dataResources.simpleTool],
     materials: [],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.3,
@@ -359,7 +359,7 @@ var dataSites = {
   river: {
     name: 'River',
     job: 'fisher',
-    tools: dataResources.simpleTool,
+    tools: [dataResources.simpleTool],
     materials: [],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.3,
@@ -371,7 +371,7 @@ var dataSites = {
   pond: {
     name: 'Pond',
     job: 'water-bearer',
-    tools: '',
+    tools: [],
     materials: [],
     primaryProduce: dataResources.water,
     primaryEfficiency: 2,
@@ -383,7 +383,7 @@ var dataSites = {
   clayDeposit: {
     name: 'Clay Deposit',
     job: 'clay digger',
-    tools: dataResources.simpleTool,
+    tools: [dataResources.simpleTool],
     materials: [],
     primaryProduce: dataResources.clay,
     primaryEfficiency: 0.5,
@@ -395,7 +395,7 @@ var dataSites = {
   grazingLand: {
     name: 'Grazing Land',
     job: 'hunter',
-    tools: dataResources.simpleTool,
+    tools: [dataResources.simpleTool],
     materials: [],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.3,
@@ -407,7 +407,7 @@ var dataSites = {
   outcropping: {
     name: 'Outcropping',
     job: 'quarrier',
-    tools: dataResources.simpleTool,
+    tools: [dataResources.simpleTool],
     materials: [],
     primaryProduce: dataResources.stone,
     primaryEfficiency: .5,
@@ -419,7 +419,7 @@ var dataSites = {
   hardwoodGrove: {
     name: 'Forest',
     job: 'logger',
-    tools: dataResources.simpleTool,
+    tools: [dataResources.simpleTool],
     materials: [],
     primaryProduce: dataResources.lumber,
     primaryEfficiency: .5,
@@ -431,7 +431,7 @@ var dataSites = {
   fruitGrove: {
     name: 'Fruit Grove',
     job: 'gatherer',
-    tools: '',
+    tools: [],
     materials: [],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.3,
@@ -443,7 +443,7 @@ var dataSites = {
   oasis: {
     name: 'Oasis',
     job: 'oasis tender',
-    tools: '',
+    tools: [],
     materials: [],
     primaryProduce: dataResources.water,
     primaryEfficiency: 1,
@@ -455,7 +455,7 @@ var dataSites = {
   cenote: {
     name: 'Cenote',
     job: 'cenotista',
-    tools: '',
+    tools: [],
     materials: [],
     primaryProduce: dataResources.water,
     primaryEfficiency: 1,
@@ -467,7 +467,7 @@ var dataSites = {
   canyon: {
     name: 'Canyon',
     job: 'quarrier',
-    tools: dataResources.simpleTool,
+    tools: [dataResources.simpleTool],
     materials: [],
     primaryProduce: dataResources.stone,
     primaryEfficiency: 0.5,
@@ -479,7 +479,7 @@ var dataSites = {
   peatBog: {
     name: 'Peat Bog',
     job: 'peat cutter',
-    tools: dataResources.simpleTool,
+    tools: [dataResources.simpleTool],
     materials: [],
     primaryProduce: dataResources.fuel,
     primaryEfficiency: .3,
@@ -491,7 +491,7 @@ var dataSites = {
   cowrieBeach: {
     name: 'Cowrie Beach',
     job: 'cowrie gatherer',
-    tools: '',
+    tools: [],
     materials: [],
     primaryProduce: dataResources.cowrie,
     primaryEfficiency: .5,
@@ -504,7 +504,7 @@ var dataSites = {
   knappery: {
     name: 'Knappery',
     job: 'knapper',
-    tools: dataResources.simpleTool,
+    tools: [dataResources.simpleTool],
     materials: [dataResources.stone],
     primaryProduce: dataResources.simpleTool,
     primaryEfficiency: 1.8,
@@ -518,7 +518,7 @@ var dataSites = {
   stoneArmory: {
     name: 'Stone Armory',
     job: 'stone armorer',
-    tools: dataResources.simpleTool,
+    tools: [dataResources.simpleTool],
     materials: [dataResources.stone],
     primaryProduce: dataResources.stoneAxe,
     primaryEfficiency: 0.5,
@@ -532,7 +532,7 @@ var dataSites = {
   bronzesmith: {
     name: 'Bronzesmithy',
     job: 'bronzesmith',
-    tools: dataResources.simpleTool,
+    tools: [dataResources.simpleTool],
     materials: [dataResources.bronze],
     primaryProduce: dataResources.bronzeAxe,
     primaryEfficiency: 0.5,
@@ -546,7 +546,7 @@ var dataSites = {
   caribouHerd: {
     name: 'Caribou Herd',
     job: 'Caribou Herder',
-    tools: '',
+    tools: [],
     materials: [],
     primaryProduce: dataResources.food,
     primaryEfficiency: 0.9,
@@ -560,7 +560,7 @@ var dataSites = {
   caribouPaddock: {
     name: 'Caribou Paddock',
     job: 'Caribou Rancher',
-    tools: '',
+    tools: [],
     materials: [dataResources.caribou],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.5,

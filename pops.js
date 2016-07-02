@@ -365,7 +365,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.assign = function(newJob) {
   	this.job = newJob;
   	
-  	notification = this.name + " decides to start working as " + this.job.site.job + ".";
+  	notification = this.name + " decides to start working as " + this.job.site.job + "s at the " + this.job.site.name + ".";
 	
 	this.notify(notification);
 	this.guided = 1;
@@ -772,6 +772,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 	this.x = x;
 	this.y = y;
 	this.prestige = Math.floor((this.prestige + 50)/2);
+	this.job = worldMap.coords[this.x][this.y].sites[0];
 	targetTile.units.push(this);
 	notification = this.name + " migrates to a new area."
 	
@@ -1271,18 +1272,114 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
   };
   
-  this.impulse.jobChange = function(pop) {
-    
-    // Rewrite to use pop.jobChange(site);
-    // Presently random; needs to take mats&tools into account at least
-    // Extra credit: value of the primary resources to be produced?
+  this.impulse.jobChange = function(pop,resource) {
+  
+    // Extra credit rewrite: value of the primary resources to be produced?
     
     var sites = worldMap.coords[pop.x][pop.y].sites;
-    var newJob = sites[Math.floor(Math.random()*sites.length)];
+    var spaceAvailable = 0;
+    var goodSites = [];
+    var poorSites = [];
+    var badSites = [pop.job];
     
-    pop.job = newJob;
+    for (i in sites) {
+    	if (sites[i].site.tools.length !== 0 && sites[i].site.materials.length !== 0 ) { // requires tools and materials
+    		for (m in sites[i].site.materials) {
+    			if (pop.inv[sites[i].site.materials[m].key] === undefined && worldMap.coords[pop.x][pop.y].stocks[sites[i].site.materials[m].key] === undefined) {
+    				available = 0;
+    			} else if (worldMap.coords[pop.x][pop.y].stocks[sites[i].site.materials[m].key] === undefined) {
+    				available = pop.inv[sites[i].site.materials[m].key];
+    			} else if (pop.inv[sites[i].site.materials[m].key] === undefined ) {
+    				available = worldMap.coords[pop.x][pop.y].stocks[sites[i].site.materials[m].key];
+    			} else {
+    				available = pop.inv[sites[i].site.materials[m].key] + worldMap.coords[pop.x][pop.y].stocks[sites[i].site.materials[m].key];
+    			}
+    			if (pop.population < available) {
+    				goodSites.push(sites[i]);
+    			} else if (available > 0) {
+    				poorSites.push(sites[i]);
+    			} else {
+    				badSites.push(sites[i]);
+    			}
+    		}
+    		for (t in sites[i].site.tools) {
+    			if (pop.population < pop.inv[sites[i].site.tools[t].key]) {
+    				goodSites.push(sites[i]);
+    			} else if (pop.inv[sites[i].site.tools[t].key] > 0) {
+    				poorSites.push(sites[i]);
+    			} else {
+    				badSites.push(sites[i]);
+    			}
+    		}
+    		
+    	} else if (sites[i].site.materials.length !== 0) { // requires materials
+    		for (m in sites[i].site.materials) {
+    			if (pop.inv[sites[i].site.materials[m]] === undefined && worldMap.coords[pop.x][pop.y].stocks[sites[i].site.materials] === undefined) {
+    				available = 0;
+    			} else if (worldMap.coords[pop.x][pop.y].stocks[sites[i].site.materials] === undefined) {
+    				available = pop.inv[sites[i].site.materials[m]];
+    			} else if (pop.inv[sites[i].site.materials[m]] === undefined ) {
+    				available = worldMap.coords[pop.x][pop.y].stocks[sites[i].site.materials];
+    			} else {
+    				available = pop.inv[sites[i].site.materials[m]] + worldMap.coords[pop.x][pop.y].stocks[sites[i].site.materials];
+    			}
+    			if (pop.population < available) {
+    				goodSites.push(sites[i]);
+    			} else if (available > 0) {
+    				poorSites.push(sites[i]);
+    			} else {
+    				badSites.push(sites[i]);
+    			}
+    		}
+    	} else if (sites[i].site.tools.length !== 0) { // requires tools
+    		for (t in sites[i].site.tools) {
+    			if (pop.population < pop.inv[sites[i].site.tools[t].key]) {
+    				goodSites.push(sites[i]);
+    			} else if (pop.inv[sites[i].site.tools[t].key] > 0) {
+    				poorSites.push(sites[i]);
+    			} else {
+    				badSites.push(sites[i]);
+    			}
+    		}
+    	} else { // requires no tools or materials
+    		goodSites.push(sites[i]);
+    		
+    	}
+    	
+    	spaceAvailable = sites[i].capacity;
+    	
+    	for (u in worldMap.coords[pop.x][pop.y].units) {
+    		if (worldMap.coords[pop.x][pop.y].units[u].job === sites[i]) {
+    			spaceAvailable -= worldMap.coords[pop.x][pop.y].units[u].population;
+    		}
+    	}
+    	
+    	if (this.population > spaceAvailable) {
+    		badSites.push(sites[i]);
+    	}
+    	
+    	if (resource !== undefined && sites[i].site.primaryProduce.key !== resource) {
+    		badSites.push(sites[i]);
+    	}
+    }
     
-    notification = pop.name + " decide to start working as " + newJob.site.job + "s.";
+    goodSites = goodSites.filter(function(value) {return badSites.indexOf(value) === -1}) ;
+    poorSites = poorSites.filter(function(value) {return badSites.indexOf(value) === -1}) ;
+    
+    if (goodSites.length > 0) {
+    	pop.assign(goodSites[Math.floor(Math.random()*goodSites.length)]);
+    } else if (poorSites.length > 0) {
+    	pop.assign(poorSites[Math.floor(Math.random()*poorSites.length)]);
+    } else {
+    	notification = pop.name + " wants to work elsewhere, but doesn't have the tools or materials.";
+    	pop.prestige -= 10;
+    	for (i in pop.loyalty) {
+    		pop.loyalty[i] -= 1;
+    	}
+    	pop.notify(notification);
+    }
+    
+    
   };
   
   this.impulse.matriarchy = function(pop) {
@@ -1676,18 +1773,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   };
   
   this.impulse.growFood = function(pop) {
-    
-    var potentialSites = [];
-    
-    for (var i in worldMap.coords[pop.x][pop.y].sites) {
-      if (worldMap.coords[pop.x][pop.y].sites[i].site.primaryProduce === dataResources.food) {
-        potentialSites.push(worldMap.coords[pop.x][pop.y].sites[i]);
-      }
-    }
-    
-    // this is a special case of the changeJob function - pop.changeJob(potentialSites[Math.floor(Math.random()*potentialSites.length)]);
-    pop.job = potentialSites[Math.floor(Math.random()*potentialSites.length)];
-    notification = pop.name + " decides to produce food working as " + pop.job.site.job + "s.";
+  	
+  	pop.impulse.jobChange(pop,"food");
     
   };
   
