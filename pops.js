@@ -1057,14 +1057,14 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     if (this.population > this.inv.food) {
       
       // Lean Season
-      this.health -= 30 * (1 - (this.inv.food / this.population));
+      this.health = Math.max(0,this.health - 30 * (1 - (this.inv.food / this.population)));
       this.inv.food = 0;
       notification = notification + " They have a lean season, and are down to "+ Math.floor(this.health) + "% health.";
       
       // Starvation Losses
       if (this.health < 50 ) {
         
-        var deaths = Math.ceil(this.population * this.health / 50) ;
+        var deaths = this.population - Math.ceil(this.population * this.health / 50) ;
         
         notification = notification + " They lose " + deaths  + " souls to starvation.";
         this.population = Math.floor(this.population - deaths);
