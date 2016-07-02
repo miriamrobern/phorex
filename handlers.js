@@ -239,9 +239,15 @@ var handlers = {
   	var targetY = view.targetY;
   	view.focusPop.raid(targetX,targetY);
 
+	view.refreshMinimapPanel();
+	view.displayWorldMap();
+	view.refreshGuidanceMap();
+
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
 	view.refreshPeoplePanel();
+	view.refreshLandPanel();
+	view.displayGuidance();
   },
   
   uiGuidanceMigrateButton: function() {

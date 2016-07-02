@@ -592,11 +592,149 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	this.notify(notification);
 	this.guided = 1;
   	};
+  	
+  	
+  	
   
   this.raid = function(x,y) {
-  	console.log("Raid ",x,y);
+  	notification = this.name + " mounts a raid to (" + x + "," + y + ").  ";
+  	
+  	var targetTile = worldMap.coords[x][y];
+  	var pileLoot = 0;
+  	var targetPop;
+  	var raidForce = this.force();
+  	var potentialTargets = [];
+  	var pileLoot;
+  	var popLoot;
+	var spoilsPile;
+	var spoilsPop;
+  	var spoilsPileNum = 0;
+  	var spoilsPopNum = 0;
+  	
+  	for (i in targetTile.stocks) {
+  		pileLoot += targetTile.stocks[i] ;
+  	}
+  	
+  	for (i in targetTile.units) {
+  		if (raidForce * 1.2 > targetTile.units[i].defense() && targetTile.units[i] !== this) {
+  			potentialTargets.push(targetTile.units[i]);
+  		}
+  	} 
+  	
+  	// Do the filter thing with the shit-list
+  	
+  	targetPop = potentialTargets[Math.floor(Math.random()*potentialTargets.length)];
+  	
+  	raidForce *= Math.random() + 0.5;
+  	
+  	if (targetTile.units.length === 0 && pileLoot < 1) {
+  		notification += this.name + " finds the place deserted and looted."
+  	} else if (targetTile.units.length === 0) {
+  		notification += this.name + " finds an undefended stockpile!"
+  		spoilsPileNum = 2;
+	} else if (targetPop === undefined) {
+		notification = this.name + " cannot find a vulnerable target.";
+  	} else if (raidForce > 2 * targetPop.defense() ) {
+  		spoilsPopNum = 1.5;
+  		spoilsPileNum = 1.5;
+  		targetPop.health -= 30;
+  		notification += "They trounce the defenders and return at "+Math.floor(pop.health)+"% health.";
+  		targetPop.lastSeason += "The "+pop.name+" trounce them in a raid, reducing their health to "+targetPop.health+"%.";
+  	} else if (raidForce > targetPop.defense() ) {
+  		spoilsPopNum = 1;
+  		spoilsPileNum = 1;
+  		targetPop.health -= 20;
+  		this.health -= 10
+  		notification += "They defeat the defenders and return at "+Math.floor(pop.health)+"% health.";
+  		targetPop.lastSeason += "The "+pop.name+" defeat them in a raid, reducing their health to "+targetPop.health+"%.";
+  	} else if (raidForce > 0.5 * targetPop.defense() ) {
+  		spoilsPopNum = 0;
+  		spoilsPileNum = 1;
+  		targetPop.health -= 10;
+  		this.health -= 20
+  		notification += "They struggle against the defenders and return at "+Math.floor(pop.health)+"% health.";
+  		targetPop.lastSeason += "The "+pop.name+" struggle against them in a raid, reducing their health to "+targetPop.health+"%.";
+  	} else {
+  		spoilsPopNum = 0;
+  		spoilsPileNum = 0;
+  		this.health -= 30
+  		notification += "They are routed by the defenders and return at "+Math.floor(pop.health)+"% health.";
+  		targetPop.lastSeason += "The " + pop.name + " are routed after attempting a raid.";
+  	}
+  	
+	if (spoilsPileNum !== 0 ) {
+	
+	pileLoot = Object.keys(targetTile.stocks);
+	popLoot = Object.keys(targetPop.inv);
+	
+	spoilsPile = pileLoot[Math.floor(Math.random()*pileLoot.length)]
+	spoilsPop = popLoot[Math.floor(Math.random()*popLoot.length)]
+	
+	spoilsPileNum *= targetTile.stocks[spoilsPile] / 2;
+	spoilsPopNum *= targetPop.inv[spoilsPop] / 2;
+
+	spoilsPopNum = Math.floor(spoilsPopNum*100)/100;
+	spoilsPileNum = Math.floor(spoilsPileNum*100)/100;
+
+	if (spoilsPop === undefined && spoilsPile === undefined) {
+		spoilsText = " Their targets, however, had nothing to take as spoils.";
+	} else if (spoilsPile === undefined) {
+		spoilsText = " They keep " + spoilsPopNum + " of the " +targetPop.name+ "'s " + dataResources[spoilsPop].plural + " as spoils.";
+		targetPop.lastSeason += " The raiders carry off " + spoilsPopNum + " " + dataResources[spoilsPop].plural + " from the "+targetPop.name+".  ";
+		if (this.inv[spoilsPop] === undefined) {
+			this.inv[spoilsPop] = spoilsPopNum;
+		} else {
+			this.inv[spoilsPop] += spoilsPopNum;
+		}
+		targetPop.inv[spoilsPop] -= spoilsPopNum;
+	} else if (spoilsPop === undefined) {
+		spoilsText = " They add their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile.";
+		raidTarget.lastSeason += " The raiders carry off " + spoilsPileNum + " " + dataResources[spoilsPile].plural + " from the stockpile.  ";
+		pop.prestige += 10;
+		if (worldMap.coords[this][this.y].stocks[spoilsPile] === undefined) {
+			worldMap.coords[this][this.y].stocks[spoilsPile] = spoilsPileNum;
+		} else {
+			worldMap.coords[this.x][this.y].stocks[spoilsPile] += spoilsPileNum;
+		}
+		targetTile.stocks[spoilsPile] -= spoilsPileNum;
+	} else {
+		spoilsText = " They add a portion of their spoils, " + spoilsPileNum + " " + dataResources[spoilsPile].plural + ", to the stockpile and keep " + spoilsPopNum + " of the " +targetPop.name+ "'s " + dataResources[spoilsPop].plural + " for themselves.";
+		targetPop.lastSeason += " The raiders carry off " + spoilsPileNum + " " + dataResources[spoilsPile].plural + " from the stockpile and " + spoilsPopNum + " " + dataResources[spoilsPop].plural + " from the "+targetTile.name+".  ";
+		this.prestige += 10;
+		if (this.inv[spoilsPop] === undefined) {
+			this.inv[spoilsPop] = spoilsPopNum;
+		} else {
+			this.inv[spoilsPop] += spoilsPopNum;
+		}
+		if (worldMap.coords[this.x][this.y].stocks[spoilsPile] === undefined) {
+			worldMap.coords[this.x][this.y].stocks[spoilsPile] = spoilsPileNum;
+		} else {
+			worldMap.coords[this.x][this.y].stocks[spoilsPile] += spoilsPileNum;
+		}
+		targetPop.inv[spoilsPop] -= spoilsPopNum;
+		targetTile.stocks[spoilsPile] -= spoilsPileNum;
+	}
+
+	targetPop.prestige -= 5;
+	targetPop.values.aggression += 2;
+
+	// Add raiders to raidTarget's dispositions shit-list
+	targetPop.dispositions.negative.shift();
+	targetPop.dispositions.negative.push(this);
+	
+	// Fog
+
+	notification += spoilsText;
+}
+  	
+  	
 	this.guided = 1;
   	};
+  
+  
+  
+  
+  
   
   this.migrate = function(x,y) {
   	var targetTile = worldMap.coords[x][y];
