@@ -49,10 +49,10 @@ var testMap = {
     
     worldMap.coords[1][1].stocks = {caribou:1000};
     
-    southeast = new Pop("Southeasterners",south,22,2,2,100,{aggression: 10, patriarchy: 70},{gender:"mixed",age:"mixed"});
-    northwest = new Pop("Northwesterners",north,11,2,2,1,{aggression: 10, matriarchy: 70},{gender:"mixed",age:"mixed"});
-    northeast = new Pop("Northeasterners",north,50,2,1,50,{aggression: 10, neutrarchy: 70},{gender:"mixed",age:"mixed"});
-    southwest = new Pop("Southwesterners",south,21,1,2,21,{aggression: 10, piety: 70},{gender:"mixed",age:"mixed"});
+    southeast = new Pop("Southeasterners",south,4,2,2,100,{aggression: 100},{gender:"mixed",age:"mixed"});
+    northwest = new Pop("Northwesterners",north,4,2,2,1,{aggression: 100},{gender:"mixed",age:"mixed"});
+    northeast = new Pop("Northeasterners",north,4,2,1,50,{aggression: 100},{gender:"mixed",age:"mixed"});
+    southwest = new Pop("Southwesterners",south,4,1,2,21,{aggression: 100},{gender:"mixed",age:"mixed"});
     
     
     worldMap.coords[1][1].units = [];

@@ -1790,6 +1790,11 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	}
   	potentialTargets = potentialTargets.concat(hatedTargets);
   	
+  	if (potentialTargets.length === 0) {
+  		potentialTargets = worldMap.coords[pop.x][pop.y].units.slice();
+  		potentialTargets.splice(potentialTargets.indexOf(pop),1);
+  	}
+  	
   	targetPop = potentialTargets[Math.floor(Math.random()*potentialTargets.length)];
   	targetPile = undefendedTiles[Math.floor(Math.random()*undefendedTiles.length)];
   	
