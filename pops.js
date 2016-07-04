@@ -9,6 +9,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.x = x;
   this.y = y;
   this.lastSeason = this.name + " rally behind a new vision of the future.";
+  this.history = [];
   this.loyalty = {player:0};
   this.guided = 0;
   
@@ -203,6 +204,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   this.notify = function(notification,witnesses,locations) {
     this.lastSeason = this.lastSeason + notification + "  ";
+    this.history.push(notification);
 //     notificationLog.push([this,worldMap.coords[this.x][this.y],witnesses,locations,notification]);
     console.log([this],notification);
     
@@ -490,15 +492,21 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   			 resources.push(Object.keys(this.inv)[i]);
   	}
   	var sacrifice = resources[Math.floor(Math.random()*resources.length)];
-  	var sacrificeNum = Math.ceil(this.inv[sacrifice] / 5 )
-  	this.inv[sacrifice] -= sacrificeNum;
   	
-  	if (Math.random() < 0.2) {
-  		var newRite = new Rite(this,sacrifice);
-  		this.rites.push(newRite);
-  		notification = this.name + " sacrifices " + sacrificeNum + " " + sacrifice + " and develop a new major rite, " + newRite.name + ".";
-  	} else {
-  		notification = this.name + " sacrifices " + sacrificeNum + " " + sacrifice + " in minor religious rites.";
+  	if (sacrifice === undefined) {
+  		this.values.piety -= 20;
+  		notification = this.name + " has nothing to sacrifice in its religious rites.";
+  	} else {  	
+		var sacrificeNum = Math.ceil(this.inv[sacrifice] / 5 )
+		this.inv[sacrifice] -= sacrificeNum;
+	
+		if (Math.random() < 0.2) {
+			var newRite = new Rite(this,sacrifice);
+			this.rites.push(newRite);
+			notification = this.name + " sacrifices " + sacrificeNum + " " + sacrifice + " and develop a new major rite, " + newRite.name + ".";
+		} else {
+			notification = this.name + " sacrifices " + sacrificeNum + " " + sacrifice + " in minor religious rites.";
+		}
   	}
 	this.guided = 1;
   	};
@@ -971,54 +979,85 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   this.work = function() {
     
+    // will need to use regional availability function for both mats and tools
+    
     var notification = '';
+    var here = worldMap.coords[this.x][this.y]
     var job = this.job.site;
+    var matNum = 0;
+    var available = 0;
     var matsCheck = 0;
+    var matsLow = this.population;
     var toolsCheck = 0;
+    var toolsLow = this.population;
     var materialCost = '';
+    var toolBreak;
+    var toolBreakNum;
     var breakage = '';
+    var matsText = '';
     
     if (job.materials[0] === undefined) {
       matsCheck = 1;
     } else {
-      console.log('ERROR: requires materials');
-      
-      // will need to use regional availability function
-      
-      materialCost = ' consuming some stuff?';
+		for (m in job.materials) {
+			if (this.inv[job.materials[m].key] < this.population && here.stocks[job.materials[m].key] > 0) {
+				matNum = Math.min(here.stocks[job.materials[m].key],this.population-this.inv[job.materials[m].key]);
+				here.stocks[job.materials[m].key] -= matNum;
+				this.inv[job.materials[m].key] += matNum;
+				notification += this.name + " takes " + matNum + " " + job.materials[m].name + "from the stockpile.  "
+			}
+			if (this.inv[job.materials[m].key] > 0) {
+				matsLow = Math.min(matsLow,this.population,this.inv[job.materials[m].key]);
+			} else {
+				matsLow = 0
+			}
+		}
+		matsCheck = matsLow / this.population;
+		matsText = '';
+		for (m in job.materials) {
+			this.inv[job.materials[m].key] -= matsLow;
+			matsText += job.materials[m].name + " " ;
+		}
+		materialCost = ' consuming ' + matsLow + ' each of ' + matsText + ' and ';
     }
     
     if (job.tools[0] === undefined) {
       toolsCheck = 1;
     } else {
-      console.log('ERROR: requires tools');
+      for (t in job.tools) {
+      	if (this.inv[job.tools[t].key] !== undefined) {
+      		toolsLow = Math.min(toolsLow,this.inv[job.tools[t].key]);
+      	} else {
+      		toolsLow = 0;
+      	}
+      }
       
-      // will need to use regional availability function
+      toolsCheck = toolsLow / this.population;
       
-      breakage = 'Maybe something breaks?';
+      if (Math.random() < 0.33) {
+      	toolBreak = job.tools[Math.floor(Math.random()*job.tools.length)];
+      	toolBreakNum = Math.ceil(this.inv[toolBreak.key]/[2,3,3,4,4,4,5,5,5,5][Math.floor(Math.random()*10)])
+      	breakage = toolBreakNum + " " + toolBreak.plural + " are broken in the process!  ";
+      }
     }
-    
-    if (matsCheck + toolsCheck === 2) {
 
-      var primary = job.primaryProduce;
-      var primaryQuantity = Math.floor(job.primaryEfficiency * this.population * 100) / 100;
-      var secondary = job.secondaryProduce[Math.floor(Math.random()*job.secondaryProduce.length)];
-      var secondaryQuantity = Math.floor(job.secondaryEfficiency * this.population * 100) / 100;
+    var primary = job.primaryProduce;
+    var primaryQuantity = Math.floor(Math.min(matsCheck,toolsCheck) * job.primaryEfficiency * this.population * 100) / 100;
+    var secondary = job.secondaryProduce[Math.floor(Math.random()*job.secondaryProduce.length)];
+    var secondaryQuantity = Math.floor(Math.min(matsCheck,toolsCheck) * job.secondaryEfficiency * this.population * 100) / 100;
       
-      notification = this.name + " works as " + job.job + "s," + materialCost + " producing " + primaryQuantity + " " + primary.plural + " and " + secondaryQuantity + " " + secondary.plural + ".  " + breakage;
+    notification = this.name + " works as " + job.job + "s," + materialCost + " producing " + primaryQuantity + " " + primary.plural + " and " + secondaryQuantity + " " + secondary.plural + ".  " + breakage;
 
-      if (worldMap.coords[this.x][this.y].stocks[primary.key] > 0) {
-        worldMap.coords[this.x][this.y].stocks[primary.key] += primaryQuantity;
-      } else {
-        worldMap.coords[this.x][this.y].stocks[primary.key] = primaryQuantity;
-      }
+    if (worldMap.coords[this.x][this.y].stocks[primary.key] > 0) {
+    	worldMap.coords[this.x][this.y].stocks[primary.key] += primaryQuantity;
+    } else {
+    	worldMap.coords[this.x][this.y].stocks[primary.key] = primaryQuantity;
+    }
       
-      if (worldMap.coords[this.x][this.y].stocks[secondary.key] > 0) {
-        worldMap.coords[this.x][this.y].stocks[secondary.key] += secondaryQuantity; 
-      } else {
-        worldMap.coords[this.x][this.y].stocks[secondary.key] = secondaryQuantity; 
-      }
-      
+    if (worldMap.coords[this.x][this.y].stocks[secondary.key] > 0) {
+    	worldMap.coords[this.x][this.y].stocks[secondary.key] += secondaryQuantity; 
+    } else {
+    	worldMap.coords[this.x][this.y].stocks[secondary.key] = secondaryQuantity; 
     }
     
     this.notify(notification);
@@ -1118,7 +1157,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     var claim = availableStocks[Math.floor(Math.random()*availableStocks.length)];
     
     if (claim === undefined) {
-    	notification = this.name + "does not find anything in the stockpile worth claiming.";
+    	notification = this.name + " does not find anything in the stockpile worth claiming.";
     } else {
 		var claimNum = Math.ceil(Math.min(this.population,worldMap.coords[this.x][this.y].stocks[claim]/2));
 	
@@ -1641,7 +1680,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       // Add servants to superior's disposition like list
       targetPop.dispositions.positive.shift();
       targetPop.dispositions.positive.push(pop);
-      
+            
       notification = pop.name + " serves " + targetPop.name + ", spending " + tributeNum + " " + dataResources[tribute].plural + " in the process.";
       
     } else if (targets.length > 0) {
@@ -1687,21 +1726,16 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     if (Math.random()< 1/(1+pop.rites.length) ) { // attempt to create new rite
     	
-    	// this is the design function - pop.design();
-		var sacrifice = Object.keys(pop.inv)[Math.floor(Math.random()*Object.keys(pop.inv).length)];
-		var sacrificeNum = Math.ceil(pop.inv[sacrifice]/5);
-		pop.inv[sacrifice] -= sacrificeNum;
-		if (Math.random() < 0.2) {
-			var newRite = new Rite(pop,sacrifice);
-			pop.rites.push(newRite);
-			notification = pop.name + " sacrifices " + sacrificeNum + " " + dataResources[sacrifice].plural + " to develop a new religious rite, the " + newRite.name + ".";
-		} else {
-			notification = pop.name + " sacrifices " + sacrificeNum + " " + dataResources[sacrifice].plural + " in minor religious rites.";
-		}
-      	// end design function
+    	pop.design();
       
-    // } else if (Math.random() < 1 / localRites.length) { // syncretize rites
-    //   notifiction = pop.name + "merges two rites to make a stronger rite!";
+    } else if (Math.random() < 1 / localRites.length) { // syncretize rites
+      var riteA = pop.rites[Math.floor(Math.random()*pop.rites.length)];
+      var otherRites = pop.rites.slice();
+      otherRites = otherRites.splice(otherRites.indexOf(riteA),1);
+      var riteB = otherRites[Math.floor(Math.random()*otherRites.length)];
+      
+      pop.synthesize(riteA,riteB);
+      
     } else { // enact rite
       
       var rite = pop.rites[Math.floor(Math.random()*pop.rites.length)]
@@ -1817,20 +1851,28 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.season.winter = function(pop) {
   	var mates = 0;
   	var targetGender;
+  	var targetFertility;
   	var popGrowth;
+  	var tilePop = 0;
   	
   	for (i in worldMap.coords[pop.x][pop.y].units) {
   		targetGender = worldMap.coords[pop.x][pop.y].units[i].demographics.gender;
-  		if (pop.demographics.gender === "mixed") {
-  			mates += pop.population / 2;
-  		} else if ( targetGender !== pop.demographics.gender && targetGender !== "Neuters" ) {
+  		targetFertility = worldMap.coords[pop.x][pop.y].units[i].demographics.fertility;
+  		if (targetGender === "mixed" && targetFertility !== "Celibate") {
+  			mates += worldMap.coords[pop.x][pop.y].units[i].population / 2;
+  		} else if ( targetGender !== pop.demographics.gender && targetGender !== "Neuters"  && targetFertility !== "Celibate") {
   			mates += worldMap.coords[pop.x][pop.y].units[i].population;
-  		} else if (targetGender === "Genderqueers" && pop.demographics.gender === "Genderqueers") {
+  		} else if (targetGender === "Genderqueers" && pop.demographics.gender === "Genderqueers" && targetFertility !== "Celibate") {
   			mates += worldMap.coords[pop.x][pop.y].units[i].population;
   		}
+  		tilePop =+ worldMap.coords[pop.x][pop.y].units[i].population;
   	}
   	
-  	popGrowth = pop.population * Math.min(0.3,0.1 * mates / pop.population);
+  	if (pop.demographics.fertility === "Celibate") {
+  		popGrowth = tilePop * .01 * pop.prestige / 20;
+  	} else {
+  		popGrowth = pop.population * Math.min(0.3,0.1 * mates / pop.population);
+  	}
   	
   	if (Math.random < popGrowth-Math.floor(popGrowth)) {
   		popGrowth = Math.ceil(popGrowth);
@@ -1840,12 +1882,14 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	
   	pop.population += popGrowth;
   	
-  	if (popGrowth > 0) {
+  	if (popGrowth > 0 && pop.demographics.fertility !== "Celibate") {
   		notification = pop.name + " sees " +popGrowth+ " young people come of age and join them in adulthood.";
-  	} else if (mates/pop.population < .2 && pop.demographics.gender !== "Neuters") {
+  	} else if (popGrowth > 0 && pop.demographics.fertility === "Celibate") {
+  		notification = pop.name + " sees " +popGrowth+ " new celibates join their ranks.";
+  	} else if (mates/pop.population < .2 && pop.demographics.fertility !== "Celibate") {
   		notification = "With so few mates available, " + pop.name + " sees no new members come of age this year.";
-  	} else if (pop.demographics.gender === "Neuters") {
-  		notification = pop.name + " sees no new neuters come of age this year.";
+  	} else if (pop.demographics.fertility === "Celibate") {
+  		notification = pop.name + " sees no new celibates join their ranks this year.";
   	} else {
   		notification = pop.name + " sees no new members come of age this year.";
   	}

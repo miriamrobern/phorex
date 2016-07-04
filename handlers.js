@@ -344,6 +344,7 @@ var handlers = {
     
     for (i in popsByPrestige) {
     	if (popsByPrestige[i].guided === 0) {
+    		console.log(popsByPrestige[i]);
     		popsByPrestige[i].impulse();
     	}
     }
