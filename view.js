@@ -667,12 +667,19 @@ var view = {
   	uiGuidanceAssignSelect.innerHTML = '';
   	var uiGuidanceAssignCostButton = document.getElementById('uiGuidanceAssignCostButton');
   	uiGuidanceAssignCostButton.innerHTML = Math.max(10,Math.ceil(view.focusPop.prestige));
+  	var uiGuidanceAssignButton = document.getElementById('uiGuidanceAssignButton');
   	
   	for (i in worldMap.coords[view.focusX][view.focusY].sites) {
   		var item = document.createElement('option');
   		item.text = "Produce " + worldMap.coords[view.focusX][view.focusY].sites[i].site.primaryProduce.plural + " as " + worldMap.coords[view.focusX][view.focusY].sites[i].site.job + "s at " + worldMap.coords[view.focusX][view.focusY].sites[i].site.name;
   		item.value = i;
   		uiGuidanceAssignSelect.appendChild(item);
+  	}
+  	
+  	if (uiGuidanceAssignCostButton.innerHTML > gameClock.guidancePoints) {
+  		uiGuidanceAssignButton.disabled = true;
+  	} else {
+  		uiGuidanceAssignButton.disabled= false;
   	}
   	
   	// Development
@@ -692,11 +699,15 @@ var view = {
   		uiGuidanceProspectCostButton.innerHTML = 100;
   		if (gameClock.guidancePoints < 100) {
   			uiGuidanceProspectButton.disabled = true;
+  		} else {
+  			uiGuidanceProspectButton.disabled = false;
   		}
   	} else {
   		uiGuidanceProspectCostButton.innerHTML = Math.max(100-pop.values.inquiry,10);
   		if (gameClock.guidancePoints < Math.max(100-pop.values.inquiry,10)) {
   			uiGuidanceProspectButton.disabled = true;  			
+  		} else {
+  			uiGuidanceProspectButton.disabled = false;
   		}
   	}
   	
@@ -739,6 +750,7 @@ var view = {
   	// Experiments
   	var uiGuidanceExperimentSelect = document.getElementById('uiGuidanceExperimentSelect');
   	uiGuidanceExperimentSelect.innerHTML = '';
+  	var uiGuidanceExperimentButton = document.getElementById('uiGuidanceExperimentButton');
   	
   	var uiGuidanceExperimentCost = document.getElementById('uiGuidanceExperimentCost');
   	var uiGuidanceExperimentCostButton = document.getElementById('uiGuidanceExperimentCostButton');
@@ -779,9 +791,16 @@ var view = {
 
   	}
   	
+  	if (uiGuidanceExperimentCostButton.innerHTML > gameClock.guidancePoints) {
+  		uiGuidanceExperimentButton.disabled = true;
+  	} else {
+  		uiGuidanceExperimentButton.disabled= false;
+  	}
+  	
   	// Worship
   	
   	var uiGuidanceEnactButton = document.getElementById('uiGuidanceEnactButton');
+  	var uiGuidanceDesignButton = document.getElementById('uiGuidanceDesignButton');
   	var uiGuidanceSynthesizeButton = document.getElementById('uiGuidanceSynthesizeButton');
   	var uiGuidanceEnactCostButton = document.getElementById('uiGuidanceEnactCostButton');
   	var uiGuidanceDesignCostButton = document.getElementById('uiGuidanceDesignCostButton');
@@ -791,13 +810,6 @@ var view = {
   	uiGuidanceEnactButton.disabled = true;
   	uiGuidanceSynthesizeButton.disabled = true;
   	
-  	if (numRites > 2) {
-  		uiGuidanceEnactButton.disabled = false;
-  		uiGuidanceSynthesizeButton.disabled = false;
-  	} else if (numRites > 1) {
-  		uiGuidanceEnactButton.disabled = false;
-  	}
-  	
   	if (pop.values.piety === undefined) {
   		uiGuidanceEnactCostButton.innerHTML = 100;
   		uiGuidanceDesignCostButton.innerHTML = 100*numRites;
@@ -806,6 +818,19 @@ var view = {
   		uiGuidanceEnactCostButton.innerHTML = Math.ceil(Math.max(100-pop.values.piety,10));
   		uiGuidanceDesignCostButton.innerHTML = Math.ceil(Math.max((100-pop.values.piety)*numRites,10*numRites));
   		uiGuidanceSynthesizeCostButton.innerHTML = Math.ceil(Math.max(100-pop.values.piety,10));
+  	}
+  	
+  	if (numRites > 2 && gameClock.guidancePoints >= uiGuidanceEnactCostButton.innerHTML) {
+  		uiGuidanceEnactButton.disabled = false;
+  		uiGuidanceSynthesizeButton.disabled = false;
+  	} else if (numRites > 1 && gameClock.guidancePoints >= uiGuidanceEnactCostButton.innerHTML) {
+  		uiGuidanceEnactButton.disabled = false;
+  	}
+  	
+  	if (gameClock.guidancePoints >= uiGuidanceDesignCostButton.innerHTML) {
+  		uiGuidanceDesignButton.disabled = false;
+  	} else {
+  		uiGuidanceDesignButton.disabled = true;
   	}
   	
   	var uiGuidanceEnactSelect = document.getElementById('uiGuidanceEnactSelect');
@@ -835,7 +860,12 @@ var view = {
   	var uiGuidanceRaidCostButton = document.getElementById('uiGuidanceRaidCostButton');
   	var uiGuidanceMigrateCostButton = document.getElementById('uiGuidanceMigrateCostButton');
   	
-  	uiGuidanceScoutCostButton.innerHTML = Math.ceil(Math.max(100-pop.values.inquiry,10));
+  	if (pop.values.inquiry === undefined) {
+  		uiGuidanceScoutCostButton.innerHTML = 100;
+  	} else {
+  		uiGuidanceScoutCostButton.innerHTML = Math.ceil(Math.max(100-pop.values.inquiry,10));
+  	}
+  	
   	uiGuidanceRaidCostButton.innerHTML = Math.ceil(Math.max(100-pop.values.aggression,10));
   	uiGuidanceMigrateCostButton.innerHTML = Math.ceil(Math.max(50+pop.prestige,10));
   	
@@ -845,47 +875,56 @@ var view = {
   	uiGuidanceSplitSelect.innerHTML = '';
   	uiGuidanceMergeSelect.innerHTML = '';
   	var item;
+  	var splitCost;
   	
   	if (pop.values.matriarchy !== undefined && pop.demographics.gender !== "Women" && pop.demographics.gender !== "Men") {
   		item = document.createElement('option');
-  		item.text = "Expel Men (" + Math.max(10,100-pop.values.matriarchy) + "G)";
-  		item.value = "matriarchy";
+  		splitCost = Math.max(10,100-pop.values.matriarchy);
+  		item.text = "Expel Men (" + splitCost + "G)";
+  		item.value = "matriarchy "+splitCost;
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
   	if (pop.values.patriarchy !== undefined && pop.demographics.gender !== "Men" && pop.demographics.gender !== "Women") {
   		item = document.createElement('option');
-  		item.text = "Expel Women (" + Math.max(10,100-pop.values.patriarchy) + "G)";
-  		item.value = "patriarchy";
+  		splitCost = Math.max(10,100-pop.values.patriarchy);
+  		item.text = "Expel Women (" + splitCost + "G)";
+  		item.value = "patriarchy "+splitCost;
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
   	if (pop.values.neutrarchy !== undefined && pop.demographics.fertility === "mixed") {
   		item = document.createElement('option');
-  		item.text = "Expel Breeders (" + Math.max(10,100-pop.values.neutrarchy) + "G)";
-  		item.value = "neutrarchy";
+  		splitCost = Math.max(10,100-pop.values.neutrarchy);
+  		item.text = "Expel Breeders (" + splitCost + "G)";
+  		item.value = "neutrarchy "+splitCost;
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
   	if (pop.values.authority !== undefined) {
   		item = document.createElement('option');
-  		item.text = "Expel Low Status (" + Math.max(10,100-pop.values.authority) + "G)";
-  		item.value = "authority";
+  		splitCost = Math.max(10,100-pop.values.authority);
+  		item.text = "Expel Low Status (" +  + "G)";
+  		item.value = "authority "+splitCost;
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
   	if (pop.values.piety !== undefined) {
   		item = document.createElement('option');
-  		item.text = "Expel Heretics (" + Math.max(10,100-pop.values.piety) + "G)";
-  		item.value = "piety";
+  		splitCost = Math.max(10,100-pop.values.piety);
+  		item.text = "Expel Heretics (" + splitCost + "G)";
+  		item.value = "piety "+splitCost;
   		uiGuidanceSplitSelect.appendChild(item);
   	}
   	
   	if (pop.values.aggression !== undefined) {
   		item = document.createElement('option');
-  		item.text = "Expel the Weak (" + Math.max(10,100-pop.values.aggression) + "G)";
-  		item.value = "aggression";
+  		splitCost = Math.max(10,100-pop.values.aggression);
+  		item.text = "Expel the Weak (" + splitCost + "G)";
+  		item.value = "aggression "+splitCost;
+  		item.selected = true;
   		uiGuidanceSplitSelect.appendChild(item);
+  		view.splitCostButtonToggle();
   	}
   	
   	var uiGuidanceMergeSelect = document.getElementById('uiGuidanceMergeSelect');
@@ -934,6 +973,11 @@ var view = {
   		resource.value = i;
   		uiGuidanceDivestSelect.appendChild(resource);
   	}
+  	
+  	if (gameClock.guidancePoints < 10) {
+  		document.getElementById('uiGuidanceDivestButton').disabled = true;
+  	}
+  	
   },
   
   refreshGuidanceMap: function() {
@@ -1018,13 +1062,43 @@ var view = {
   },
   
   guidanceMapSelect(x,y) {
-  	document.getElementById('uiGuidanceScoutButton').disabled= false;
-  	document.getElementById('uiGuidanceRaidButton').disabled= false;
-  	document.getElementById('uiGuidanceMigrateButton').disabled= false;
+  	var uiGuidanceScoutCostButton = document.getElementById('uiGuidanceScoutCostButton');
+  	var uiGuidanceRaidCostButton = document.getElementById('uiGuidanceRaidCostButton');
+  	var uiGuidanceMigrateCostButton = document.getElementById('uiGuidanceMigrateCostButton');
+  	
+  	if (uiGuidanceScoutCostButton.innerHTML > gameClock.guidancePoints) {
+  		uiGuidanceScoutButton.disabled = true;
+  	} else {
+  		uiGuidanceScoutButton.disabled= false;
+  	}
+  	
+  	if (uiGuidanceRaidCostButton.innerHTML > gameClock.guidancePoints) {
+  		uiGuidanceRaidButton.disabled = true;
+  	} else {
+  		uiGuidanceRaidButton.disabled= false;
+  	}
+  	
+  	if (uiGuidanceMigrateCostButton.innerHTML > gameClock.guidancePoints) {
+  		uiGuidanceMigrateButton.disabled = true;
+  	} else {
+  		uiGuidanceMigrateButton.disabled= false;
+  	}
   	
   	view.targetX = x;
   	view.targetY = y;
   	view.refreshGuidanceMap();
+  },
+  
+  splitCostButtonToggle: function() {
+  	var uiGuidanceSplitButton = document.getElementById('uiGuidanceSplitButton');
+  	var input = document.getElementById('uiGuidanceSplitSelect').value;
+  	var splitCost = +input.substr(1+input.indexOf(" "));
+  	console.log(splitCost);
+  	if (splitCost > gameClock.guidancePoints) {
+  		uiGuidanceSplitButton.disabled = true;
+  	} else {
+  		uiGuidanceSplitButton.disabled = false;
+  	}
   },
   
   

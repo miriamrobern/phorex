@@ -151,6 +151,7 @@ function Rite(pop,sacrifice) {
     }
     
     pop.notify(notification);
+    pop.guided = 1;
     
   }
 }

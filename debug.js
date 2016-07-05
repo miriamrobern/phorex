@@ -35,7 +35,7 @@ var testMap = {
     worldMap.coords[1][2].altitude = 2;
     worldMap.coords[2][1].altitude = 2;
     worldMap.coords[2][2].altitude = 2;
-    worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.fruitGrove,capacity:100},{site:dataSites.river,capacity:100},{site:dataSites.cenote,capacity:100},{site:dataSites.pond,capacity:100}];
+    worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.fruitGrove,capacity:100},{site:dataSites.river,capacity:100},{site:dataSites.knappery,capacity:100},{site:dataSites.pond,capacity:100}];
     worldMap.coords[1][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.grazingLand,capacity:100},{site:dataSites.river,capacity:100}];
     worldMap.coords[1][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.outcropping,capacity:100},{site:dataSites.peatBog,capacity:100}];
     worldMap.coords[2][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.clayDeposit,capacity:100},{site:dataSites.pond,capacity:100}];
@@ -49,10 +49,10 @@ var testMap = {
     
     worldMap.coords[1][1].stocks = {caribou:1000};
     
-    southeast = new Pop("Southeasterners",south,4,2,2,100,{aggression: 100},{gender:"mixed",age:"mixed"});
-    northwest = new Pop("Northwesterners",north,4,2,2,1,{aggression: 100},{gender:"mixed",age:"mixed"});
-    northeast = new Pop("Northeasterners",north,4,2,1,50,{aggression: 100},{gender:"mixed",age:"mixed"});
-    southwest = new Pop("Southwesterners",south,4,1,2,21,{aggression: 100},{gender:"mixed",age:"mixed"});
+    southeast = new Pop("Southeasterners",south,4,2,2,100,{aggression: 1,piety: 100},{gender:"mixed",age:"mixed"});
+    northwest = new Pop("Northwesterners",north,4,2,2,1,{aggression: 1,piety: 100},{gender:"mixed",age:"mixed"});
+    northeast = new Pop("Northeasterners",north,4,2,1,50,{aggression: 1,piety: 100},{gender:"mixed",age:"mixed"});
+    southwest = new Pop("Southwesterners",south,4,1,2,21,{aggression: 1,piety: 100},{gender:"mixed",age:"mixed"});
     
     
     worldMap.coords[1][1].units = [];

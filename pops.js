@@ -422,7 +422,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	this.prestige += 20;
   	
   	worldMap.coords[this.x][this.y].sites.push({site:site,capacity:site.baseCapacity});
-  	notification = this.name + "builds a "+ dataSites[site].name + ".";
+  	notification = this.name + " builds a "+ site.name + ".";
   	
   	this.notify(notification);
 	this.guided = 1;
@@ -514,7 +514,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	
   	
   this.synthesize = function(riteA,riteB) {
-  	console.log("Synthesize ",riteA,riteB);
   	
   	var newRite = new Rite(this,dataResources.caribou);
   	this.rites.push(newRite);
@@ -1279,6 +1278,43 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       impulse.growFood = Math.random()*100;
     }
     
+    // OMG the Build Impulse
+    var canBuild = [];
+    for (i in this.advances) {
+    	if (i !== 'failures') {
+			for (l = 1 ; l < this.advances[i]+1 ; l++) {
+				if (dataAdvances[i][l].type === "site") {
+					canBuild.push(dataAdvances[i][l].key);
+				}
+			}
+		}
+    }
+    var builtHere = [];
+    for (i in worldMap.coords[this.x][this.y].sites) {
+    	builtHere.push(worldMap.coords[this.x][this.y].sites[i].site);
+    }
+    var letsBuild = [];
+    var matsCheck = 0;
+    for (i in canBuild) {
+    	if (builtHere.indexOf(dataSites[canBuild[i]]) === -1) {
+    		matsCheck = 0;
+    		for (m in dataSites[canBuild[i]].buildCost) {
+    			if (this.inv[m] > dataSites[canBuild[i]].buildCost[m]) {
+    				matsCheck = 1;
+    			}
+    		}
+    		if (matsCheck === 1) {
+    			letsBuild.push(canBuild[i]);
+    		}
+    	}
+    }
+    if (letsBuild.length > 0) {
+    	impulse.build = 75;
+    	letsBuild = letsBuild[Math.floor(Math.random()*letsBuild.length)];
+    }
+    
+    // End Build Impulse
+    
      // can add other impulses (migration/survival/rebellion) in here
     
     impulse = Object.keys(impulse).reduce(function(a, b){ return impulse[a] > impulse[b] ? a : b });
@@ -1305,6 +1341,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       this.impulse.migration(this);
     } else if (impulse === "growFood") {
       this.impulse.growFood(this);
+    } else if (impulse === "build") {
+      this.build(letsBuild);
     } 
     
     this.notify(notification);
@@ -1728,10 +1766,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     	
     	pop.design();
       
-    } else if (Math.random() < 1 / localRites.length) { // syncretize rites
+    } else if (Math.random() < localRites.length / 20) { // syncretize rites
       var riteA = pop.rites[Math.floor(Math.random()*pop.rites.length)];
-      var otherRites = pop.rites.slice();
-      otherRites = otherRites.splice(otherRites.indexOf(riteA),1);
+      var otherRites = localRites.slice();
+      otherRites.splice(otherRites.indexOf(riteA),1);
       var riteB = otherRites[Math.floor(Math.random()*otherRites.length)];
       
       pop.synthesize(riteA,riteB);

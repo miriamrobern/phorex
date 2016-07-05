@@ -143,6 +143,8 @@ var handlers = {
   uiGuidanceAssignButton: function() {
   	var i = document.getElementById('uiGuidanceAssignSelect').value;
   	var newJob = worldMap.coords[view.focusX][view.focusY].sites[i];
+  	var cost = uiGuidanceAssignCostButton.innerHTML;
+  	gameClock.guidancePoints -= cost;
   	
   	view.focusPop.assign(newJob);
 
@@ -151,10 +153,14 @@ var handlers = {
   	
   	view.refreshPeoplePanel();
   	view.refreshLandPanel();
+  	view.refreshMinimapPanel();
   	view.displayGuidance(view.focusPop);
   },
   
   uiGuidanceProspectButton: function() {
+  	var cost = uiGuidanceProspectCostButton.innerHTML;
+  	gameClock.guidancePoints -= cost;
+  	
   	view.focusPop.prospect();
 
 	view.selectGuidance('uiGuidanceResult')  
@@ -173,10 +179,14 @@ var handlers = {
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
 	view.refreshPeoplePanel();
   	view.refreshLandPanel();
+  	view.refreshMinimapPanel();
   	view.displayGuidance(view.focusPop);
   },
   
   uiGuidanceExperimentButton: function() {
+  	var cost = uiGuidanceExperimentCostButton.innerHTML;
+  	gameClock.guidancePoints -= cost;
+  	
   	var uiGuidanceExperimentSelect = document.getElementById('uiGuidanceExperimentSelect');
   	var resource = uiGuidanceExperimentSelect.options[uiGuidanceExperimentSelect.selectedIndex].value;
   	view.focusPop.experiment(resource);
@@ -185,29 +195,43 @@ var handlers = {
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
 	
   	view.refreshPeoplePanel();
+  	view.refreshMinimapPanel();
   	view.displayGuidance(view.focusPop);
   },
   
   uiGuidanceEnactButton: function() {
+  	var cost = uiGuidanceEnactCostButton.innerHTML;
+  	gameClock.guidancePoints -= cost;
+  	
   	var uiGuidanceEnactSelect = document.getElementById('uiGuidanceEnactSelect');
   	var rite = uiGuidanceEnactSelect.options[uiGuidanceEnactSelect.selectedIndex].value;
   	view.focusPop.rites[rite].enact(view.focusPop);
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	
+  	view.refreshMinimapPanel();
 	view.refreshPeoplePanel();
   },
   
   uiGuidanceDesignButton: function() {
+  	var cost = uiGuidanceDesignCostButton.innerHTML;
+  	gameClock.guidancePoints -= cost;
+  	
   	view.focusPop.design();
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	
 	view.refreshPeoplePanel();
+  	view.refreshMinimapPanel();
 	view.refreshWorshipPanel();
   },
   
   uiGuidanceSynthesizeButton: function() {
+  	var cost = uiGuidanceSynthesizeCostButton.innerHTML;
+  	gameClock.guidancePoints -= cost;
+  	
   	var uiGuidanceSynthesisSelectA = document.getElementById('uiGuidanceSynthesisSelectA');
   	var uiGuidanceSynthesisSelectB = document.getElementById('uiGuidanceSynthesisSelectB');
   	var riteA = view.focusPop.rites[uiGuidanceSynthesisSelectA.options[uiGuidanceSynthesisSelectA.selectedIndex].value];
@@ -216,11 +240,16 @@ var handlers = {
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	
 	view.refreshPeoplePanel();
+  	view.refreshMinimapPanel();
 	view.refreshWorshipPanel();
   },
   
   uiGuidanceScoutButton: function() {
+  	var cost = uiGuidanceScoutCostButton.innerHTML;
+  	gameClock.guidancePoints -= cost;
+  	
   	var targetX = view.targetX;
   	var targetY = view.targetY;
   	view.focusPop.scout(targetX,targetY);
@@ -231,10 +260,15 @@ var handlers = {
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	
 	view.refreshPeoplePanel();
+  	view.refreshMinimapPanel();
   },
   
   uiGuidanceRaidButton: function() {
+  	var cost = uiGuidanceRaidCostButton.innerHTML;
+  	gameClock.guidancePoints -= cost;
+  	
   	var targetX = view.targetX;
   	var targetY = view.targetY;
   	view.focusPop.raid(targetX,targetY);
@@ -245,12 +279,17 @@ var handlers = {
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
+	
 	view.refreshPeoplePanel();
 	view.refreshLandPanel();
+  	view.refreshMinimapPanel();
 	view.displayGuidance(view.focusPop);
   },
   
   uiGuidanceMigrateButton: function() {
+  	var cost = uiGuidanceMigrateCostButton.innerHTML;
+  	gameClock.guidancePoints -= cost;
+  	
   	var targetX = view.targetX;
   	var targetY = view.targetY;
   	view.focusPop.migrate(targetX,targetY);
@@ -276,12 +315,17 @@ var handlers = {
   },
   
   uiGuidanceSplitButton: function() {
-  	var splitType=document.getElementById('uiGuidanceSplitSelect').value;
+  	var input=document.getElementById('uiGuidanceSplitSelect').value;
+  	var splitType = input.substr(0,input.indexOf(" "));
+  	var splitCost = +input.substr(1+input.indexOf(" "));
+  	
+  	gameClock.guidancePoints -= splitCost;
   	view.focusPop.splitByType(splitType);
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
 	view.refreshPeoplePanel();
+  	view.refreshMinimapPanel();
   },
   
   uiGuidanceMergeButton: function() {
@@ -290,6 +334,7 @@ var handlers = {
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
 	view.refreshPeoplePanel();
+  	view.refreshMinimapPanel();
   },
   
   uiGuidanceEquipButton: function() {
@@ -300,10 +345,14 @@ var handlers = {
   },
   
   uiGuidanceDivestButton: function() {
+  	var cost = uiGuidanceDivestCostButton.innerHTML;
+  	gameClock.guidancePoints -= cost;
+  	
   	var uiGuidanceDivestSelect = document.getElementById('uiGuidanceDivestSelect');
   	var resource = uiGuidanceDivestSelect.options[uiGuidanceDivestSelect.selectedIndex].value;
   	view.focusPop.divest(resource);
 	view.refreshPeoplePanel();
+  	view.refreshMinimapPanel();
   },
   
   helpTopics: function() {
