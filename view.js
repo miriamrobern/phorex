@@ -281,30 +281,44 @@ var view = {
     
     for (i = 0; i < worldMap.coords[x][y].units.length;i++) {
       
-      values = worldMap.coords[x][y].units[i].values;
+      // values = worldMap.coords[x][y].units[i].values;
+//       
+//       if (values.matriarchy > values.patriarchy + 20 ) {
+//           popDescriptors = popDescriptors + "matriarchal and ";
+//           
+//         } else if (values.patriarchy > values.matriarchy + 20) {
+//           popDescriptors = popDescriptors + "patriarchal and ";
+//         } 
+//         
+//         if (values.piety > values.aggression && values.piety > values.authority && values.piety > values.inquiry) {
+//           popDescriptors = popDescriptors + "pious ";
+//           
+//         } else if (values.authority > values.inquiry && values.authority > values.aggression && values.authority > values.piety) {
+//           popDescriptors = popDescriptors + "authoritarian ";
+//           
+//         } else if (values.inquiry > values.aggression && values.inquiry > values.authority && values.inquiry > values.piety) {
+//           popDescriptors = popDescriptors + "curious ";
+//           
+//         } else {
+//           popDescriptors = popDescriptors + "violent ";
+//           
+//         }
+
+	  var values = worldMap.coords[x][y].units[i].values;
+	  popDescriptors = Object.keys(values).reduce(function(a, b){ return values[a] > values[b] ? a : b });
+
+	  if (popDescriptors === 'matriarchy') {popDescriptors = "matriarchal";}
+	  else if (popDescriptors === 'patriarchy') {popDescriptors = "patriarchal";}
+	  else if (popDescriptors === 'neutrarchy') {popDescriptors = "neutrarchal";}
+	  else if (popDescriptors === 'tertiarchy') {popDescriptors = "tertiarchal";}
+	  else if (popDescriptors === 'quadrarchy') {popDescriptors = "quadrarchal";}
+	  else if (popDescriptors === 'inquiry') {popDescriptors = "curious";}
+	  else if (popDescriptors === 'piety') {popDescriptors = "pious";}
+	  else if (popDescriptors === 'authority') {popDescriptors = "authoritarian";}
+	  else if (popDescriptors === 'aggression') {popDescriptors = "aggressive";}
       
-      if (values.matriarchy > values.patriarchy + 20 ) {
-          popDescriptors = popDescriptors + "matriarchal and ";
-          
-        } else if (values.patriarchy > values.matriarchy + 20) {
-          popDescriptors = popDescriptors + "patriarchal and ";
-        } 
-        
-        if (values.piety > values.aggression && values.piety > values.authority && values.piety > values.inquiry) {
-          popDescriptors = popDescriptors + "pious ";
-          
-        } else if (values.authority > values.inquiry && values.authority > values.aggression && values.authority > values.piety) {
-          popDescriptors = popDescriptors + "authoritarian ";
-          
-        } else if (values.inquiry > values.aggression && values.inquiry > values.authority && values.inquiry > values.piety) {
-          popDescriptors = popDescriptors + "curious ";
-          
-        } else {
-          popDescriptors = popDescriptors + "violent ";
-          
-        }
-      
-      populationsList = populationsList + "<li>" + worldMap.coords[x][y].units[i].population + " of the " + popDescriptors + worldMap.coords[x][y].units[i].people.name + " people</li>";
+      var popPopUp = worldMap.coords[x][y].units[i].popUp();
+      populationsList = populationsList + "<li><a class='popup'>" + worldMap.coords[x][y].units[i].population + " of the " + popDescriptors + " " + worldMap.coords[x][y].units[i].people.name + " people <span>" + popPopUp + "</span></a></li>";
       popDescriptors = '';
     }
     
@@ -369,7 +383,7 @@ var view = {
     selectPaneAltitude.innerHTML = Math.floor(worldMap.coords[x][y].altitude*900) + "m";
     selectPanePrecipitation.innerHTML = worldMap.coords[x][y].precipitation + "cm annually";
     selectPaneTemperature.innerHTML = worldMap.coords[x][y].temperature + " celsius";
-    selectPaneNaturalBounty.innerHTML = site.name;
+    selectPaneNaturalBounty.innerHTML = site.site.name;
     
     selectPaneWest.innerHTML = worldMap.coords[x-1][y].biome.name + " to the west " + neighborsWest + ".";
     selectPaneEast.innerHTML = worldMap.coords[x+1][y].biome.name + " to the east " + neighborsEast + ".";
