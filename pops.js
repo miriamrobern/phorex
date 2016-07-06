@@ -1044,6 +1044,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     var primaryQuantity = Math.floor(Math.min(matsCheck,toolsCheck) * job.primaryEfficiency * this.population * 100) / 100;
     var secondary = job.secondaryProduce[Math.floor(Math.random()*job.secondaryProduce.length)];
     var secondaryQuantity = Math.floor(Math.min(matsCheck,toolsCheck) * job.secondaryEfficiency * this.population * 100) / 100;
+    
+    if (primary === dataResources.mysteryOre) {
+    	primary = dataResources.leadOre;
+    }
       
     notification = this.name + " works as " + job.job + "s," + materialCost + " producing " + primaryQuantity + " " + primary.plural + " and " + secondaryQuantity + " " + secondary.plural + ".  " + breakage;
 
