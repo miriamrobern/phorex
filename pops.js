@@ -8,7 +8,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.population = population;
   this.x = x;
   this.y = y;
-  this.lastSeason = this.name + " rally behind a new vision of the future.";
+  this.lastSeason = this.name + " rallies behind a new vision of the future.";
   this.history = [];
   this.loyalty = {player:0};
   this.guided = 0;
@@ -28,11 +28,11 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       this.values.matriarchy = Math.floor(Math.random()*100);
       this.values.patriarchy = Math.floor(Math.random()*100);
       this.values.neutrarchy = Math.floor(Math.random()*100);
-    } else if (Math.random()>0.7) {
-      this.values.matriarchy = Math.floor(Math.random()*100);
-      this.values.patriarchy = Math.floor(Math.random()*100);
-      this.values.tertiarchy = Math.floor(Math.random()*100);
-      this.values.quartarchy = Math.floor(Math.random()*100);
+//     } else if (Math.random()>0.7) {
+//       this.values.matriarchy = Math.floor(Math.random()*100);
+//       this.values.patriarchy = Math.floor(Math.random()*100);
+//       this.values.tertiarchy = Math.floor(Math.random()*100);
+//       this.values.quartarchy = Math.floor(Math.random()*100);
     }
     
     if (Math.random()>0.6) {
@@ -370,7 +370,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	notification = this.name + " decides to start working as " + this.job.site.job + "s at the " + this.job.site.name + ".";
 	
 	this.notify(notification);
-	this.guided = 1;
+// 	this.guided = 1;
   };
   
   this.prospect = function() {
@@ -405,7 +405,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 	}
 	
 	this.notify(notification);
-	this.guided = 1;
+// 	this.guided = 1;
   };
   
   this.build = function(site) {
@@ -424,8 +424,15 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	worldMap.coords[this.x][this.y].sites.push({site:site,capacity:site.baseCapacity});
   	notification = this.name + " builds a "+ site.name + ".";
   	
+  	if (this.inv.food >= this.population) {
+  		this.job = worldMap.coords[this.x][this.y].sites[worldMap.coords[this.x][this.y].sites.length];
+  		notification += " They start to work at the new site.";
+  	}
+  	
+  	
+  	
   	this.notify(notification);
-	this.guided = 1;
+// 	this.guided = 1;
   	};
   	
   	
@@ -473,7 +480,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     
     this.notify(notification);
-	this.guided = 1;
+// 	this.guided = 1;
   	
   	};
   	
@@ -481,7 +488,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	
   this.enact = function(rite) {
   	console.log("Enact ",rite);
-	this.guided = 1;
+// 	this.guided = 1;
   	};
   
   this.design = function() {
@@ -496,6 +503,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	if (sacrifice === undefined) {
   		this.values.piety -= 20;
   		notification = this.name + " has nothing to sacrifice in its religious rites.";
+		this.notify(notification);
   	} else {  	
 		var sacrificeNum = Math.ceil(this.inv[sacrifice] / 5 )
 		this.inv[sacrifice] -= sacrificeNum;
@@ -507,16 +515,16 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 		} else {
 			notification = this.name + " sacrifices " + sacrificeNum + " " + sacrifice + " in minor religious rites.";
 		}
+		this.notify(notification);
+
   	}
-	this.guided = 1;
+// 	this.guided = 1;
   	};
   	
   	
   	
   this.synthesize = function(riteA,riteB) {
-  
-  console.log("Synthesize: ",riteA,riteB);
-  	
+    	
   	var newRite = new Rite(this,dataResources.caribou);
   	this.rites.push(newRite);
   	this.rites.splice(this.rites.indexOf(riteA),1);
@@ -569,7 +577,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	newRite.items = newRite.items.filter(function(item,pos) {return newRite.items.indexOf(item) == pos});
   	
   	notification = this.name + " synthesized " + riteA.name + " and " + riteB.name + " to create " + newRite.name + ".";
-	this.guided = 1;
+	this.notify(notification);
+
+// 	this.guided = 1;
   	};
   	
   	
@@ -601,7 +611,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 	
 	notification = this.name + " mounts a scouting expedition and comes home with tall tales. ("+observations+" observations)";
   	this.notify(notification);
-	this.guided = 1;
+// 	this.guided = 1;
   	};
   	
   	
@@ -769,8 +779,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 		view.displayWorldMap();
 	}
   	
+	this.notify(notification);
   	
-	this.guided = 1;
+// 	this.guided = 1;
   	};
   
   
@@ -796,7 +807,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 		}
 	}
 	this.notify(notification);
-	this.guided = 1;
+// 	this.guided = 1;
   		
   	};
   
@@ -931,13 +942,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 		}
   	}
   	
-	this.guided = 1;
-	newPop.guided = 1;
+// 	this.guided = 1;
+// 	newPop.guided = 1;
   	};
   
   this.mergeByType = function(mergeType,mergeTarget) {
   	console.log("Merge with ",mergeTarget," via ",mergeType);
-	this.guided = 1;
+// 	this.guided = 1;
   	};
   
   this.equip = function(resource) {  	
@@ -1055,7 +1066,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     	primary = dataResources.leadOre;
     }
       
-	console.log(this,job,primary);
     notification = this.name + " works as " + job.job + "s," + materialCost + " producing " + primaryQuantity + " " + primary.plural + " and " + secondaryQuantity + " " + secondary.plural + ".  " + breakage;
 
     if (worldMap.coords[this.x][this.y].stocks[primary.key] > 0) {
@@ -1330,6 +1340,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     impulse = Object.keys(impulse).reduce(function(a, b){ return impulse[a] > impulse[b] ? a : b });
     
+    this.lastSeason += " " + this.name + " has a " + impulse + " impulse. ";
     notification = this.name + "has an impulse that didn't go off: " + impulse;
     
     if (impulse === "jobChange") {
@@ -1355,8 +1366,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     } else if (impulse === "build") {
       this.build(letsBuild);
     } 
-    
-    this.notify(notification);
     
   };
   
@@ -1446,7 +1455,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     		badSites.push(sites[i]);
     	}
     	
-    	console.log(sites[i]);
     	if (resource !== undefined && sites[i].site.primaryProduce.key !== resource) {
     		badSites.push(sites[i]);
     	}
@@ -1544,6 +1552,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       notification = pop.name + " celebrates their mothers in a modest ceremony, consuming " + tributeNum + " " + dataResources[tribute].plural + ".";
     }
     
+	pop.notify(notification);
   };
 
   this.impulse.patriarchy = function(pop) {
@@ -1618,6 +1627,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
       notification = pop.name + " celebrates their fathers in a modest ceremony, consuming " + tributeNum + " " + dataResources[tribute].plural + ".";
     }
+	pop.notify(notification);
   };
   
   this.impulse.neutrarchy = function(pop) {
@@ -1693,6 +1703,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
       notification = pop.name + " celebrates their celibates in a modest ceremony, consuming " + tributeNum + " " + dataResources[tribute].plural + ".";
     }
+	pop.notify(notification);
   };
   
   this.impulse.authority = function(pop) {
@@ -1763,6 +1774,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     
     
+	pop.notify(notification);
   };
   
   this.impulse.piety = function(pop) {
@@ -1779,7 +1791,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     	pop.design();
       
     } else if (Math.random() < localRites.length / 20 && localRites.length > 1) { // syncretize rites
-    	console.log(localRites);
       var riteA = pop.rites[Math.floor(Math.random()*pop.rites.length)];
       var otherRites = localRites.slice();
       otherRites.splice(otherRites.indexOf(riteA),1);
@@ -1851,15 +1862,16 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	
   	if (targetPop === undefined && targetPile === undefined & pop.population > 1) {
   		pop.splitByType("aggression");
+		pop.notify(notification);
   	} else if (targetPop === undefined && targetPile === undefined) {
   		notification = pop.name + ' has no targets and is alone with futilely aggressive thoughts.';
+		pop.notify(notification);
   	} else if (targetPile !== undefined) {
   		pop.raid(targetPile.x,targetPile.y);
   	} else if (targetPop !== undefined) {
   		pop.raid(targetPop.x,targetPop.y);
   	}
-  	
-  	    
+  	  	    
   };
   
   this.impulse.growFood = function(pop) {

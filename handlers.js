@@ -147,6 +147,8 @@ var handlers = {
   	gameClock.guidancePoints -= cost;
   	
   	view.focusPop.assign(newJob);
+  	
+  	view.focusPop.guided = 1;
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
@@ -162,6 +164,8 @@ var handlers = {
   	gameClock.guidancePoints -= cost;
   	
   	view.focusPop.prospect();
+  	
+  	view.focusPop.guided = 1;
 
 	view.selectGuidance('uiGuidanceResult')  
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;	
@@ -174,6 +178,8 @@ var handlers = {
   uiGuidanceBuildButton: function() {
   	var building = document.getElementById('uiGuidanceBuildSelect').value;
   	view.focusPop.build(building);
+  	
+  	view.focusPop.guided = 1;
 
 	view.selectGuidance('uiGuidanceResult')
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
@@ -190,6 +196,8 @@ var handlers = {
   	var uiGuidanceExperimentSelect = document.getElementById('uiGuidanceExperimentSelect');
   	var resource = uiGuidanceExperimentSelect.options[uiGuidanceExperimentSelect.selectedIndex].value;
   	view.focusPop.experiment(resource);
+  	
+  	view.focusPop.guided = 1;
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
@@ -206,6 +214,8 @@ var handlers = {
   	var uiGuidanceEnactSelect = document.getElementById('uiGuidanceEnactSelect');
   	var rite = uiGuidanceEnactSelect.options[uiGuidanceEnactSelect.selectedIndex].value;
   	view.focusPop.rites[rite].enact(view.focusPop);
+  	
+  	view.focusPop.guided = 1;
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
@@ -219,6 +229,8 @@ var handlers = {
   	gameClock.guidancePoints -= cost;
   	
   	view.focusPop.design();
+  	
+  	view.focusPop.guided = 1;
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
@@ -237,6 +249,8 @@ var handlers = {
   	var riteA = view.focusPop.rites[uiGuidanceSynthesisSelectA.options[uiGuidanceSynthesisSelectA.selectedIndex].value];
   	var riteB = view.focusPop.rites[uiGuidanceSynthesisSelectB.options[uiGuidanceSynthesisSelectB.selectedIndex].value];
   	view.focusPop.synthesize(riteA,riteB);
+  	
+  	view.focusPop.guided = 1;
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
@@ -253,6 +267,8 @@ var handlers = {
   	var targetX = view.targetX;
   	var targetY = view.targetY;
   	view.focusPop.scout(targetX,targetY);
+  	
+  	view.focusPop.guided = 1;
 
 	view.refreshMinimapPanel();
 	view.displayWorldMap();
@@ -272,6 +288,8 @@ var handlers = {
   	var targetX = view.targetX;
   	var targetY = view.targetY;
   	view.focusPop.raid(targetX,targetY);
+  	
+  	view.focusPop.guided = 1;
 
 	view.refreshMinimapPanel();
 	view.displayWorldMap();
@@ -293,6 +311,8 @@ var handlers = {
   	var targetX = view.targetX;
   	var targetY = view.targetY;
   	view.focusPop.migrate(targetX,targetY);
+  	
+  	view.focusPop.guided = 1;
 	
 	view.focusX = targetX;
 	view.focusY = targetY;
@@ -321,6 +341,8 @@ var handlers = {
   	
   	gameClock.guidancePoints -= splitCost;
   	view.focusPop.splitByType(splitType);
+  	
+  	view.focusPop.guided = 1;
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
@@ -330,6 +352,8 @@ var handlers = {
   
   uiGuidanceMergeButton: function() {
   	view.focusPop.mergeByType(0);
+  	
+  	view.focusPop.guided = 1;
 
 	view.selectGuidance('uiGuidanceResult') 
 	document.getElementById('uiGuidanceResultContent').innerHTML = notification;
@@ -399,17 +423,19 @@ var handlers = {
     	if (popsByPrestige[i].guided === 0) {
     		console.log(popsByPrestige[i]);
     		popsByPrestige[i].impulse();
+    	} else {
+    		popsByPrestige[i].lastSeason += popsByPrestige[i].name + " accepted guidance instead of taking an action on its own impulses.";
     	}
     }
     
-    for (i in popsByPrestige) {
-      popsByPrestige[i].season(popsByPrestige[i]);
-      popsByPrestige[i].guided = 0;
-      worldPop += popsByPrestige[i].population;
+    for (i in pops) {
+      pops[i].season(pops[i]);
+      pops[i].guided = 0;
+      worldPop += pops[i].population;
     }
   
   	console.log("=-=-=-=-=-=-=-=- End Processing Turn ",gameClock.turn," -=-=-=-=-=-=-=-=-=");
-  	console.log("Global Population: ",worldPop," in ",popsByPrestige.length," populations.");
+  	console.log("Global Population: ",worldPop," in ",pops.length," populations.");
     
     gameClock.turn++;
     
