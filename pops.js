@@ -425,7 +425,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	notification = this.name + " builds a "+ site.name + ".";
   	
   	if (this.inv.food >= this.population) {
-  		this.job = worldMap.coords[this.x][this.y].sites[worldMap.coords[this.x][this.y].sites.length];
+  		var sitesHere = worldMap.coords[this.x][this.y].sites;
+  		this.job = sitesHere[sitesHere.length-1];
   		notification += " They start to work at the new site.";
   	}
   	
