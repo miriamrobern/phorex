@@ -35,7 +35,7 @@ var testMap = {
     worldMap.coords[1][2].altitude = 2;
     worldMap.coords[2][1].altitude = 2;
     worldMap.coords[2][2].altitude = 2;
-    worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.fruitGrove,capacity:100},{site:dataSites.river,capacity:100},{site:dataSites.knappery,capacity:100},{site:dataSites.pond,capacity:100}];
+    worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.potter,capacity:100},{site:dataSites.crudeFields,capacity:100},{site:dataSites.knappery,capacity:100},{site:dataSites.pond,capacity:100}];
     worldMap.coords[1][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.grazingLand,capacity:100},{site:dataSites.river,capacity:100}];
     worldMap.coords[1][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.outcropping,capacity:100},{site:dataSites.peatBog,capacity:100}];
     worldMap.coords[2][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.clayDeposit,capacity:100},{site:dataSites.pond,capacity:100}];
@@ -73,7 +73,7 @@ var testMap = {
     pops.push(northeast);
     pops.push(northwest);
     
-    southeast.advances = {failures:80, manufacture:3, caribouHerding:1, };
+    southeast.advances = {failures:80, stonecraft:2, caribouHerding:1, };
     southeast.inv.caribou = 10;
 
     

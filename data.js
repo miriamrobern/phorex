@@ -3,7 +3,7 @@ var dataAdvances = {
   	key: "agriculture",
     name: "Agriculture",
     terrain: ["Shrubland","Savanna","Forest","Rainforest"],
-    1: {type:'site', name:"crudeFields"},
+    1: {type:'site', key:"crudeFields"},
     2: {type:'upgrade', key:"cropRotation"},
   },
   
@@ -207,7 +207,7 @@ var dataAdvances = {
   	key: "preservation",
     name: "Food Preservation",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'site', key:'granary'},
+    1: {type:'pile', key:'granary'},
   },
   
   pyrotechnics: {
@@ -278,6 +278,13 @@ var dataResources = {
     advances: [dataAdvances.brewing],
   },
   
+  bronzeArmor: {
+    key: "bronzeArmor",
+    name: "Bronze Armor",
+    plural: "suit of Bronze Armor",
+    advances: [dataAdvances.bronzeworking],
+  },
+  
   bone: {
     key: "bone",
     name: "Bone",
@@ -298,10 +305,18 @@ var dataResources = {
     plural: "ingots of Bronze",
   },
   
+  bronzeArmor:  {
+    key: "bronzeArmor",
+    name: "Bronze Armor",
+    plural: "Bronze Armor",
+    advances: [dataAdvances.discipline],
+  },
+  
   bronzeArms: {
     key: "bronzeArms",
     name: "Bronze Arms",
-    plural: "Bronze Armss",
+    plural: "Bronze Arms",
+    advances: [dataAdvances.discipline],
   },
   
   bronzeTool: {
@@ -338,11 +353,18 @@ var dataResources = {
     advances: [dataAdvances.ceramics, dataAdvances.preservation, dataAdvances.construction],
   },
   
+  cloth: {
+    key: "cloth",
+    name: "Cloth",
+    plural: "bolts of Cloth",
+    advances: [dataAdvances.textiles],
+  },
+  
   clothing: {
     key: "clothing",
     name: "Clothing",
     plural: "outfits of Clothing",
-    advances: [dataAdvances.weaving],
+    advances: [dataAdvances.textiles],
   },
   
   copperOre: {
@@ -358,6 +380,27 @@ var dataResources = {
     advances: [dataAdvances.finance,dataAdvances.trade],
   },
   
+  dog: {
+  	key: "dog",
+  	name: "Dog",
+  	plural: "dogs",
+  	advances: [dataAdvances.kennelry],
+  },
+  
+  dye: {
+    key: "dye",
+    name: "Dye",
+    plural: "bucket of Dye",
+    advances: [dataAdvances.dyes,dataAdvances.textiles],
+  },
+  
+  dyedCloth: {
+    key: "dyedCloth",
+    name: "Dyed Cloth",
+    plural: "bolts of Dyed Cloth",
+    advances: [dataAdvances.textiles],
+  },
+  
   goat: {
     key: "goat",
     name: "Goat",
@@ -365,25 +408,25 @@ var dataResources = {
     advances: [dataAdvances.goatHerding],
   },
   
-  manure: {
-    key: "manure",
-    name: "manure",
-    plural: "piles of Manure",
-    advances: [dataAdvances.agriculture,dataAdvances.preservation,dataAdvances.blackpowder],
+  falcon: {
+  	key: "falcon",
+  	name: "Falcon",
+  	plural: "Falcons",
+  	advances: [dataAdvances.falconry],
   },
   
   fiber: {
     key: "fiber",
     name: "Fiber",
     plural: "cords of Fiber",
-    advances: [dataAdvances.weaving],
+    advances: [dataAdvances.textiles],
   },
   
   fineClothing: {
     key: "fineClothing",
     name: "Fine Clothing",
     plural: "outfits of Fine Clothing",
-    advances: [dataAdvances.weaving],
+    advances: [dataAdvances.textiles],
   },
   
   fuel: {
@@ -400,6 +443,20 @@ var dataResources = {
     advances: [dataAdvances.leatherworking, dataAdvances.dyes],
   },
   
+  glaze: {
+    key: "glaze",
+    name: "Glaze",
+    plural: "pots of Glaze",
+    advances: [dataAdvances.pottery, dataAdvances.dyes],
+  },
+  
+  horse: {
+    key: "horse",
+    name: "Horse",
+    plural: "head of Horses",
+    advances: [dataAdvances.horseHerding],
+  },
+  
   ironIngot: {
     key: "ironIngot",
     name: "Iron Ingot",
@@ -412,6 +469,26 @@ var dataResources = {
     name: "Iron Ore",
     plural: "piles of Iron Ore",
     advances: [dataAdvances.ironworking],
+  },
+  
+  ironArmor:  {
+    key: "ironArmor",
+    name: "Iron Armor",
+    plural: "Iron Armor",
+    advances: [dataAdvances.discipline],
+  },
+  
+  ironArms: {
+    key: "ironArms",
+    name: "Iron Arms",
+    plural: "Iron Arms",
+    advances: [dataAdvances.discipline],
+  },
+  
+  ironTool: {
+  	key: "ironTool",
+  	name: "Iron Tool",
+  	plural: "Iron Tools",
   },
   
   leadOre: {
@@ -428,6 +505,27 @@ var dataResources = {
     advances: [dataAdvances.slings],
   },
   
+  leather: {
+  	key: "leather",
+  	name: "Leather",
+  	plural: "bale of Leathers",
+    advances: [dataAdvances.leatherworking,dataAdvances.dyes],
+  },
+  
+  leatherFinery: {
+  	key: "leatherFinery",
+  	name: "Leather Finery",
+  	plural: "suit of Leather Finery",
+    advances: [dataAdvances.leatherworking,dataAdvances.dyes],
+  },
+  
+  leatherJerkin: {
+  	key: "leatherJerkin",
+  	name: "Leather Jerkin",
+  	plural: "leather Jerkins",
+    advances: [dataAdvances.leatherworking,dataAdvances.dyes],
+  },
+  
   lumber: {
     key: "lumber",
     name: "Lumber",
@@ -435,11 +533,25 @@ var dataResources = {
     advances: [dataAdvances.forestry, dataAdvances.pyrotechnics, dataAdvances.carpentry, dataAdvances.aquatecture],
   },
   
+  manure: {
+    key: "manure",
+    name: "manure",
+    plural: "piles of Manure",
+    advances: [dataAdvances.agriculture,dataAdvances.preservation,dataAdvances.blackpowder],
+  },
+  
   mysteryOre: {
   	key: "mysteryOre",
   	name: "Mystery Ore!",
   	plural: "glowing clumps of Mysterious Ore",
   	advances: [],
+  },
+  
+  net: {
+  	key: "net",
+  	name: "Fishing Net",
+  	plural: "Fishing Nets",
+  	advances: [dataAdvances.fishing],
   },
   
   pottery: {
@@ -465,7 +577,7 @@ var dataResources = {
   simpleTool: {
     key: "simpleTool",
     name: "Simple Tool",
-    plural: "simple tools",
+    plural: "Simple Tools",
     advances: [dataAdvances.excavation],
   },
   
@@ -473,7 +585,7 @@ var dataResources = {
   	key: "slag",
   	name: "Slag",
   	plural: "lumps of Slag",
-  	advances: [dataAdvances.ironworking,dataAdvances.ceramics];
+  	advances: [dataAdvances.ironworking,dataAdvances.ceramics],
   },
   
   sling: {
@@ -482,10 +594,37 @@ var dataResources = {
   	plural: "Slings",
   },
   
+  steed: {
+    key: "steed",
+    name: "Steed",
+    plural: "noble Steeds",
+    advances: [dataAdvances.horseHerding],
+  },
+  
   steelBar: {
     key: "steelBar",
     name: "Steel Bar",
     plural: "stacks of Steel Bars",
+  },
+  
+  steelArmor:  {
+    key: "steelArmor",
+    name: "Steel Armor",
+    plural: "Steel Armor",
+    advances: [dataAdvances.discipline],
+  },
+  
+  steelArms: {
+    key: "steelArms",
+    name: "Steel Arms",
+    plural: "Steel Arms",
+    advances: [dataAdvances.discipline],
+  },
+  
+  steelTool: {
+  	key: "steelTool",
+  	name: "Steel Tool",
+  	plural: "Steel Tools",
   },
   
   stone: {
@@ -531,6 +670,13 @@ var dataResources = {
     name: "Water",
     plural: "jugs of Water",
     advances: [dataAdvances.agriculture, dataAdvances.brewing, dataAdvances.dyes],
+  },
+  
+  wolf: {
+  	key: "wolf",
+  	name: "Wolf",
+  	plural: "wolves",
+  	advances: [dataAdvances.kennelry],
   },
   
 };
@@ -721,7 +867,7 @@ var dataSites = {
     secondaryProduce: [dataResources.slag],
     secondaryEfficiency: 0.2,
     upgradeAdvance: dataAdvances.ironworking,
-    buildCost: {resource:999},
+    buildCost: {brick:100, lumber:20},
     baseCapacity: 20,
   },
   
@@ -735,7 +881,7 @@ var dataSites = {
     secondaryProduce: [dataResources.slag],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.ironworking,
-    buildCost: {resource:999},
+    buildCost: {stone:50},
     baseCapacity: 20,
   },
   
@@ -749,9 +895,9 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.manure],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.brewing,
-    buildCost: {resource:999},
+    buildCost: {lumber:50},
     baseCapacity: 20,
-  }
+  },
   
   brickworks: {
     name: 'Brickworks',
@@ -763,7 +909,7 @@ var dataSites = {
     secondaryProduce: [dataResources.simpleTool,dataResources.fuel,dataResources.stone],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.ceramics,
-    buildCost: {resource:999},
+    buildCost: {stone:50},
     baseCapacity: 20,
   },
   
@@ -777,7 +923,7 @@ var dataSites = {
     secondaryProduce: [dataResources.bronzeTool,dataResources.simpleTool,dataResources.bronzeArmor],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.bronzeworking,
-    buildCost: {resource:999},
+    buildCost: {stone:100},
     baseCapacity: 20,
   },
   
@@ -791,7 +937,7 @@ var dataSites = {
     secondaryProduce: [dataResources.bronzeArms,dataResources.bronzeTool],
     secondaryEfficiency: 0.5,
     upgradeAdvance: dataAdvances.bronzeworking,
-    buildCost: {resource:999},
+    buildCost: {stone:200},
     baseCapacity: 20,
   },
     
@@ -805,7 +951,7 @@ var dataSites = {
     secondaryProduce: [dataResources.bronzeTool],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.bronzeworking,
-    buildCost: {simpleTool:10,bronze:10},
+    buildCost: {simpleTool:50,stone:50},
     baseCapacity: 20,
   },
   
@@ -819,7 +965,7 @@ var dataSites = {
     secondaryProduce: [dataResources.cattle,dataResources.manure],
     secondaryEfficiency: 0.2,
     upgradeAdvance: dataAdvances.cattleHerding,
-    buildCost: {resource:999},
+    buildCost: {fur:20},
     baseCapacity: 20,
   },
   
@@ -833,7 +979,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.manure],
     secondaryEfficiency: 1.5,
     upgradeAdvance: dataAdvances.caribouHerding,
-    buildCost: {resource:999},
+    buildCost: {fur:20, lumber: 50},
     baseCapacity: 20,
   },
     
@@ -847,7 +993,7 @@ var dataSites = {
     secondaryProduce: [dataResources.caribou,dataResources.manure],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.caribouHerding,
-    buildCost: {fur:10},
+    buildCost: {fur:20},
     baseCapacity: 20,
   },
   
@@ -861,7 +1007,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.manure],
     secondaryEfficiency: 1.5,
     upgradeAdvance: dataAdvances.caribouHerding,
-    buildCost: {lumber:10},
+    buildCost: {fur:20,lumber:50},
     baseCapacity: 20,
   },
   
@@ -875,7 +1021,7 @@ var dataSites = {
     secondaryProduce: [dataResources.simpleTool,dataResources.stone,dataResources.food],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.pyrotechnics,
-    buildCost: {resource:999},
+    buildCost: {stone:20},
     baseCapacity: 20,
   },
   
@@ -889,7 +1035,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.manure],
     secondaryEfficiency: 1.5,
     upgradeAdvance: dataAdvances.chickenHusbandry,
-    buildCost: {resource:999},
+    buildCost: {lumber:20},
     baseCapacity: 20,
   },
   
@@ -903,7 +1049,7 @@ var dataSites = {
     secondaryProduce: [dataResources.simpleTool,dataResources.fineClothing],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.textiles,
-    buildCost: {resource:999},
+    buildCost: {fiber:1,lumber:20},
     baseCapacity: 20,
   },
   
@@ -917,7 +1063,7 @@ var dataSites = {
     secondaryProduce: [dataResources.simpleTool,dataResources.stone,dataResources.lumber,dataResources.fiber],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.agriculture,
-    buildCost: {resource:999},
+    buildCost: {simpleTool:20,lumber:10},
     baseCapacity: 20,
   },
   
@@ -931,7 +1077,7 @@ var dataSites = {
     secondaryProduce: [dataResources.cowrie,dataResources.food],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.dyes,
-    buildCost: {resource:999},
+    buildCost: {stone:50},
     baseCapacity: 20,
   },
   
@@ -945,7 +1091,7 @@ var dataSites = {
     secondaryProduce: [dataResources.cloth,dataResources.simpleTool],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.dyes,
-    buildCost: {resource:999},
+    buildCost: {stone:100},
     baseCapacity: 20,  
   },
   
@@ -959,7 +1105,7 @@ var dataSites = {
     secondaryProduce: [dataResources.dye,dataResources.food],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.textiles,
-    buildCost: {resource:999},
+    buildCost: {lumber:20},
     baseCapacity: 20,
   },
   
@@ -973,7 +1119,7 @@ var dataSites = {
     secondaryProduce: [dataResources.leatherJerkin,dataResources.simpleTool],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.leatherworking,
-    buildCost: {resource:999},
+    buildCost: {lumber:100},
     baseCapacity: 20,
   },
   
@@ -987,7 +1133,7 @@ var dataSites = {
     secondaryProduce: [dataResources.slag,dataResources.ironOre],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.ceramics,
-    buildCost: {resource:999},
+    buildCost: {stone:100},
     baseCapacity: 20,
   },
   
@@ -1001,7 +1147,7 @@ var dataSites = {
     secondaryProduce: [dataResources.goat,dataResources.manure],
     secondaryEfficiency: 0.4,
     upgradeAdvance: dataAdvances.goatHerding,
-    buildCost: {resource:999},
+    buildCost: {fur:20},
     baseCapacity: 20,
   },
   
@@ -1015,7 +1161,7 @@ var dataSites = {
     secondaryProduce: [dataResources.goat,dataResources.manure],
     secondaryEfficiency: 0.4,
     upgradeAdvance: dataAdvances.goatHerding,
-    buildCost: {resource:999},
+    buildCost: {fur:20,lumber:50},
     baseCapacity: 20,
   },
   
@@ -1029,7 +1175,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.horse,dataResources.manure],
     secondaryEfficiency: 0.5,
     upgradeAdvance: dataAdvances.horseHerding,
-    buildCost: {resource:999},
+    buildCost: {fur:20,lumber:50},
     baseCapacity: 20,
   },
   
@@ -1043,7 +1189,7 @@ var dataSites = {
     secondaryProduce: [dataResources.simpleTool,dataResources.food,dataResources.manure],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.horseHerding,
-    buildCost: {resource:999},
+    buildCost: {fur:20},
     baseCapacity: 20,
   },
   
@@ -1057,7 +1203,7 @@ var dataSites = {
     secondaryProduce: [dataResources.ironTool,dataResources.ironArmor],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.ironworking,
-    buildCost: {resource:999},
+    buildCost: {brick:100},
     baseCapacity: 20,
   },
   
@@ -1071,7 +1217,7 @@ var dataSites = {
     secondaryProduce: [dataResources.ironArms,dataResources.ironTool],
     secondaryEfficiency: 0.5,
     upgradeAdvance: dataAdvances.ironworking,
-    buildCost: {resource:999},
+    buildCost: {brick:200},
     baseCapacity: 20,
   },
   
@@ -1085,7 +1231,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.wolf],
     secondaryEfficiency: 0.5,
     upgradeAdvance: dataAdvances.kennelry,
-    buildCost: {resource:999},
+    buildCost: {lumber:50},
     baseCapacity: 20,
   },
     
@@ -1113,7 +1259,7 @@ var dataSites = {
     secondaryProduce: [dataResources.leatherFinery,dataResources.dye,dataResources.simpleTool],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.caribouHerding,
-    buildCost: {resource:999},
+    buildCost: {lumber:50},
     baseCapacity: 20,
   },
   
@@ -1127,7 +1273,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.textiles,
-    buildCost: {resource:999},
+    buildCost: {lumber:50},
     baseCapacity: 20,
   },
   
@@ -1141,7 +1287,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.simpleTool,dataResources.stone],
     secondaryEfficiency: 0.2,
     upgradeAdvance: dataAdvances.forestry,
-    buildCost: {resource:999},
+    buildCost: {lumber:50},
     baseCapacity: 20,
   },
   
@@ -1155,7 +1301,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food],
     secondaryEfficiency: 0.8,
     upgradeAdvance: dataAdvances.falconry,
-    buildCost: {resource:999},
+    buildCost: {stone:50},
     baseCapacity: 20,
   },
   
@@ -1169,7 +1315,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.simpleTool],
     secondaryEfficiency: 0.4,
     upgradeAdvance: dataAdvances.fishing,
-    buildCost: {resource:999},
+    buildCost: {lumber:100},
     baseCapacity: 20,
   },
   
@@ -1183,7 +1329,7 @@ var dataSites = {
     secondaryProduce: [dataResources.simpleTool,dataResources.stone],
     secondaryEfficiency: 0.3,
     upgradeAdvance: dataAdvances.excavation,
-    buildCost: {resource:999},
+    buildCost: {simpleTool:100},
     baseCapacity: 20,
   },
   
@@ -1197,7 +1343,7 @@ var dataSites = {
     secondaryProduce: [dataResources.stone,dataResources.brick],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.caribouHerding,
-    buildCost: {resource:999},
+    buildCost: {simpleTool:10,lumber:20},
     baseCapacity: 20,
   },
   
@@ -1211,9 +1357,9 @@ var dataSites = {
     secondaryProduce: [dataResources.fiber,dataResources.cloth],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.textiles,
-    buildCost: {resource:999},
+    buildCost: {lumber:100},
     baseCapacity: 20,
-  }
+  },
   
   smoker: {
     name: 'Smoker',
@@ -1225,7 +1371,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.dye],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.pyrotechnics,
-    buildCost: {resource:999},
+    buildCost: {stone:50},
     baseCapacity: 20,
   },
   
@@ -1239,7 +1385,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.horse,dataResources.manure],
     secondaryEfficiency: 0.8,
     upgradeAdvance: dataAdvances.horseHerding,
-    buildCost: {resource:999},
+    buildCost: {lumber:100},
     baseCapacity: 20,
   },
   
@@ -1253,7 +1399,7 @@ var dataSites = {
     secondaryProduce: [dataResources.steelTool,dataResources.steelArmor],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.steelworking,
-    buildCost: {resource:999},
+    buildCost: {brick:300},
     baseCapacity: 20,
   },
   
@@ -1267,7 +1413,7 @@ var dataSites = {
     secondaryProduce: [dataResources.steelArms,dataResources.steelTool],
     secondaryEfficiency: 0.5,
     upgradeAdvance: dataAdvances.steelworking,
-    buildCost: {resource:999},
+    buildCost: {brick:400},
     baseCapacity: 20,
   },
     
@@ -1281,7 +1427,7 @@ var dataSites = {
     secondaryProduce: [dataResources.simpleTool,dataResources.lumber,dataResources.bone],
     secondaryEfficiency: .1,
     upgradeAdvance: dataAdvances.stonecraft,
-    buildCost: {simpleTool:20,stone:10},
+    buildCost: {simpleTool:20,stone:50},
     baseCapacity: 20,
   },
   
@@ -1295,7 +1441,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.manure],
     secondaryEfficiency: 1,
     upgradeAdvance: dataAdvances.swineHerding,
-    buildCost: {resource:999},
+    buildCost: {fur:20},
     baseCapacity: 20,
   },
   
@@ -1309,7 +1455,7 @@ var dataSites = {
     secondaryProduce: [dataResources.swine,dataResources.manure],
     secondaryEfficiency: 0.5,
     upgradeAdvance: dataAdvances.swineHerding,
-    buildCost: {resource:999},
+    buildCost: {fur:20,water:20,simpleTool:20},
     baseCapacity: 20,
   },
   
@@ -1323,7 +1469,7 @@ var dataSites = {
     secondaryProduce: [dataResources.clothing],
     secondaryEfficiency: 0.5,
     upgradeAdvance: dataAdvances.textiles,
-    buildCost: {resource:999},
+    buildCost: {lumber:100},
     baseCapacity: 20,
   },
   
@@ -1337,7 +1483,7 @@ var dataSites = {
     secondaryProduce: [dataResources.dye,dataResources.food],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.leatherworking,
-    buildCost: {resource:999},
+    buildCost: {lumber:10,simpleTool:20},
     baseCapacity: 20,
   },
   
@@ -1351,7 +1497,7 @@ var dataSites = {
     secondaryProduce: [dataResources.brick,dataResources.glaze,dataResources.pottery],
     secondaryEfficiency: 0.3,
     upgradeAdvance: dataAdvances.ceramics,
-    buildCost: {resource:999},
+    buildCost: {brick:50},
     baseCapacity: 20,
   },
   
@@ -1364,7 +1510,7 @@ var dataSites = {
     primaryEfficiency: 1,
     secondaryProduce: [dataResources.simpleTool,dataResources.food,dataResources.stone,dataResources.bone],
     secondaryEfficiency: 0.1,
-    buildCost: {resource:999},
+    buildCost: {stone:50,simpleTool:10},
     baseCapacity: 20,
   },
   
@@ -1378,7 +1524,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.bone],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.kennelry,
-    buildCost: {resource:999},
+    buildCost: {food:20,fur:20},
     baseCapacity: 20,
   },
   

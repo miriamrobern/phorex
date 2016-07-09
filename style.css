@@ -194,6 +194,14 @@ ul {
   float: right;
 }
 
+.uiGuidancePointsDisplay {
+	font-size: 2em;
+	font-weight: bold;
+}
+
+.uiPanelAlignRight {
+	text-align: right;
+}
 
 
 

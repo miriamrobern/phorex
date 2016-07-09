@@ -514,6 +514,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	
   	
   this.synthesize = function(riteA,riteB) {
+  
+  console.log("Synthesize: ",riteA,riteB);
   	
   	var newRite = new Rite(this,dataResources.caribou);
   	this.rites.push(newRite);
@@ -589,11 +591,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 				observations++;
 			}
 		}
+	} else {
+		observations = 10; // This is a terrible and cludgy fix
 	}
 	
 	this.x = old.x;
 	this.y = old.y;
-	this.advances.failures += observations;
+	this.advances.failures += Math.ceil(observations/5);
 	
 	notification = this.name + " mounts a scouting expedition and comes home with tall tales. ("+observations+" observations)";
   	this.notify(notification);
@@ -761,6 +765,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 	
 		this.x = old.x;
 		this.y = old.y;
+		
+		view.displayWorldMap();
 	}
   	
   	
@@ -1049,6 +1055,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     	primary = dataResources.leadOre;
     }
       
+	console.log(this,job,primary);
     notification = this.name + " works as " + job.job + "s," + materialCost + " producing " + primaryQuantity + " " + primary.plural + " and " + secondaryQuantity + " " + secondary.plural + ".  " + breakage;
 
     if (worldMap.coords[this.x][this.y].stocks[primary.key] > 0) {
@@ -1439,6 +1446,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     		badSites.push(sites[i]);
     	}
     	
+    	console.log(sites[i]);
     	if (resource !== undefined && sites[i].site.primaryProduce.key !== resource) {
     		badSites.push(sites[i]);
     	}
@@ -1770,7 +1778,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     	
     	pop.design();
       
-    } else if (Math.random() < localRites.length / 20) { // syncretize rites
+    } else if (Math.random() < localRites.length / 20 && localRites.length > 1) { // syncretize rites
+    	console.log(localRites);
       var riteA = pop.rites[Math.floor(Math.random()*pop.rites.length)];
       var otherRites = localRites.slice();
       otherRites.splice(otherRites.indexOf(riteA),1);

@@ -454,8 +454,15 @@ var view = {
       workers = 0;
       capacity = worldMap.coords[view.focusX][view.focusY].sites[i].capacity;
       sitePopUp = "<strong>"+site.name+"</strong>";
-      if (site.tools) {
-      	sitePopUp += "<p>When equipped with "+site.tools.name+"s, the ";
+      if (site.tools.length) {
+      	var toolsText = '';
+      	for (n in site.tools) {
+      		if (toolsText !== '') {
+      			toolsText += " and ";
+      		}
+      		toolsText += site.tools[n].plural;
+      	}
+      	sitePopUp += "<p>When equipped with "+toolsText+", the ";
       } else {
       	sitePopUp += "<p> The ";
       }
@@ -463,7 +470,14 @@ var view = {
       if (site.materials.length === 0) {
       	sitePopUp += "produce ";
       } else {
-      	sitePopUp += "convert "+site.materials+" to ";
+      	var materialsText = '';
+      	for (n in site.materials) {
+      		if (materialsText !== '') {
+      			materialsText += " and ";
+      		}
+      		materialsText += site.materials[n].plural;
+      	}
+      	sitePopUp += "convert "+materialsText+" to ";
       }
       sitePopUp += site.primaryProduce.plural+". Additionally, they may also produce a small amount of "
       for (var r in site.secondaryProduce) {
@@ -1107,7 +1121,6 @@ var view = {
   	var uiGuidanceSplitButton = document.getElementById('uiGuidanceSplitButton');
   	var input = document.getElementById('uiGuidanceSplitSelect').value;
   	var splitCost = +input.substr(1+input.indexOf(" "));
-  	console.log(splitCost);
   	if (splitCost > gameClock.guidancePoints) {
   		uiGuidanceSplitButton.disabled = true;
   	} else {

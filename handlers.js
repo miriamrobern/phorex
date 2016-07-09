@@ -361,6 +361,10 @@ var handlers = {
   
   processTurn() {
   
+  	console.log("=-=-=-=-=-=-=-=- Begin Processing Turn ",gameClock.turn," -=-=-=-=-=-=-=-=-=");
+  	
+  	var worldPop = 0;
+  
   	document.getElementById('uiGuidancePanel').style.display = "none";
     
     var uiNotificationsList = document.getElementById('uiNotificationsList');
@@ -401,7 +405,11 @@ var handlers = {
     for (i in popsByPrestige) {
       popsByPrestige[i].season(popsByPrestige[i]);
       popsByPrestige[i].guided = 0;
+      worldPop += popsByPrestige[i].population;
     }
+  
+  	console.log("=-=-=-=-=-=-=-=- End Processing Turn ",gameClock.turn," -=-=-=-=-=-=-=-=-=");
+  	console.log("Global Population: ",worldPop," in ",popsByPrestige.length," populations.");
     
     gameClock.turn++;
     

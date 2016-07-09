@@ -256,7 +256,7 @@
       </div>
       <div class="uiPanel" id="uiPanelMinimap">
         <h2 class="uiTitle" id="uiTitleDate">The Present</h2>
-        <p><strong>Guidance Points: </strong> <span id="uiGuidancePoints"></span>G</p>
+        <p class='uiPanelAlignRight'><strong>Guidance Points: </strong> <span class='uiGuidancePointsDisplay'><span id="uiGuidancePoints"></span>G</span></p>
         <button id="uiNextTurn" onclick="handlers.processTurn()">Next Season</button>
 		<hr class="clear" />
         <table id="minimapTable"></table>
@@ -316,6 +316,11 @@
     </div>
     
     <div class="clear"></div>
+    
+    <div id="blueBooking">
+    	<h3>Bluebooking</h3>
+    	<textarea id="uiBlueBookingTextArea"></textarea>
+    </div>
     
     
   </body>
