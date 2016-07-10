@@ -33,6 +33,7 @@ var worldMap = {
           sites: [],
           units: [],
           stocks: {},
+          name: "("+x+","+y+")",
           
         });
         
@@ -341,53 +342,97 @@ var worldMap = {
     for (x=0; x<worldMap.prefs.size_x; x++) {
       for (y=0; y<worldMap.prefs.size_y; y++) {
         
+        var here = worldMap.coords[x][y];
         worldMap.coords[x][y].biome = '';
         worldMap.coords[x][y].sites = [];
         
         if (worldMap.coords[x][y].altitude < 0) {
           worldMap.coords[x][y].biome = dataBiomes.ocean;
+          here.nameGeography = [];
+          here.nameAdjective = [];
           
         } else if (worldMap.coords[x][y].temperature < 0) {
           worldMap.coords[x][y].biome = dataBiomes.tundra;
           site = dataBiomes.tundra.naturalSites[Math.floor(Math.random()*dataBiomes.tundra.naturalSites.length)] ;
           worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
+          here.nameGeography = ["Reach","Expanse","Ice Shelf"];
+          here.nameAdjective = ["Frozen","Cold","Icy","Moaning","Windy","White","Grey","Granite"];
           
         } else if (worldMap.coords[x][y].precipitation > 200) {
           worldMap.coords[x][y].biome = dataBiomes.rainforest;
           site = dataBiomes.rainforest.naturalSites[Math.floor(Math.random()*dataBiomes.rainforest.naturalSites.length)] ;
           worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
+          here.nameGeography = ["Rainforest","Jungle","Deeps","Green"];
+          here.nameAdjective = ["Verdant","Steamy","Living","Fruitful","Savage","Coiled","Strangled"];
           
         } else if (worldMap.coords[x][y].precipitation < 50) {
           worldMap.coords[x][y].biome = dataBiomes.desert;
           site = dataBiomes.desert.naturalSites[Math.floor(Math.random()*dataBiomes.desert.naturalSites.length)] ;
           worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
+          here.nameGeography = ["Reach","Expanse","Desert","Plateau","Bluffs","Badlands","Wastes"];
+          here.nameAdjective = ["Dry","Thirsty","Dusty","Sandy","Windswept","Bleached","Rocky","Pebble"];
           
         } else if (worldMap.coords[x][y].temperature > 20) {
           worldMap.coords[x][y].biome = dataBiomes.savanna;
           site = dataBiomes.savanna.naturalSites[Math.floor(Math.random()*dataBiomes.savanna.naturalSites.length)] ;
           worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
+          here.nameGeography = ["Plain","Veldt","Grassland"];
+          here.nameAdjective = ["Dry","Sighing","Flat","Endless","Placid"];
           
         } else if (worldMap.coords[x][y].precipitation > 100) {
           worldMap.coords[x][y].biome = dataBiomes.forest;
           site = dataBiomes.forest.naturalSites[Math.floor(Math.random()*dataBiomes.forest.naturalSites.length)] ;
           worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
+          here.nameGeography = ["Green","Forest","Glade","Wood"];
+          here.nameAdjective = ["Verdant","Cool","Dark","Thick","Haunted","Tangled","Deep"];
           
         } else {
           worldMap.coords[x][y].biome = dataBiomes.shrubland;
           site = dataBiomes.shrubland.naturalSites[Math.floor(Math.random()*dataBiomes.shrubland.naturalSites.length)] ;
           worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
+          here.nameGeography = ["Plain","Grassland","Prairie","Dale"];
+          here.nameAdjective = ["Windy","Harsh","Rolling","Treacherous"];
           
         }
         
-        if (x > 1 && y > 1 && x < worldMap.prefs.size_x-1 && y < worldMap.prefs.size_y-1) {
-          if (worldMap.coords[x+1][y].altitude < 0 || worldMap.coords[x][y+1].altitude < 0 || worldMap.coords[x-1][y].altitude < 0 || worldMap.coords[x][y-1].altitude < 0 ) {
-            if (Math.random() < 0.3 ) {
-              worldMap.coords[x][y].sites.splice(1,1,{site:[dataSites.cowrieBeach,dataSites.shallows][Math.floor(Math.random()*2)],capacity:20+Math.floor(Math.random()*20)});
-            }          
+		if (x > 1 && y > 1 && x < worldMap.prefs.size_x-1 && y < worldMap.prefs.size_y-1) {
+			if (worldMap.coords[x+1][y].altitude < 0 || worldMap.coords[x][y+1].altitude < 0 || worldMap.coords[x-1][y].altitude < 0 || worldMap.coords[x][y-1].altitude < 0 ) {
+				if (Math.random() < 0.3 ) {
+					worldMap.coords[x][y].sites.splice(1,1,{site:[dataSites.cowrieBeach,dataSites.shallows][Math.floor(Math.random()*2)],capacity:20+Math.floor(Math.random()*20)});
+				}
+				here.nameAdjective.push("Salty","Crashing","Seaspray");
+				here.nameGeography.push("Beach","Bank","Shore");
+				if (worldMap.coords[x+1][y].altitude < 0 && worldMap.coords[x][y+1].altitude < 0 && worldMap.coords[x-1][y].altitude < 0 && worldMap.coords[x][y-1].altitude < 0) {   
+					here.nameGeography = ["Isle","Island","Key","Cay","Islet","Archipelago","Atoll"];
+				}
+			}
+        
         }
         
-
-        } 
+        if (Math.random() < 0.33) {
+        	nameFlavor = here.biome.flora[Math.floor(Math.random()*here.biome.flora.length)];
+        } else if (Math.random() < 0.5) {
+        	nameFlavor = here.biome.fauna[Math.floor(Math.random()*here.biome.fauna.length)];
+        } else {
+        	nameFlavor = dataNames.universal[Math.floor(Math.random()*dataNames.universal.length)];
+        }
+        var nameGeography = here.nameGeography[Math.floor(Math.random()*here.nameGeography.length)];
+        var nameAdjective = here.nameAdjective[Math.floor(Math.random()*here.nameAdjective.length)];
+        
+        if (Math.random() < 0.25) {
+        	here.name = nameAdjective + " " + nameGeography;
+        } else if (Math.random() < 0.33) {
+        	here.name = nameAdjective + " " + nameFlavor + " " + nameGeography;
+        } else if (Math.random() < 0.5) {
+        	here.name = nameGeography + " of " + nameFlavor + "s";
+        } else {
+        	here.name = nameGeography + " of the " + nameAdjective + " " + nameFlavor + "s";
+        }
+        
+        if (Math.random() < 0.4) {
+        	here.name = "The " + here.name;
+        }
+        
       }
     }
 

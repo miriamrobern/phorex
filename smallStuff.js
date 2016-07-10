@@ -33,8 +33,7 @@ function Rite(pop,sacrifice) {
   riteIcons = riteIcons.concat(worldMap.coords[pop.x][pop.y].biome.flora);
   riteIcons = riteIcons.concat(worldMap.coords[pop.x][pop.y].biome.fauna);
   
-  this.icon = riteIcons[Math.floor(Math.random()*riteIcons.length)];
-  this.icon = [this.icon.charAt(0).toUpperCase() + this.icon.slice(1)];
+  this.icon = [riteIcons[Math.floor(Math.random()*riteIcons.length)]];
   this.form = [riteForms[Math.floor(Math.random()*riteForms.length)]];
   this.adjective = [riteAdjectives[Math.floor(Math.random()*riteAdjectives.length)]];
   

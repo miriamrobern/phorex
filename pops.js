@@ -610,7 +610,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 	this.y = old.y;
 	this.advances.failures += Math.ceil(observations/5);
 	
-	notification = this.name + " mounts a scouting expedition and comes home with tall tales. ("+observations+" observations)";
+	notification = this.name + " mounts a scouting expedition to " + worldMap.coords[x][y].name + " (" +x+ "," +y+ ") and comes home with tall tales. ("+observations+" observations)";
   	this.notify(notification);
 // 	this.guided = 1;
   	};
@@ -619,7 +619,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	
   
   this.raid = function(x,y) {
-  	notification = this.name + " mounts a raid to (" + x + "," + y + ").  ";
+  	notification = this.name + " mounts a raid to " + worldMap.coords[x][y].name + " (" +x+ "," +y+ ").  ";
   	
   	var targetTile = worldMap.coords[x][y];
   	var pileLoot = 0;
@@ -799,7 +799,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 	this.prestige = Math.floor((this.prestige + 50)/2);
 	this.job = worldMap.coords[this.x][this.y].sites[0];
 	targetTile.units.push(this);
-	notification = this.name + " migrates to a new area."
+	notification = this.name + " migrates to " + worldMap.coords[x][y].name + " (" +x+ "," +y+ ")."
 	
 	if (this.loyalty.player > 0) {
 		var withinSight = this.withinSight();

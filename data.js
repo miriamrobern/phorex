@@ -1551,54 +1551,56 @@ var dataBiomes = {
   tundra: {
     name: 'Tundra',
     naturalSites: [dataSites.clayDeposit,dataSites.grazingLand,dataSites.outcropping],
-    fauna: ["caribou",'polar bear',"puffin","penguin",'hare','wolf','fox','yak'],
-    flora: ['lichen','rock willow','pasque','saxifrage'],
+    fauna: ["Caribou",'Polar Bear',"Puffin","Penguin",'Hare','Wolf','Fox','Yak'],
+    flora: ['Lichen','Rock Willow','Pasque','Saxifrage'],
     moveCost: 30,
   },
   
   desert: {
     name: 'Desert',
     naturalSites: [dataSites.clayDeposit,dataSites.outcropping,dataSites.canyon,dataSites.oasis,dataSites.cenote],
-    fauna: ['jackal','camel','vulture','snake','scorpion','goat','wolf','tortoise','lizard','owl'],
-    flora: ['palm','date','mustard seed','cactus'],
+    fauna: ['Jackal','Camel','Vulture','Snake','Scorpion','Goat','Wolf','Tortoise','Lizard','Owl'],
+    flora: ['Palm','Date','Mustard Seed','Cactus'],
     moveCost: 50,
   },
   
   shrubland: {
     name: 'Shrubland',
     naturalSites: [dataSites.grazingLand,dataSites.clayDeposit,dataSites.pond,dataSites.river],
-    fauna: ['antelope','sheep','cat','wolf','otter','fox','bat','wallaby','hare','zebra','rhinoceros','mouse','rat','elephant','owl'],
-    flora: ["saltbrush",'needlebush','tomato','currant','cassia','bloodbush','cotton','sage'],
+    fauna: ['Antelope','Sheep','Cat','Wolf','Otter','Fox','Bat','Wallaby','Hare','Zebra','Rhinoceros','Mouse','Rat','Elephant','Owl'],
+    flora: ["Saltbrush",'Needlebush','Tomato','Currant','Cassia','Bloodbush','Cotton','Sage'],
     moveCost: 20,
   },
   
   rainforest: {
     name: 'Rainforest',
     naturalSites: [dataSites.river,dataSites.pond,dataSites.clayDeposit,dataSites.outcropping,dataSites.hardwoodGrove,dataSites.canyon],
-    fauna: ['duiker','fox','cat','ocelot','ferret','bat','bonobo','chimpanzee','loris','orangutan','mouse','rat'],
-    flora: ['vine','bamboo','fern','orchid','palm','water lily','rubber tree','bougainvillea','corpse flower','pitcherplant','durian'],
+    fauna: ['Duiker','Fox','Cat','Ocelot','Ferret','Bat','Bonobo','Chimpanzee','Loris','Orangutan','Mouse','Rat'],
+    flora: ['Vine','Bamboo','Fern','Orchid','Palm','Water Lily','Rubber Tree','Bougainvillea','Corpse Flower','Pitcherplant','Durian'],
     moveCost: 70,
   },
   
   savanna: {
     name: 'Savanna',
     naturalSites: [dataSites.river,dataSites.pond,dataSites.clayDeposit,dataSites.grazingLand,dataSites.outcropping,dataSites.cenote,dataSites.canyon],
-    fauna: ['antelope','gazelle','peccary','buffalo','giraffe','duiker','leopard','lion','tiger','fox','hyena','lynx','bat','mouse','rat','squirrel','porcupine','owl','hawk'],
-    flora: ['tall grass','acacia','manketti','bushwillow','baobab','melon'],
+    fauna: ['Antelope','Gazelle','Peccary','Buffalo','Giraffe','Duiker','Leopard','Lion','Tiger','Fox','Hyena','Lynx','Bat','Mouse','Rat','Squirrel','Porcupine','Owl','Hawk'],
+    flora: ['Tall Grass','Acacia','Manketti','Bushwillow','Baobab','Melon'],
     moveCost: 20,
   },
   
   forest: {
     name: 'Forest',
     naturalSites: [dataSites.river,dataSites.pond,dataSites.peatBog,dataSites.clayDeposit,dataSites.outcropping,dataSites.hardwoodGrove,dataSites.fruitGrove,dataSites.canyon],
-    fauna: ['ox','peccary','deer','elk','cat','wolf','fox','wolverine','bat','lemur','opposum','kangaroo','rabbit','hare','ape','tamarin','monkey','elephant','mouse','rat','squirrel','porcupine','owl','hawk','eagle'],
-    flora: ['oak','pine','berry','water lily','rose','lily','dandelion'],
+    fauna: ['Ox','Peccary','Deer','Elk','Cat','Wolf','Fox','Wolverine','Bat','Lemur','Opposum','Kangaroo','Rabbit','Hare','Ape','Tamarin','Monkey','Elephant','Mouse','Rat','Squirrel','Porcupine','Owl','Hawk','Eagle'],
+    flora: ['Oak','Pine','Berry','Water Lily','Rose','Lily','Dandelion'],
     moveCost: 60,
   },
   
   ocean: {
   	name: 'Ocean',
     moveCost: 20,
+    flora: [],
+    fauna: [],
     
   },
   
@@ -1680,7 +1682,9 @@ var dataMoveAdvances = {
   
 };
 
-
+var dataNames = {
+	universal: ["Star","Stars","Sky","Moon","Sun","Summer","Autumn","Winter","Spring","Rains","Wind","Stone","Rock","Pebble","Water","Waters","Child","Children","Mother","Mothers","Father","Fathers","Parent","Parents","Hunger","Peace","Plenty","Strife","Loss","Feast","Cloud","Clouds"],
+};
 
 
 

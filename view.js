@@ -435,7 +435,7 @@ var view = {
   },
   
   refreshLandPanel: function() {
-    
+    var uiLandName = document.getElementById('uiLandName');
     var uiLandShort = document.getElementById('uiLandShort');
     var uiSitesList = document.getElementById("uiSitesList");
     var uiStocksList = document.getElementById("uiStocksList");
@@ -443,7 +443,7 @@ var view = {
     var workers;
     
     var here=worldMap.coords[view.focusX][view.focusY]
-    uiLandShort.innerHTML = here.biome.name + " (" + Math.floor(here.altitude*900) + "m elevation, " + here.precipitation + "cm rainfall, " + here.temperature + "\u00B0 celsius)";
+    uiLandShort.innerHTML = "<strong>" + here.name + ":</strong> " + here.biome.name + " (" + Math.floor(here.altitude*900) + "m elevation, " + here.precipitation + "cm rainfall, " + here.temperature + "\u00B0 celsius)";
     
     uiSitesList.innerHTML = "";
     uiStocksList.innerHTML = "";
