@@ -280,29 +280,6 @@ var view = {
     var values ;
     
     for (i = 0; i < worldMap.coords[x][y].units.length;i++) {
-      
-      // values = worldMap.coords[x][y].units[i].values;
-//       
-//       if (values.matriarchy > values.patriarchy + 20 ) {
-//           popDescriptors = popDescriptors + "matriarchal and ";
-//           
-//         } else if (values.patriarchy > values.matriarchy + 20) {
-//           popDescriptors = popDescriptors + "patriarchal and ";
-//         } 
-//         
-//         if (values.piety > values.aggression && values.piety > values.authority && values.piety > values.inquiry) {
-//           popDescriptors = popDescriptors + "pious ";
-//           
-//         } else if (values.authority > values.inquiry && values.authority > values.aggression && values.authority > values.piety) {
-//           popDescriptors = popDescriptors + "authoritarian ";
-//           
-//         } else if (values.inquiry > values.aggression && values.inquiry > values.authority && values.inquiry > values.piety) {
-//           popDescriptors = popDescriptors + "curious ";
-//           
-//         } else {
-//           popDescriptors = popDescriptors + "violent ";
-//           
-//         }
 
 	  var values = worldMap.coords[x][y].units[i].values;
 	  popDescriptors = Object.keys(values).reduce(function(a, b){ return values[a] > values[b] ? a : b });
@@ -374,8 +351,8 @@ var view = {
     
     if (neighborsSouth === "live ") {neighborsSouth = "crash endless waves"}
     
-    selectPaneBiomeVerbose.innerHTML = worldMap.coords[x][y].biome.name;
-    selectPanePopulationsNumber.innerHTML = worldMap.coords[x][y].units.length;
+    selectPaneBiomeVerbose.innerHTML = worldMap.coords[x][y].name;
+    selectPanePopulationsNumber.innerHTML = ["zero","one","two","three","four","five"][worldMap.coords[x][y].units.length];
     
     selectPanePopulationsList.innerHTML = populationsList;
     

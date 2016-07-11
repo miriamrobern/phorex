@@ -206,7 +206,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     this.lastSeason = this.lastSeason + notification + "  ";
     this.history.push(notification);
 //     notificationLog.push([this,worldMap.coords[this.x][this.y],witnesses,locations,notification]);
-    console.log([this],notification);
+    console.log([this,worldMap.coords[this.x][this.y]],notification);
     
   };
   
@@ -362,6 +362,113 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     return newPop;
     
+  };
+  
+  this.merge = function(pop) {
+  	newPop = new Pop(this.name,this.people,this.population + pop.population,this.x,this.y)
+  	newPop.prestige = (this.prestige + pop.prestige + Math.min(this.prestige,pop.prestige) ) / 3;
+  	
+  	if (this.loyalty.player !== 0 || pop.loyalty.player !== 0) {
+  		newPop.loyalty.player = (this.loyalty.player*this.population + pop.loyalty.player*pop.population)/newPop.population;
+  	}
+  	
+  	var sharedValues = Object.keys(this.values);
+  	for (i in pop.values) {
+  		if (sharedValues.indexOf(pop.values[i]) === -1) {
+  			sharedValues.push(i);
+  		}
+  	}
+  	for (i in sharedValues) {
+  		if (this.values[sharedValues[i]] === undefined) {
+  			newPop.values[sharedValues[i]] = (pop.population * pop.values[sharedValues[i]]) / newPop.population ;
+  		} else if (pop.values[sharedValues[i]] === undefined) {
+  			newPop.values[sharedValues[i]] = (this.population * this.values[sharedValues[i]]) / newPop.population ;
+  		} else {
+  			newPop.values[sharedValues[i]] = (this.population * this.values[sharedValues[i]] + pop.population * pop.values[sharedValues[i]]) / newPop.population ;
+  		}
+  	}
+  	
+  	var sharedDemographics = Object.keys(this.demographics);
+  	for (i in pop.demographics) {
+  		if (sharedDemographics.indexOf(pop.demographics[i]) === -1) {
+  			sharedDemographics.push(i);
+  		}
+  	}
+  	for (i in sharedDemographics) {
+  		if (this.demographics[sharedDemographics[i]] === pop.demographics[sharedDemographics[i]]) {
+  			newPop.demographics[sharedDemographics[i]] = this.demographics[sharedDemographics[i]];
+  		} else if (this.demographics[sharedDemographics[i]] === "Queers") {
+  			newPop.demographics[sharedDemographics[i]] = pop.demographics[sharedDemographics[i]];
+  		} else if (pop.demographics[sharedDemographics[i]] === "Queers") {
+  			newPop.demographics[sharedDemographics[i]] = this.demographics[sharedDemographics[i]];
+  		} else if (this.demographics[sharedDemographics[i]] === undefined) {
+  			newPop.demographics[sharedDemographics[i]] = "mixed";
+  		}
+  	}
+  	
+  	newPop.dispositions = [];
+  	for (i=this.dispositions.length/2; i < this.dispositions.length; i++) {
+  	newPop.dispositions.push(this.dispositions[i]);
+  	newPop.dispositions.push(pop.dispositions[i]);
+  	}
+  	
+  	var sharedInv = Object.keys(this.inv);
+  	for (i in pop.inv) {
+  		if (this.inv[pop.inv[i]] === undefined) {
+  			sharedInv.push(pop.inv[i]);
+  		}
+  	}
+  	for (i in sharedInv) {
+  		if (this.inv[pop.inv[i]] === undefined) {
+  			newPop.inv[pop.inv[i]] = pop.inv[pop.inv[i]];
+  		} else if (pop.inv[pop.inv[i]] === undefined) {
+  			newPop.inv[pop.inv[i]] = this.inv[pop.inv[i]];
+  		} else {
+  			newPop.inv[pop.inv[i]] = this.inv[pop.inv[i]] + pop.inv[pop.inv[i]];
+  		}
+  	}
+  	
+  	for (i in this.rites) {
+  		newPop.rites.push(this.rites[i]);
+  	}
+  	for (i in pop.rites) {
+  		if (newPop.rites.indexOf(pop.rites[i]) === -1) {
+  			newPop.rites.push(pop.rites[i]);
+  		}
+  	}
+  	
+  	var sharedAdvances = Object.keys(this.advances);
+  	for (i in pop.advances) {
+  		if (this.advances[i] === undefined) {
+  			sharedAdvances.push(i);
+  		}
+  	}
+  	for (i in sharedAdvances) {
+  		if (sharedAdvances[i] === "failures") {
+  			newPop.advances.failures = this.advances.failures + pop.advances.failures;
+  		} else if (this.advances[sharedAdvances[i]] === undefined) {
+  			newPop.advances[sharedAdvances[i]] = pop.advances[sharedAdvances[i]];
+  		} else if (pop.advances[sharedAdvances[i]] === undefined) {
+  			newPop.advances[sharedAdvances[i]] = this.advances[sharedAdvances[i]];
+  		} else {
+  			newPop.advances[sharedAdvances[i]] = this.advances[i] + pop.advances[sharedAdvances[i]];
+  		}
+  	}
+  	
+  	newPop.health = (this.health * this.population + pop.health * pop.population) / newPop.population;
+  	newPop.movement = 100;
+  	newPop.job = this.job;
+    
+    pops.slice(pops.indexOf(this),1);
+    pops.slice(pops.indexOf(pop),1);
+    pops.push(newPop);
+        
+    worldMap.coords[this.x][this.y].units.splice(worldMap.coords[this.x][this.y].units.indexOf(this),1);
+    worldMap.coords[pop.x][pop.y].units.splice(worldMap.coords[pop.x][pop.y].units.indexOf(pop),1);
+    worldMap.coords[this.x][this.y].units.push(newPop);
+  	
+  	return newPop;
+  	
   };
   
   this.assign = function(newJob) {
@@ -627,16 +734,17 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	var raidForce = this.force();
   	var potentialTargets = [];
   	var hatedTargets = [];
-  	var pileLoot;
+  	var stocks;
+  	var pileLoot = [];
   	var popLoot;
 	var spoilsPile;
 	var spoilsPop;
   	var spoilsPileNum = 0;
   	var spoilsPopNum = 0;
   	
-  	for (i in targetTile.stocks) {
-  		pileLoot += targetTile.stocks[i] ;
-  	}
+//   	for (i in targetTile.stocks) {
+//   		pileLoot += targetTile.stocks[i] ;
+//   	}
   	
   	for (i in targetTile.units) {
   		if (raidForce * 1.2 > targetTile.units[i].defense() && targetTile.units[i] !== this) {
@@ -691,7 +799,13 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	
 	if (spoilsPileNum !== 0 ) {
 	
-		pileLoot = Object.keys(targetTile.stocks);
+		stocks = Object.keys(targetTile.stocks);
+		for (i in stocks) {
+			if (targetTile.stocks[stocks[i]] > 0) {
+				pileLoot.push(stocks[i]);
+			}
+		};
+		
 		if (targetPop === undefined) {
 			popLoot = [];
 		} else {
@@ -1273,6 +1387,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
           notification = this.name + " shares their views with " + targetPop.name + ", emboldening their stance on " + value + ".";
         }
       }
+      targetPop.notify(notification);
     }
     
     this.notify(notification);
@@ -1290,6 +1405,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     if (this.prestige < 1) {
       // will eventually need to check for freedom of movement
       impulse.migration =  this.prestige * -1 ;
+    }
+    
+    if (this.population < 10 && this.prestige < 50) {
+    	impulse.assimilate = 100 - this.prestige - this.population;
     }
     
     if (this.job.site.primaryProduce === dataResources.food) {
@@ -1364,6 +1483,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       this.impulse.migration(this);
     } else if (impulse === "growFood") {
       this.impulse.growFood(this);
+    } else if (impulse === "assimilate") {
+      this.impulse.assimilate(this);
     } else if (impulse === "build") {
       this.build(letsBuild);
     } 
@@ -1700,7 +1821,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       var tributeNum = Math.ceil(pop.inv[tribute]/4) ;
       
       pop.inv[tribute] -= tributeNum;
-      pop.values.patriarchy -= Math.ceil(Math.random()*3);
+      pop.values.neutrarchy -= Math.ceil(Math.random()*3);
       
       notification = pop.name + " celebrates their celibates in a modest ceremony, consuming " + tributeNum + " " + dataResources[tribute].plural + ".";
     }
@@ -1752,7 +1873,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 
       var potentialTribute = Object.keys(targetPop.inv);
       var tribute = potentialTribute[Math.floor(Math.random()*potentialTribute.length)];
-      var tributeNum = Math.ceil(pop.inv[tribute]/2);
+      var tributeNum = Math.ceil(targetPop.inv[tribute]/2);
       
       targetPop.inv[tribute] -= tributeNum;
       if (pop.inv[tribute] === undefined) {
@@ -1897,6 +2018,62 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   			pop.loyalty.player = Math.floor(pop.loyalty.player/2);
   		}
   	}
+  };
+  
+  this.impulse.assimilate = function(pop) {
+  	var superiors = [];
+  	for (i in worldMap.coords[pop.x][pop.y].units) {
+  		potential = worldMap.coords[pop.x][pop.y].units[i];
+  		if (potential.prestige > pop.prestige && potential.demographics.gender === pop.demographics.gender && potential.demographics.fertility === pop.demographics.fertility) {
+  			superiors.push(worldMap.coords[pop.x][pop.y].units[i]);
+  		}
+  	}
+  	if (superiors.length === 0 ) {
+  		pop.impulse.jobChange(pop);
+  	} else {
+  		var superior = superiors[Math.floor(Math.random()*superiors.length)];
+  		var missingValues = [];
+  		var diffValues = {};
+  		var valueDifference = 0;
+  		for (i in superior.values) {
+  			if (pop.values[i] === undefined) {
+  				missingValues.push(i);
+  			} else {
+  				diffValues[i] = superior.values[i] - pop.values[i];
+  				valueDifference += superior.values[i] - pop.values[i];
+  			}
+  		}
+  		if (missingValues.length !== 0) {
+  			// adopts a value
+  			var valueName = missingValues[Math.floor(Math.random()*missingValues.length)];
+  			pop.values[valueName] = superior.values[valueName] + (Math.random()-0.5)*50;
+  			notification = pop.name + " adopts the " + dataValues[valueName].name + " value of their superiors, the " + superior.name + ".";
+  		} else if (valueDifference > 50 && valueDifference > -50) {
+  			// shifts a value
+  			diffValues = Object.keys(diffValues);
+  			var valueName = diffValues[Math.floor(Math.random()*diffValues.length)];
+  			pop.values[valueName] = (pop.values[valueName] + superior.values[valueName]) / 2;
+  			notification = pop.name + " shifts their value of " + dataValues[valueName].name + " towards that of their superiors, the " + superior.name + ".";
+  		} else {
+  			var popNum = Math.ceil(pop.population * (100 - valueDifference)/100 );
+  			superior.prestige -= popNum;
+  			for (i in diffValues) {
+  				pop.values[i] =  pop.values[i] + (pop.values[i] - superior.values[i])/2;
+  				superior.values[i] = (superior.values[i]*superior.population + pop.values[i]*popNum ) / (superior.population + popNum);
+  			}
+  			pop.population -= popNum;
+  			superior.population += popNum;
+  			notification = popNum + " members abandon the " + pop.name + " and find acceptance among the " + superior.name + ", adopting their ways.";
+  			
+  			if (pop.population < 1) {
+  			pops.splice(pops.indexOf(pop),1);
+  			worldMap.coords[pop.x][pop.y].units.splice(worldMap.coords[pop.x][pop.y].units.indexOf(pop),1);
+  			notification += "  The population is no more."
+  			}
+  		}
+  	}
+  	
+  	pop.notify(notification);
   };
   
   this.season = function(pop) {

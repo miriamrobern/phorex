@@ -377,14 +377,14 @@ var worldMap = {
           site = dataBiomes.savanna.naturalSites[Math.floor(Math.random()*dataBiomes.savanna.naturalSites.length)] ;
           worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
           here.nameGeography = ["Plain","Veldt","Grassland"];
-          here.nameAdjective = ["Dry","Sighing","Flat","Endless","Placid"];
+          here.nameAdjective = ["Dry","Sighing","Endless","Placid"];
           
         } else if (worldMap.coords[x][y].precipitation > 100) {
           worldMap.coords[x][y].biome = dataBiomes.forest;
           site = dataBiomes.forest.naturalSites[Math.floor(Math.random()*dataBiomes.forest.naturalSites.length)] ;
           worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
           here.nameGeography = ["Green","Forest","Glade","Wood"];
-          here.nameAdjective = ["Verdant","Cool","Dark","Thick","Haunted","Tangled","Deep"];
+          here.nameAdjective = ["Verdant","Dark","Haunted","Tangled","Deep"];
           
         } else {
           worldMap.coords[x][y].biome = dataBiomes.shrubland;
@@ -396,16 +396,52 @@ var worldMap = {
         }
         
 		if (x > 1 && y > 1 && x < worldMap.prefs.size_x-1 && y < worldMap.prefs.size_y-1) {
-			if (worldMap.coords[x+1][y].altitude < 0 || worldMap.coords[x][y+1].altitude < 0 || worldMap.coords[x-1][y].altitude < 0 || worldMap.coords[x][y-1].altitude < 0 ) {
+		
+			var adjacentTiles = [worldMap.coords[x+1][y],worldMap.coords[x][y+1],worldMap.coords[x-1][y],worldMap.coords[x][y-1]]
+			var higherTiles = 0;
+			var lowerTiles = 0;
+			var waterTiles = 0;
+			for (i in adjacentTiles) {
+				if (adjacentTiles[i].altitude > here.altitude) {
+					higherTiles++;
+				} else if (adjacentTiles[i].altitude < here.altitude) {
+					lowerTiles++;
+				}
+				if (adjacentTiles[i].altitude < 0) {
+					waterTiles++;
+				}
+			}		
+			
+			if (higherTiles > 2) {
+				here.nameGeography.push("Valley","Hollow","Canyon","Culvert","Vale");
+			} else if (lowerTiles > 2 && here.altitude > 3 && higherTiles === 0) {
+				here.nameGeography = ["Summit","Crest","Mount"];
+				here.nameAdjective.push("High","Great");
+			} else if ((worldMap.coords[x+1][y].altitude < here.altitude && worldMap.coords[x-1][y].altitude < here.altitude && worldMap.coords[x][y+1].altitude > here.altitude && worldMap.coords[x][y-1].altitude > here.altitude) || (worldMap.coords[x+1][y].altitude > here.altitude && worldMap.coords[x-1][y].altitude > here.altitude && worldMap.coords[x][y+1].altitude < here.altitude && worldMap.coords[x][y-1].altitude < here.altitude)) {
+				here.nameGeography.push("Ridge","Saddle");
+			} else if (lowerTiles > 2) {
+				here.nameGeography.push("Hill","Hills");
+			};
+		
+			if (waterTiles > 0 ) {
+				here.nameAdjective.push("Salty","Crashing","Seaspray","Seaborne");
 				if (Math.random() < 0.3 ) {
 					worldMap.coords[x][y].sites.splice(1,1,{site:[dataSites.cowrieBeach,dataSites.shallows][Math.floor(Math.random()*2)],capacity:20+Math.floor(Math.random()*20)});
 				}
-				here.nameAdjective.push("Salty","Crashing","Seaspray");
-				here.nameGeography.push("Beach","Bank","Shore");
-				if (worldMap.coords[x+1][y].altitude < 0 && worldMap.coords[x][y+1].altitude < 0 && worldMap.coords[x-1][y].altitude < 0 && worldMap.coords[x][y-1].altitude < 0) {   
+				if (waterTiles === 4) {   
 					here.nameGeography = ["Isle","Island","Key","Cay","Islet","Archipelago","Atoll"];
+				} else if (waterTiles === 3) {
+					here.nameGeography.push("Peninsula","Spit","Cape","Point","Finger","Chersonese");
+				} else if ((worldMap.coords[x+1][y].altitude < 0 && worldMap.coords[x-1][y].altitude < 0 && worldMap.coords[x][y+1].altitude > 0 && worldMap.coords[x][y-1].altitude > 0) || (worldMap.coords[x+1][y].altitude > 0 && worldMap.coords[x-1][y].altitude > 0 && worldMap.coords[x][y+1].altitude < 0 && worldMap.coords[x][y-1].altitude < 0)) {
+					here.nameGeography.push("Isthmus","Bridge","Stretch","Neck");
+				} else if (waterTiles === 2) {
+					here.nameGeography.push("Point");
 				}
-			}
+				if (waterTiles < 4) {
+					here.nameGeography.push("Beach","Bank","Shore");
+				}
+			};
+
         
         }
         

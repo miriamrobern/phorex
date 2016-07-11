@@ -397,7 +397,9 @@ var handlers = {
     // Sort all populations by prestige so high-prestige pops go first everywhere
     popsByPrestige = [];
     for (i in pops) {
-      popsByPrestige.push(pops[i]);
+    	if (pops[i].population > 0) {
+    		popsByPrestige.push(pops[i]);
+    	}
     }
     popsByPrestige.sort(function(a,b){return b.prestige - a.prestige});
     

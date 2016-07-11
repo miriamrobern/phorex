@@ -1683,7 +1683,7 @@ var dataMoveAdvances = {
 };
 
 var dataNames = {
-	universal: ["Star","Stars","Sky","Moon","Sun","Summer","Autumn","Winter","Spring","Rains","Wind","Stone","Rock","Pebble","Water","Waters","Child","Children","Mother","Mothers","Father","Fathers","Parent","Parents","Hunger","Peace","Plenty","Strife","Loss","Feast","Cloud","Clouds"],
+	universal: ["Star","Sky","Moon","Sun","Summer","Autumn","Winter","Spring","Rain","Wind","Stone","Rock","Pebble","Water","Child","Children","Mother","Father","Parent","Hunger","Peace","Plenty","Strife","Loss","Feast","Cloud"],
 };
 
 
