@@ -1,263 +1,277 @@
 var dataAdvances = {
+  failures: {
+  	key: "failures",
+    name: "Negative Results",
+    terrain: [],
+    unlocks: [],
+  },
+  
   agriculture: {
   	key: "agriculture",
     name: "Agriculture",
     terrain: ["Shrubland","Savanna","Forest","Rainforest"],
-    1: {type:'site', key:"crudeFields"},
-    2: {type:'upgrade', key:"cropRotation"},
+    unlocks: [,	{type:'site', key:"crudeFields"},
+    			{type:'upgrade', key:"cropRotation"}],
   },
   
   aquatecture: {
   	key: "aquatecture",
     name: "Aquatecture",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'trade', key:"shortPier"},
+    unlocks: [,	{type:'trade', key:"shortPier"}],
+  },
+  
+  blackPowder: {
+  	key: "blackPowder",
+  	name: "Black Powder",
+  	terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+  	unlocks: [,	],
   },
   
   brewing: {
   	key: "brewing",
   	name: "Brewing",
   	terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-  	1: {type:'site', key:'brewery'},
+  	unlocks: [,	{type:'site', key:'brewery'}],
   },
   
   bronzeworking: {
   	key: "bronzeworking",
   	name: "bronzeworking",
   	terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'site', key:'bronzesmith'},
-    2: {type:'site', key:'bronzeSwordsmithy'},
-    3: {type:'site', key:'bronzeArmory'},
+    unlocks: [,	{type:'site', key:'bronzesmith'},
+    			{type:'site', key:'bronzeSwordsmithy'},
+    			{type:'site', key:'bronzeArmory'}],
   },
   
   carpentry: {
   	key: "carpentry",
     name: "Carpentry",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'building', key:"woodHut"},
-    2: {type:'defense', key:"woodenPalisade"},
+    unlocks: [,	{type:'building', key:"woodHut"},
+    			{type:'defense', key:"woodenPalisade"}],
   },
   
   caribouHerding: {
   	key: "caribouHerding",
     name: "Caribou Herding",
     terrain: ["Tundra"],
-    1: {type:'site', key:"caribouHerd"},
-    2: {type:'site', key:"caribouPaddock"},
+    unlocks: [,	{type:'site', key:"caribouHerd"},
+    			{type:'site', key:"caribouPaddock"}],
   },
   
   cattleHerding: {
   	key: "cattleHerding",
     name: "Cattle Herding",
     terrain: ['Savanna'],
-    1: {type:'site', key:"cattleHerd"},
-    2: {type:'site', key:"cattleKraal"},
+    unlocks: [,	{type:'site', key:"cattleHerd"},
+    			{type:'site', key:"cattleKraal"}],
   },
   
   ceramics: {
   	key: "ceramics",
     name: "Ceramics",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'site', key:'potter'},
-    2: {type:'site', key:'brickworks'},
-    3: {type:'site', key:'glazier'},
-    4: {type:'site', key:'tilery'},
+    unlocks: [,	{type:'site', key:'potter'},
+   				{type:'site', key:'brickworks'},
+    			{type:'site', key:'glazier'},
+    			{type:'site', key:'tilery'}],
   },
   
   chickenHusbandry: {
   	key: "chickenHusbandry",
     name: "Chicken Husbandry",
     terrain: ["Rainforest"],
-    1: {type:'site', key:'chickenCoop'},
+    unlocks: [,	{type:'site', key:'chickenCoop'}],
   },
   
   construction: {
   	key: "construction",
     name: "Construction",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'building', key:'stoneHut'},
-    2: {type:'defense', key:'stoneWall'},
+    unlocks: [,	{type:'building', key:'stoneHut'},
+    			{type:'defense', key:'stoneWall'}],
   },
   
   discipline: {
   	key: "discipline",
     name: "Discipline",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'bonus', key:"Basic Discipline"},
+    unlocks: [,	{type:'bonus', key:"Basic Discipline"}]
   },
   
   dyes: {
   	key: "dyes",
     name: "Dyes",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'site', key:'dyehouse'},
+    unlocks: [,	{type:'site', key:'dyehouse'}]
   },
   
   excavation: {
   	key: "excavation",
     name: "Excavation",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'site', key:'well'},
-    2: {type:'site', key:'openPitMine'},
+    unlocks: [,	{type:'site', key:'well'},
+    			{type:'site', key:'openPitMine'}],
   },
   
   falconry: {
   	key: "falconry",
     name: "Falconry",
     terrain: "Forest",
-    1: {type:'site', key:'mews'},
+    unlocks: [,	{type:'site', key:'mews'}],
   },
   
   feminism: {
   	key: "feminism",
     name: "Feminism",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'value', key:"feminism"},
+    unlocks: [,	{type:'value', key:"feminism"}],
   },
   
   finance: {
   	key: "finance",
     name: "Finance",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'pile', key:'treasury'},
-    2: {type:'building', key:'bank'},
+    unlocks: [,	{type:'pile', key:'treasury'},
+    			{type:'building', key:'bank'}],
   },
   
   fishing: {
   	key: "fishing",
     name: "Fishing",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'site', key:'netWeaver'},
+    unlocks: [,	{type:'site', key:'netWeaver'}],
   },
   
   forestry: {
   	key: "forestry",
     name: "Forestry",
     terrain: ['Forest','Rainforest'],
-    1: {type:'site', key:'lumberyard'},
+    unlocks: [,	{type:'site', key:'lumberyard'}],
   },
   
   goatHerding: {
   	key: "goatHerding",
     name: "Goat Herding",
     terrain: ['Shrubland','Savanna'],
-    1: {type:'site', key:'goatHerd'},
-    1: {type:'site', key:'goatPen'},
+    unlocks: [,	{type:'site', key:'goatHerd'},
+    			{type:'site', key:'goatPen'}],
   },
   
   honor: {
   	key: "honor",
     name: "Honor",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'bonus', key:'Honor'},
+    unlocks: [,	{type:'bonus', key:'Honor'}],
   },
   
   horseHerding: {
   	key: "horseHerding",
     name: "Horse Herding",
     terrain: ['Savanna'],
-    1: {type:'site', key:'horseHerd'},
-    2: {type:'site', key:'horseCorral'},
-    3: {type:'site', key:'stable'},
+    unlocks: [,	{type:'site', key:'horseHerd'},
+    			{type:'site', key:'horseCorral'},
+    			{type:'site', key:'stable'}],
   },
   
   ironworking: {
   	key: "ironworking",
   	name: "Ironworking",
   	terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-  	1: {type:'site', key:'bloomery'},
-  	2: {type:'site', key:'ironArmory'},
-  	3: {type:'site', key:'ironArsenal'},
-  	4: {type:'site', key:'blastFurnace'},
+  	unlocks: [,	{type:'site', key:'bloomery'},
+  				{type:'site', key:'ironArmory'},
+  				{type:'site', key:'ironArsenal'},
+  				{type:'site', key:'blastFurnace'}],
   },
   
   kennelry: {
   	key: "kennelry",
     name: "Kennelry",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'site', key:'wolfDen'},
-    2: {type:'site', key:'kennel'},
+    unlocks: [,	{type:'site', key:'wolfDen'},
+    			{type:'site', key:'kennel'}],
   },
   
   leatherworking: {
   	key: "leatherworking",
     name: "Leatherworking",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'site', key:'tannery'},
-    2: {type:'site', key:'leatherworks'},
-    3: {type:'site', key:'fineLeatherworks'},
+    unlocks: [,	{type:'site', key:'tannery'},
+    			{type:'site', key:'leatherworks'},
+    			{type:'site', key:'fineLeatherworks'}],
   },
   
   masculinism: {
   	key: "masculinism",
     name: "Masculinism",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'value', key:"masculinism"},
+    unlocks: [,	{type:'value', key:"masculinism"}],
   },
   
   metalurgy: {
   	key: "metalurgy",
     name: "Metalurgy",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'site', key:'smelter'},
-    2: {type:'site', key:'alloyer'},
+    unlocks: [,	{type:'site', key:'smelter'},
+    			{type:'site', key:'alloyer'}],
   },
   
   preservation: {
   	key: "preservation",
     name: "Food Preservation",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'pile', key:'granary'},
+    unlocks: [,	{type:'pile', key:'granary'}],
   },
   
   pyrotechnics: {
   	key: "pyrotechnics",
     name: "Pyrotechnics",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'site', key:'charcoalBurner'},
-    2: {type:'site', key:'smoker'},
+    unlocks: [,	{type:'site', key:'charcoalBurner'},
+    			{type:'site', key:'smoker'}],
   },
   
   race: {
   	key: "race",
     name: "Race",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'value', key:'racism'},
+    unlocks: [,	{type:'value', key:'racism'}],
   },
   
   stonecraft: {
   	key: "stonecraft",
     name: "Stonecraft",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'site', key:'knappery'},
-    2: {type:'site', key:'stoneArmory'},
+    unlocks: [,	{type:'site', key:'knappery'},
+    			{type:'site', key:'stoneArmory'}],
   },
   
   swineHusbandry: {
   	key: "swingHusbandry",
     name: "Swine Husbandry",
     terrain: ["Shrubland","Forest"],
-    1: {type:'site', key:'swineHerd'},
-    2: {type:'site', key:'swineHollow'},
+    unlocks: [,	{type:'site', key:'swineHerd'},
+    			{type:'site', key:'swineHollow'}],
   },
   
   trade: {
   	key: "trade",
     name: "Trade",
     terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    1: {type:'trade', key:'tradeRoute'},
-    2: {type:'pile', key:'warehouse'},
-    3: {type:'pile', key:'market'},
+    unlocks: [,	{type:'trade', key:'tradeRoute'},
+    			{type:'pile', key:'warehouse'},
+    			{type:'pile', key:'market'}],
   },
   
   textiles: {
   	key: "textiles",
   	name: "Textiles",
   	terrain: ['Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-  	1: {type:'site', key:'feltery'},
-  	2: {type:'site', key:'clothier'},
-  	3: {type:'site', key:'loom'},
-  	4: {type:'site', key:'tailor'},
+  	unlocks: [,	{type:'site', key:'feltery'},
+  				{type:'site', key:'clothier'},
+  				{type:'site', key:'loom'},
+  				{type:'site', key:'tailor'}],
   },
   
 };
@@ -535,9 +549,9 @@ var dataResources = {
   
   manure: {
     key: "manure",
-    name: "manure",
+    name: "Manure",
     plural: "piles of Manure",
-    advances: [dataAdvances.agriculture,dataAdvances.preservation,dataAdvances.blackpowder],
+    advances: [dataAdvances.agriculture,dataAdvances.preservation,dataAdvances.blackPowder],
   },
   
   mysteryOre: {
@@ -807,7 +821,7 @@ var dataSites = {
   },
     
   hardwoodGrove: {
-    name: 'Forest',
+    name: 'Hardwood Grove',
     job: 'logger',
     tools: [dataResources.simpleTool],
     materials: [],

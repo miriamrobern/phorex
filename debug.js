@@ -35,7 +35,7 @@ var testMap = {
     worldMap.coords[1][2].altitude = 2;
     worldMap.coords[2][1].altitude = 2;
     worldMap.coords[2][2].altitude = 2;
-    worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.potter,capacity:100},{site:dataSites.crudeFields,capacity:100},{site:dataSites.knappery,capacity:100},{site:dataSites.pond,capacity:100}];
+    worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.crudeFields,capacity:100},{site:dataSites.well,capacity:100}];
     worldMap.coords[1][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.grazingLand,capacity:100},{site:dataSites.river,capacity:100}];
     worldMap.coords[1][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.outcropping,capacity:100},{site:dataSites.peatBog,capacity:100}];
     worldMap.coords[2][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.clayDeposit,capacity:100},{site:dataSites.pond,capacity:100}];
@@ -49,10 +49,10 @@ var testMap = {
     
     worldMap.coords[1][1].stocks = {caribou:1000};
     
-    southeast = new Pop("Southeasterners",south,9,2,2,48,{aggression: 1,fubar: 100},{gender:"mixed",age:"mixed"});
-    northwest = new Pop("Northwesterners",north,9,2,2,1,{aggression: 1,greezl: 100},{gender:"mixed",age:"mixed"});
-    northeast = new Pop("Northeasterners",north,9,2,2,20,{aggression: 1,johs: 100},{gender:"mixed",age:"mixed"});
-    southwest = new Pop("Southwesterners",south,9,2,2,21,{aggression: 1,fuck: 100},{gender:"mixed",age:"mixed"});
+    southeast = new Pop("Southeasterners",south,99,2,2,48,{aggression: 1,inquiry: 10},{gender:"mixed",age:"mixed"});
+    northwest = new Pop("Northwesterners",north,99,2,2,1,{aggression: 1,inquiry: 10},{gender:"mixed",age:"mixed"});
+    northeast = new Pop("Northeasterners",north,99,2,2,20,{aggression: 1,inquiry: 10},{gender:"mixed",age:"mixed"});
+    southwest = new Pop("Southwesterners",south,99,2,2,21,{aggression: 1,inquiry: 10},{gender:"mixed",age:"mixed"});
     
     
     worldMap.coords[1][1].units = [];
@@ -67,6 +67,7 @@ var testMap = {
     
     southeast.loyalty.player = 50;
     northwest.loyalty.player = 50;
+    northeast.loyalty.player = 50;
     southwest.loyalty.player = 50;
     pops.push(southeast);
     pops.push(southwest);

@@ -550,25 +550,30 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 	// The only to-do here is that pops can learn advances well beyond the range of useful advances (Forestry 47).
   	
   	var potentialAdvances = [];
+  	var advance;
   	var sacrificeNum = Math.ceil(this.inv[sacrifice]/5);
 	this.inv[sacrifice] -= sacrificeNum;
   	
   	for (i in dataResources[sacrifice].advances) {
-    	var terrainCheck = 1;
-    	if (terrainCheck === 1) {
+  		advance = dataResources[sacrifice].advances[i].key;
+    	var terrainCheck = true;
+    	var levelCheck = this.advances[advance] === undefined || this.advances[advance] < dataAdvances[advance].unlocks.length-1;
+    	console.log(levelCheck,advance,this.advances[advance],dataAdvances[advance]);
+    	if (terrainCheck === true && levelCheck === true) {
         	potentialAdvances.push(dataResources[sacrifice].advances[i]);
       	}
     }
-    var advance = potentialAdvances[Math.floor(Math.random()*potentialAdvances.length)];
+    console.log(potentialAdvances);
+    advance = potentialAdvances[Math.floor(Math.random()*potentialAdvances.length)];
 
     if (Math.random()*100 < sacrificeNum + this.advances.failures && advance !== undefined) {     
-      if (this.advances[advance.name] === undefined) {
+      if (this.advances[advance.key] === undefined) {
         this.advances[advance.key] = 1;
       } else {
         this.advances[advance.key]++;
       }
       this.advances.failures = 0;
-      var advanceLevel = dataAdvances[advance.key][this.advances[advance.key]];
+      var advanceLevel = dataAdvances[advance.key].unlocks[this.advances[advance.key]];
       
       if (advanceLevel === undefined) {
       	console.log("Reached End of the Advance ",advance.key);
@@ -1115,9 +1120,12 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     var notification = '';
     var here = worldMap.coords[this.x][this.y]
     var job = this.job.site;
+    var resource;
     var matNum = 0;
     var available = 0;
     var matsCheck = 0;
+    var matsOnHand = 0;
+    var matsInStock = 0;
     var matsLow = this.population;
     var toolsCheck = 0;
     var toolsLow = this.population;
@@ -1131,14 +1139,32 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       matsCheck = 1;
     } else {
 		for (m in job.materials) {
-			if (this.inv[job.materials[m].key] < this.population && here.stocks[job.materials[m].key] > 0) {
-				matNum = Math.min(here.stocks[job.materials[m].key],this.population-this.inv[job.materials[m].key]);
-				here.stocks[job.materials[m].key] -= matNum;
-				this.inv[job.materials[m].key] += matNum;
-				notification += this.name + " takes " + matNum + " " + job.materials[m].name + "from the stockpile.  "
+			resource = job.materials[m].key;
+			console.log(resource,"on hand",this.inv[resource]);
+			if (this.inv[resource] > 0) {
+				matsOnHand = this.inv[resource];
+			} else {
+				matsOnHand = 0;
+			}
+			if (here.stocks[resource] > 0) {
+				matsInStock = here.stocks[resource];
+			} else {
+				matsInStock = 0;
+			}
+			console.log(matsOnHand,matsInStock);
+			if (matsOnHand < this.population && matsInStock > 0) {
+				matNum = Math.min(matsInStock,this.population-matsOnHand);
+				here.stocks[resource] -= matNum;
+				if (matsOnHand === 0) {
+					this.inv[resource] = matNum;
+				} else {
+					this.inv[resource] += matNum;
+				}
+				console.log("claiming");
+				notification += "They take " + matNum + " " + job.materials[m].name + " from the stockpile.  "
 			}
 			if (this.inv[job.materials[m].key] > 0) {
-				matsLow = Math.min(matsLow,this.population,this.inv[job.materials[m].key]);
+				matsLow = Math.min(matsLow,this.population,this.inv[resource]);
 			} else {
 				matsLow = 0
 			}
@@ -1149,7 +1175,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 			this.inv[job.materials[m].key] -= matsLow;
 			matsText += job.materials[m].name + " " ;
 		}
-		materialCost = ' consuming ' + matsLow + ' each of ' + matsText + ' and ';
+		materialCost = ' consuming ' + matsLow + ' each of ' + matsText + 'and';
     }
     
     if (job.tools[0] === undefined) {
@@ -1165,9 +1191,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
       toolsCheck = toolsLow / this.population;
       
-      if (Math.random() < 0.33) {
+      if (Math.random() < 0.1) {
       	toolBreak = job.tools[Math.floor(Math.random()*job.tools.length)];
-      	toolBreakNum = Math.ceil(this.inv[toolBreak.key]/[2,3,3,4,4,4,5,5,5,5][Math.floor(Math.random()*10)])
+      	toolBreakNum = Math.ceil(this.inv[toolBreak.key]/[5,6,7][Math.floor(Math.random()*10)])
       	breakage = toolBreakNum + " " + toolBreak.plural + " are broken in the process!  ";
       }
     }
@@ -1181,7 +1207,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     	primary = dataResources.leadOre;
     }
       
-    notification = this.name + " works as " + job.job + "s," + materialCost + " producing " + primaryQuantity + " " + primary.plural + " and " + secondaryQuantity + " " + secondary.plural + ".  " + breakage;
+    notification += this.name + " works as " + job.job + "s," + materialCost + " producing " + primaryQuantity + " " + primary.plural + " and " + secondaryQuantity + " " + secondary.plural + ".  " + breakage;
 
     if (worldMap.coords[this.x][this.y].stocks[primary.key] > 0) {
     	worldMap.coords[this.x][this.y].stocks[primary.key] += primaryQuantity;
@@ -1354,6 +1380,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         if (targetPop.rites.indexOf(rite) === -1) {
           targetPop.rites.push(rite);
           rite.power += 2;
+          rite.practitioners.push(this);
           notification = this.name + " shares the "+rite.name+" with " + targetPop.name + "."
           var shared = 1;
         }
@@ -1402,9 +1429,9 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       impulse[i] = this.values[i] - Math.random()*100;
     }
     
-    if (this.prestige < 1) {
+    if (this.prestige < 1 || this.health < 50 || this.inv.food + worldMap.coords[this.x][this.y].stocks.food < this.population/10) {
       // will eventually need to check for freedom of movement
-      impulse.migration =  this.prestige * -1 ;
+      impulse.migration =  this.prestige * -1 * (50/this.health) ;
     }
     
     if (this.population < 10 && this.prestige < 50) {
@@ -1413,6 +1440,11 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     if (this.job.site.primaryProduce === dataResources.food) {
     	impulse.jobChange = (this.inv.food/this.population)*100 - Math.random()*100 ;
+    }
+    
+    if (this.lastProduce < this.population) {
+    	impulse.jobChange = 100 * this.lastProduce / this.population;
+    	this.lastSeason += this.name + " is disappointed with their work produce.  "
     }
     
     if (this.inv.food < 1 && worldMap.coords[this.x][this.y].stocks.food < 1 && this.job.site.primaryProduce != dataResources.food) {
@@ -1424,8 +1456,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     for (i in this.advances) {
     	if (i !== 'failures') {
 			for (l = 1 ; l < this.advances[i]+1 ; l++) {
-				if (dataAdvances[i][l].type === "site") {
-					canBuild.push(dataAdvances[i][l].key);
+				if (dataAdvances[i].unlocks[l].type === "site") {
+					canBuild.push(dataAdvances[i].unlocks[l].key);
 				}
 			}
 		}

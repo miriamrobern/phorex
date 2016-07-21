@@ -729,8 +729,8 @@ var view = {
   	for (i in pop.advances) {
   		if (i !== "failures") {
 	  		for (l = 1;l < pop.advances[i]+1;l++) {
-	  			if (dataAdvances[i][l].type === "site" && existingSites.indexOf(dataSites[dataAdvances[i][l].key]) === -1) {
-	  				canBuild.push(dataAdvances[i][l].key);
+	  			if (dataAdvances[i].unlocks[l].type === "site" && existingSites.indexOf(dataSites[dataAdvances[i].unlocks[l].key]) === -1) {
+	  				canBuild.push(dataAdvances[i].unlocks[l].key);
 	  			}
   			}
   		}
