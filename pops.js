@@ -1115,7 +1115,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   
   this.work = function() {
     
-    // will need to use regional availability function for both mats and tools
+    // will need to use regional availability function for mats
     
     var notification = '';
     var here = worldMap.coords[this.x][this.y]
@@ -1128,6 +1128,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     var matsInStock = 0;
     var matsLow = this.population;
     var toolsCheck = 0;
+    var toolBonus = 1;
     var toolsLow = this.population;
     var materialCost = '';
     var toolBreak;
@@ -1197,11 +1198,29 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       	breakage = toolBreakNum + " " + toolBreak.plural + " are broken in the process!  ";
       }
     }
+    
+    if (job.bonusTools[0] === undefined) {
+      toolBonus = 1;
+    } else {
+      for (t in job.bonusTools) {
+      	if (this.inv[job.bonusTools[t].key] !== undefined) {
+      		toolBonus += this.inv[job.bonusTools[t].key];
+      	}
+      }
+      
+      toolBonus = 1 + Math.min(this.population,toolBonus) / this.population;
+      
+//       if (Math.random() < 0.1) {
+//       	toolBreak = job.tools[Math.floor(Math.random()*job.tools.length)];
+//       	toolBreakNum = Math.ceil(this.inv[toolBreak.key]/[5,6,7][Math.floor(Math.random()*10)])
+//       	breakage = toolBreakNum + " " + toolBreak.plural + " are broken in the process!  ";
+//       }
+    }
 
     var primary = job.primaryProduce;
-    var primaryQuantity = Math.floor(Math.min(matsCheck,toolsCheck) * job.primaryEfficiency * this.population * 100) / 100;
+    var primaryQuantity = Math.floor(Math.min(matsCheck,toolsCheck) * job.primaryEfficiency * this.population * toolBonus * 100) / 100;
     var secondary = job.secondaryProduce[Math.floor(Math.random()*job.secondaryProduce.length)];
-    var secondaryQuantity = Math.floor(Math.min(matsCheck,toolsCheck) * job.secondaryEfficiency * this.population * 100) / 100;
+    var secondaryQuantity = Math.floor(Math.min(matsCheck,toolsCheck) * job.secondaryEfficiency * this.population * toolBonus * 100) / 100;
     
     if (primary === dataResources.mysteryOre) {
     	primary = dataResources.leadOre;

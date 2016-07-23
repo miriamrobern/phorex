@@ -468,6 +468,22 @@ var view = {
       }
       sitePopUp += ".</p>";
       
+      if (site.bonusTools.length > 0) {
+      	var bonusToolsText = '';
+      	for (n in site.bonusTools) {
+      		bonusToolsText += site.bonusTools[n].plural;
+      		if (n < site.bonusTools.length-2) {
+      			bonusToolsText += ", ";
+      		} else if (n == site.bonusTools.length-2 && site.bonusTools.length === 2) {
+      			bonusToolsText += " or ";
+      		} else if (n == site.bonusTools.length-2) {
+      			bonusToolsText += ", or ";
+      		}
+      	}
+      	
+      	sitePopUp += "<p>Workers will produce more if they are equipped with "+bonusToolsText+".</p>"
+      }
+      
       for (u in here.units) {
       	if (here.units[u].job === worldMap.coords[view.focusX][view.focusY].sites[i]) {
       		workers += here.units[u].population;
