@@ -2,14 +2,14 @@ var dataAdvances = {
   failures: {
   	key: "failures",
     name: "Negative Results",
-    terrain: [],
+    biomes: [],
     unlocks: [],
   },
   
   agriculture: {
   	key: "agriculture",
     name: "Agriculture",
-    terrain: ["Shrubland","Savanna","Forest","Rainforest"],
+    biomes: ["Shrubland","Savanna","Forest","Rainforest"],
     unlocks: [,	{type:'site', key:"crudeFields"},
     			{type:'site', key:"simpleFields"},
     			{type:'site', key:"flaxFields"},
@@ -19,28 +19,28 @@ var dataAdvances = {
   aquatecture: {
   	key: "aquatecture",
     name: "Aquatecture",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'trade', key:"shortPier"}],
   },
   
   blackPowder: {
   	key: "blackPowder",
   	name: "Black Powder",
-  	terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+  	biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
   	unlocks: [,	],
   },
   
   brewing: {
   	key: "brewing",
   	name: "Brewing",
-  	terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+  	biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
   	unlocks: [,	{type:'site', key:'brewery'}],
   },
   
   bronzeworking: {
   	key: "bronzeworking",
   	name: "bronzeworking",
-  	terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+  	biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'bronzesmith'},
     			{type:'site', key:'bronzeSwordsmithy'},
     			{type:'site', key:'bronzeArmory'}],
@@ -49,7 +49,7 @@ var dataAdvances = {
   carpentry: {
   	key: "carpentry",
     name: "Carpentry",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'building', key:"woodHut"},
     			{type:'defense', key:"woodenPalisade"}],
   },
@@ -57,7 +57,7 @@ var dataAdvances = {
   caribouHerding: {
   	key: "caribouHerding",
     name: "Caribou Herding",
-    terrain: ["Tundra"],
+    biomes: ["Tundra"],
     unlocks: [,	{type:'site', key:"caribouHerd"},
     			{type:'site', key:"caribouPaddock"}],
   },
@@ -65,7 +65,7 @@ var dataAdvances = {
   cattleHerding: {
   	key: "cattleHerding",
     name: "Cattle Herding",
-    terrain: ['Savanna'],
+    biomes: ['Savanna'],
     unlocks: [,	{type:'site', key:"cattleHerd"},
     			{type:'site', key:"cattleKraal"}],
   },
@@ -73,7 +73,7 @@ var dataAdvances = {
   ceramics: {
   	key: "ceramics",
     name: "Ceramics",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'potter'},
    				{type:'site', key:'brickworks'},
     			{type:'site', key:'glazier'},
@@ -83,14 +83,14 @@ var dataAdvances = {
   chickenHusbandry: {
   	key: "chickenHusbandry",
     name: "Chicken Husbandry",
-    terrain: ["Rainforest"],
+    biomes: ["Rainforest"],
     unlocks: [,	{type:'site', key:'chickenCoop'}],
   },
   
   construction: {
   	key: "construction",
     name: "Construction",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'building', key:'stoneHut'},
     			{type:'defense', key:'stoneWall'}],
   },
@@ -98,21 +98,21 @@ var dataAdvances = {
   discipline: {
   	key: "discipline",
     name: "Discipline",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'bonus', key:"Basic Discipline"}]
   },
   
   dyes: {
   	key: "dyes",
     name: "Dyes",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'dyehouse'}]
   },
   
   excavation: {
   	key: "excavation",
     name: "Excavation",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'well'},
     			{type:'site', key:'openPitMine'}],
   },
@@ -120,21 +120,21 @@ var dataAdvances = {
   falconry: {
   	key: "falconry",
     name: "Falconry",
-    terrain: "Forest",
+    biomes: "Forest",
     unlocks: [,	{type:'site', key:'mews'}],
   },
   
   feminism: {
   	key: "feminism",
     name: "Feminism",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'value', key:"feminism"}],
   },
   
   finance: {
   	key: "finance",
     name: "Finance",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'pile', key:'treasury'},
     			{type:'building', key:'bank'}],
   },
@@ -142,21 +142,21 @@ var dataAdvances = {
   fishing: {
   	key: "fishing",
     name: "Fishing",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'netWeaver'}],
   },
   
   forestry: {
   	key: "forestry",
     name: "Forestry",
-    terrain: ['Forest','Rainforest'],
+    biomes: ['Forest','Rainforest'],
     unlocks: [,	{type:'site', key:'lumberyard'}],
   },
   
   goatHerding: {
   	key: "goatHerding",
     name: "Goat Herding",
-    terrain: ['Shrubland','Savanna'],
+    biomes: ['Shrubland','Savanna'],
     unlocks: [,	{type:'site', key:'goatHerd'},
     			{type:'site', key:'goatPen'}],
   },
@@ -164,14 +164,14 @@ var dataAdvances = {
   honor: {
   	key: "honor",
     name: "Honor",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'bonus', key:'Honor'}],
   },
   
   horseHerding: {
   	key: "horseHerding",
     name: "Horse Herding",
-    terrain: ['Savanna'],
+    biomes: ['Savanna'],
     unlocks: [,	{type:'site', key:'horseHerd'},
     			{type:'site', key:'horseCorral'},
     			{type:'site', key:'stable'}],
@@ -180,7 +180,7 @@ var dataAdvances = {
   ironworking: {
   	key: "ironworking",
   	name: "Ironworking",
-  	terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+  	biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
   	unlocks: [,	{type:'site', key:'bloomery'},
   				{type:'site', key:'ironArmory'},
   				{type:'site', key:'ironArsenal'},
@@ -190,7 +190,7 @@ var dataAdvances = {
   kennelry: {
   	key: "kennelry",
     name: "Kennelry",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'wolfDen'},
     			{type:'site', key:'kennel'}],
   },
@@ -198,7 +198,7 @@ var dataAdvances = {
   leatherworking: {
   	key: "leatherworking",
     name: "Leatherworking",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'tannery'},
     			{type:'site', key:'leatherworks'},
     			{type:'site', key:'fineLeatherworks'}],
@@ -207,14 +207,14 @@ var dataAdvances = {
   masculinism: {
   	key: "masculinism",
     name: "Masculinism",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'value', key:"masculinism"}],
   },
   
   metalurgy: {
   	key: "metalurgy",
     name: "Metalurgy",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'smelter'},
     			{type:'site', key:'alloyer'}],
   },
@@ -222,14 +222,14 @@ var dataAdvances = {
   preservation: {
   	key: "preservation",
     name: "Food Preservation",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'pile', key:'granary'}],
   },
   
   pyrotechnics: {
   	key: "pyrotechnics",
     name: "Pyrotechnics",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'charcoalBurner'},
     			{type:'site', key:'smoker'}],
   },
@@ -237,21 +237,21 @@ var dataAdvances = {
   race: {
   	key: "race",
     name: "Race",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'value', key:'racism'}],
   },
   
   slings: {
   	key: "slings",
     name: "Slings",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'slingery'}],
   },
   
   stonecraft: {
   	key: "stonecraft",
     name: "Stonecraft",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'knappery'},
     			{type:'site', key:'stoneArmory'}],
   },
@@ -259,15 +259,22 @@ var dataAdvances = {
   swineHusbandry: {
   	key: "swingHusbandry",
     name: "Swine Husbandry",
-    terrain: ["Shrubland","Forest"],
+    biomes: ["Shrubland","Forest"],
     unlocks: [,	{type:'site', key:'swineHerd'},
     			{type:'site', key:'swineHollow'}],
+  },
+  
+  tactics: {
+  	key: "tactics",
+    name: "Tactics",
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    unlocks: [,	{type:'bonus', key:"Simple Tactics"}]
   },
   
   trade: {
   	key: "trade",
     name: "Trade",
-    terrain: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+    biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'trade', key:'tradeRoute'},
     			{type:'pile', key:'warehouse'},
     			{type:'pile', key:'market'}],
@@ -276,7 +283,7 @@ var dataAdvances = {
   textiles: {
   	key: "textiles",
   	name: "Textiles",
-  	terrain: ['Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
+  	biomes: ['Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
   	unlocks: [,	{type:'site', key:'ropewalk'},
   				{type:'site', key:'feltery'},
   				{type:'site', key:'clothier'},
@@ -333,14 +340,14 @@ var dataResources = {
     key: "bronzeArmor",
     name: "Bronze Armor",
     plural: "Bronze Armor",
-    advances: [dataAdvances.discipline],
+    advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
   bronzeArms: {
     key: "bronzeArms",
     name: "Bronze Arms",
     plural: "Bronze Arms",
-    advances: [dataAdvances.discipline],
+    advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
   bronzeTool: {
@@ -499,14 +506,14 @@ var dataResources = {
     key: "ironArmor",
     name: "Iron Armor",
     plural: "Iron Armor",
-    advances: [dataAdvances.discipline],
+    advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
   ironArms: {
     key: "ironArms",
     name: "Iron Arms",
     plural: "Iron Arms",
-    advances: [dataAdvances.discipline],
+    advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
   ironTool: {
@@ -557,6 +564,13 @@ var dataResources = {
     advances: [dataAdvances.forestry, dataAdvances.pyrotechnics, dataAdvances.carpentry, dataAdvances.aquatecture],
   },
   
+  longbow: {
+    key: "longbow",
+    name: "Longbow",
+    plural: "long Bows",
+    advances: [dataAdvances.tactics],
+  },
+  
   manure: {
     key: "manure",
     name: "Manure",
@@ -598,6 +612,13 @@ var dataResources = {
     plural: "piles of Saltpeter",
   },
   
+  shortbow: {
+    key: "shortbow",
+    name: "Shortbow",
+    plural: "short Bows",
+    advances: [dataAdvances.discipline,dataAdvances.tactics],
+  },
+  
   simpleTool: {
     key: "simpleTool",
     name: "Simple Tool",
@@ -635,14 +656,14 @@ var dataResources = {
     key: "steelArmor",
     name: "Steel Armor",
     plural: "Steel Armor",
-    advances: [dataAdvances.discipline],
+    advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
   steelArms: {
     key: "steelArms",
     name: "Steel Arms",
     plural: "Steel Arms",
-    advances: [dataAdvances.discipline],
+    advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
   steelTool: {
@@ -710,7 +731,7 @@ var dataSites = {
     name: 'The Wilds',
     job: 'hunter-gatherer',
     tools: [],
-    bonusTools: [dataResources.falcon,dataResources.dog,dataResources.sling],
+    bonusTools: [dataResources.falcon,dataResources.dog,dataResources.sling,dataResources.shortbow,dataResources.longbow],
     materials: [],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.1,
@@ -764,7 +785,7 @@ var dataSites = {
     name: 'Grazing Land',
     job: 'hunter',
     tools: [dataResources.simpleTool],
-    bonusTools: [dataResources.sling,dataResources.dog],
+    bonusTools: [dataResources.sling,dataResources.dog,dataResources.shortbow,dataResources.longbow],
     materials: [],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.3,
@@ -924,6 +945,21 @@ var dataSites = {
     baseCapacity: 20,
   },
   
+  bowyery: {
+    name: 'Bowyery',
+    job: 'bowyer',
+    tools: [dataResources.simpleTool],
+    bonusTools: [],
+    materials: [dataResources.lumber,dataResources.rope],
+    primaryProduce: dataResources.shortbow,
+    primaryEfficiency: 0.5,
+    secondaryProduce: [dataResources.simpleTool],
+    secondaryEfficiency: 0.1,
+    upgradeAdvance: dataAdvances.tactics,
+    buildCost: {lumber:20,simpleTool:20},
+    baseCapacity: 20,
+  },
+  
   brewery: {
     name: 'Brewery',
     job: 'brewer',
@@ -1005,6 +1041,7 @@ var dataSites = {
     tools: [],
     bonusTools: [],
     materials: [],
+    biomes: ['savanna','shrubland','forest','rainforest'],
     primaryProduce: dataResources.food,
     primaryEfficiency: 0.9,
     secondaryProduce: [dataResources.cattle,dataResources.manure],
@@ -1035,6 +1072,7 @@ var dataSites = {
     tools: [],
     bonusTools: [],
     materials: [],
+    biomes: ['tundra'],
     primaryProduce: dataResources.food,
     primaryEfficiency: 0.9,
     secondaryProduce: [dataResources.caribou,dataResources.manure],
@@ -1185,12 +1223,28 @@ var dataSites = {
     tools: [dataResources.simpleTool],
     bonusTools: [],
     materials: [dataResources.water],
+    biomes: ['savanna','shrubland','forest','rainforest','desert'],
     primaryProduce: dataResources.fiber,
     primaryEfficiency: 1.75,
     secondaryProduce: [dataResources.simpleTool,dataResources.stone,dataResources.lumber,dataResources.food],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.agriculture,
     buildCost: {simpleTool:20,lumber:10},
+    baseCapacity: 20,
+  },
+  
+  fletchery: {
+    name: 'Fletchery',
+    job: 'fletcher',
+    tools: [dataResources.simpleTool],
+    bonusTools: [],
+    materials: [dataResources.lumber,dataResources.rope],
+    primaryProduce: dataResources.longbow,
+    primaryEfficiency: 0.5,
+    secondaryProduce: [dataResources.simpleTool],
+    secondaryEfficiency: 0.1,
+    upgradeAdvance: dataAdvances.tactics,
+    buildCost: {lumber:20,simpleTool:20},
     baseCapacity: 20,
   },
   
@@ -1215,6 +1269,7 @@ var dataSites = {
     tools: [],
     bonusTools: [],
     materials: [],
+    biomes: ['savanna','shrubland','desert'],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1,
     secondaryProduce: [dataResources.goat,dataResources.manure],
@@ -1260,6 +1315,7 @@ var dataSites = {
     tools: [dataResources.simpleTool],
     bonusTools: [],
     materials: [],
+    biomes: ['savanna','shrubland'],
     primaryProduce: dataResources.horse,
     primaryEfficiency: 0.5,
     secondaryProduce: [dataResources.simpleTool,dataResources.food,dataResources.manure],
@@ -1455,6 +1511,7 @@ var dataSites = {
     tools: [dataResources.simpleTool],
     bonusTools: [],
     materials: [dataResources.water],
+    biomes: ['savanna','shrubland','forest','rainforest','desert'],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.75,
     secondaryProduce: [dataResources.simpleTool,dataResources.stone,dataResources.lumber,dataResources.fiber],
@@ -1477,7 +1534,7 @@ var dataSites = {
     upgradeAdvance: '',
     buildCost: {simpleTool:5,lumber:10},
     baseCapacity: 20,
-  }
+  },
   
   smoker: {
     name: 'Smoker',
@@ -1560,9 +1617,10 @@ var dataSites = {
     tools: [],
     bonusTools: [],
     materials: [dataResources.food],
+    biomes: ['forest','rainforest'],
     primaryProduce: dataResources.swine,
     primaryEfficiency: 1,
-    secondaryProduce: [dataResources.food,dataResources.manure],
+    secondaryProduce: [dataResources.food,dataResources.manure,dataResources.fur],
     secondaryEfficiency: 1,
     upgradeAdvance: dataAdvances.swineHerding,
     buildCost: {fur:20},
@@ -1577,7 +1635,7 @@ var dataSites = {
     materials: [dataResources.swine],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.2,
-    secondaryProduce: [dataResources.swine,dataResources.manure],
+    secondaryProduce: [dataResources.swine,dataResources.manure,dataResources.fur],
     secondaryEfficiency: 0.5,
     upgradeAdvance: dataAdvances.swineHerding,
     buildCost: {fur:20,water:20,simpleTool:20},
@@ -1651,7 +1709,7 @@ var dataSites = {
     materials: [dataResources.food],
     primaryProduce: dataResources.wolf,
     primaryEfficiency: 0.5,
-    secondaryProduce: [dataResources.food,dataResources.bone],
+    secondaryProduce: [dataResources.food,dataResources.bone,dataResources.fur],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.kennelry,
     buildCost: {food:20,fur:20},
@@ -1673,7 +1731,7 @@ var dataSites = {
     upgradeAdvance: dataAdvances.caribouHerding,
     buildCost: {resource:999},
     baseCapacity: 20,
-  }
+  },
   
 };
 
@@ -1798,11 +1856,13 @@ var dataForceItems = {
   sling: 0.3,
   shortbow: 0.4,
   longbow: 0.6,
+  compositebow: 0.8,
 };
 
 var dataForceAdvances = {
   honor: 0.1,
   discipline: 0.5,
+  tactics: 0.5,
 };
 
 var dataMoveItems = {

@@ -41,6 +41,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     if (Math.random()>0.6) {
       this.values.inquiry = Math.floor(Math.random()*100);
+    } else {
+    	this.values.inquiry = 0;
     }
     
     if (Math.random()>0.6) {
@@ -556,14 +558,12 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	
   	for (i in dataResources[sacrifice].advances) {
   		advance = dataResources[sacrifice].advances[i].key;
-    	var terrainCheck = true;
+    	var terrainCheck = dataAdvances[advance].biomes.indexOf(worldMap.coords[this.x][this.y].biome.name) !== -1;
     	var levelCheck = this.advances[advance] === undefined || this.advances[advance] < dataAdvances[advance].unlocks.length-1;
-    	console.log(levelCheck,advance,this.advances[advance],dataAdvances[advance]);
     	if (terrainCheck === true && levelCheck === true) {
         	potentialAdvances.push(dataResources[sacrifice].advances[i]);
       	}
     }
-    console.log(potentialAdvances);
     advance = potentialAdvances[Math.floor(Math.random()*potentialAdvances.length)];
 
     if (Math.random()*100 < sacrificeNum + this.advances.failures && advance !== undefined) {     
@@ -1199,7 +1199,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       }
     }
     
-    if (job.bonusTools[0] === undefined) {
+    if (job.bonusTools === undefined) {
       toolBonus = 1;
     } else {
       for (t in job.bonusTools) {
@@ -1398,8 +1398,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
         var rite = sharingRites[Math.floor(Math.random()*sharingRites.length)];
         if (targetPop.rites.indexOf(rite) === -1) {
           targetPop.rites.push(rite);
-          rite.power += 2;
-          rite.practitioners.push(this);
+          rite.power += 1;
+          rite.practitioners.push(targetPop);
           notification = this.name + " shares the "+rite.name+" with " + targetPop.name + "."
           var shared = 1;
         }

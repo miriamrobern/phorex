@@ -7,7 +7,7 @@ var gameClock = {
   guidancePoints: 100,
   
   year: function() {
-    return Math.floor(gameClock.turn/4);
+    return 1+Math.floor(gameClock.turn/4);
   },
   
   season: function() {
