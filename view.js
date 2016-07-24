@@ -562,10 +562,40 @@ var view = {
   },
   
   refreshCivicsPanel: function() {
+  	var uiBuildingsList = document.getElementById('uiBuildingsList');
+  	var buildingPopUp;
+  	var buildingsList = '';
+  	
+  	for (i in worldMap.coords[view.focusX][view.focusY].buildings) {
+  		building = worldMap.coords[view.focusX][view.focusY].buildings[i];
+  		buildingPopUp = "<strong>" + building.building.name + "</strong><br /><p>" + building.building.desc + "</p>";
+  		if (building.building.defense > 0) {
+  			buildingPopUp += "<p>It has a defense value of "+building.building.defense+" and will protect "+building.capacity+" souls.</p>";
+  		} else {
+  			buildingPopUp += "<p>Its capacity is "+building.capacity+"</p>";
+  		}
+  		buildingsList += "<li><a class='popup'>"+building.building.name+"<span>"+buildingPopUp+"</span></a></li>";
+  	}
+  	
+  	uiBuildingsList.innerHTML = buildingsList;
     
   },
   
   refreshWorshipPanel: function() {
+  	// Shrines
+  	var uiShrinesList = document.getElementById('uiShrinesList');
+  	var shrinePopUp;
+  	var shrinesList = '';
+  	
+  	for (i in worldMap.coords[view.focusX][view.focusY].shrines) {
+  		shrine = worldMap.coords[view.focusX][view.focusY].shrines[i];
+  		shrinePopUp = "<strong>"+shrine.name+"</strong><br /><p>" + shrine.desc + "</p>";
+  		shrinesList += "<li><a class='popup'>"+shrine.name+"<span>"+shrinePopUp+"</span></li>";
+  	}
+  	
+  	uiShrinesList.innerHTML = shrinesList;
+  	
+  	// Rites
     var uiRitesList = document.getElementById('uiRitesList');
     var ritePopUp;
     localRites = [];
@@ -589,6 +619,36 @@ var view = {
   },
   
   refreshRelationsPanel: function() {
+  	var uiLinksList = document.getElementById('uiLinksList');
+  	var linksPopUp;
+  	var linksList = '';
+  	
+  	for (i in worldMap.coords[view.focusX][view.focusY].links) {
+  		link = worldMap.coords[view.focusX][view.focusY].links[i];
+  		if (link.type.legal == true) {
+  			restrictedResources = link.type.restrictedResources;
+  			// Add destination import restrictions
+  		} else {
+  			restrictedResources = link.type.restrictedResources;
+  		}
+  		
+  		linkPopUp = "<strong>"+link.type.name+"</strong><br /><p>Destination: " +worldMap.coords[link.x][link.y].name + " ("+link.x+","+link.y+")</p>";
+  		if (restrictedResources.length > 0) {
+  			var restrictedResourcesText = '';
+  			for (n in restrictedResources) {
+  				restrictedResourcesText += restrictedResources[n].plural;
+  				if (n < restrictedResources.length-2) {
+  					restrictedResourcesText += ", ";
+  				} else if (n == restrictedResources.length-2) {
+  					restrictedResourcesText += ", or ";
+  				}
+  			}
+  			linkPopUp += "<p>This trade link cannot transport "+restrictedResourcesText+"</p>";
+  		}
+  		linksList += "<li><a class='popup'>"+link.type.name+" to "+worldMap.coords[link.x][link.y].name+"<span>"+linkPopUp+"</span></li>";
+  	}
+  	
+  	uiLinksList.innerHTML = linksList;
     
   },
   

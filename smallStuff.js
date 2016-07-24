@@ -18,9 +18,11 @@ var gameClock = {
 var peoples = [];
 
 function people(name,x,y) {
-  this.name = name;
-  this.x = x;
-  this.y = y;
+	var pluralization = ["s","i","a","es"][Math.floor(Math.random()*3)]
+	this.name = name;
+	this.plural = name + pluralization;
+	this.x = x;
+	this.y = y;
 }
 
 var rites = [];

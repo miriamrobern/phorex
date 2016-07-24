@@ -14,7 +14,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.guided = 0;
   
   if (prestige === undefined) {
-    this.prestige = Math.floor(Math.random()*100);
+    this.prestige = 20 + Math.floor(Math.random()*60);
   } else {
     this.prestige = prestige;
   }
@@ -624,6 +624,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 		if (Math.random() < 0.2) {
 			var newRite = new Rite(this,sacrifice);
 			this.rites.push(newRite);
+			worldMap.rites.push(newRite);
 			notification = this.name + " sacrifices " + sacrificeNum + " " + sacrifice + " and develop a new major rite, " + newRite.name + ".";
 		} else {
 			notification = this.name + " sacrifices " + sacrificeNum + " " + sacrifice + " in minor religious rites.";
@@ -1286,7 +1287,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     		}
     	}
     	onTheHoof.sort(function() {return Math.random() > 0.5; });
-    	console.log(onTheHoof);
     	for (i=0; i<onTheHoof.length;i++) {
     		this.inv[onTheHoof[i]]--;
     		this.inv.food += dataResources[onTheHoof[i]].foodValue;
@@ -1438,11 +1438,11 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       var sharingRites = this.rites;
       var sharingAdvances = this.advances;
       
-      if (Math.random() > 0.7 && sharingRites.length > 0) { // share a rite
+      if (Math.random() < 0.7 && this.values.piety !== undefined && sharingRites.length > 0) { // share a rite
         var rite = sharingRites[Math.floor(Math.random()*sharingRites.length)];
         if (targetPop.rites.indexOf(rite) === -1) {
           targetPop.rites.push(rite);
-          rite.power += 1;
+//           rite.power += 1;
           rite.practitioners.push(targetPop);
           notification = this.name + " shares the "+rite.name+" with " + targetPop.name + "."
           var shared = 1;
@@ -1555,6 +1555,10 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     
     impulse = Object.keys(impulse).reduce(function(a, b){ return impulse[a] > impulse[b] ? a : b });
     
+    if (this.prestige > 100 && worldMap.coords[this.x][this.y].units.length > 1) {
+    	impulse = "prestige";
+    }
+    
     this.lastSeason += " " + this.name + " has a " + impulse + " impulse. ";
     notification = this.name + "has an impulse that didn't go off: " + impulse;
     
@@ -1580,6 +1584,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       this.impulse.growFood(this);
     } else if (impulse === "assimilate") {
       this.impulse.assimilate(this);
+    } else if (impulse === "prestige") {
+      this.impulse.prestige(this);
     } else if (impulse === "build") {
       this.build(letsBuild);
     } 
@@ -2167,6 +2173,36 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   			}
   		}
   	}
+  	
+  	pop.notify(notification);
+  };
+  
+  this.impulse.prestige = function (pop) {
+  	var lessPrestige = pop.prestige - 100;
+  	var prestigeName = ["Royal","Noble","Ascendant","Exalted","Great","High"][Math.floor(Math.random()*6)];
+  	var tileSuffix = ["land","lund","iland","borough","boro","bury","by","don","den","ex","ham","holm","howe","ness","istan","stan","stead","thorp","thorpe","tun","ton","wold","weald","wick","wich","worth"][Math.floor(Math.random()*26)];
+  	var newTileName = pop.people.name + tileSuffix;
+  	for (i in worldMap.coords[pop.x][pop.y].units) {
+  		worldMap.coords[pop.x][pop.y].units[i].prestige -= lessPrestige;
+  	}
+  	
+  	notification = pop.name + " claim ascendancy over " + worldMap.coords[pop.x][pop.y].name + " and rename it " + newTileName + ".  ";
+  	worldMap.coords[pop.x][pop.y].name = newTileName
+  	
+  	for (i in worldMap.coords[pop.x][pop.y].stocks) {
+  		if (worldMap.coords[pop.x][pop.y].stocks[i] > 0) {
+			if (pop.inv[i] > 0) {
+				pop.inv[i] += Math.ceil(worldMap.coords[pop.x][pop.y].stocks[i] / 2);
+			} else {
+				pop.inv[i] = Math.ceil(worldMap.coords[pop.x][pop.y].stocks[i] / 2);
+			}
+			worldMap.coords[pop.x][pop.y].stocks[i] = Math.floor(worldMap.coords[pop.x][pop.y].stocks[i] / 2);
+			notification += "They claim " + Math.ceil(worldMap.coords[pop.x][pop.y].stocks[i] / 2) + " " + dataResources[i].plural + ".  ";
+  		}
+  	}
+  	
+  	notification += pop.name + " style themselves " + prestigeName + " " + pop.people.name + ".";
+  	pop.name = prestigeName + " " + pop.people.plural;
   	
   	pop.notify(notification);
   };

@@ -44,6 +44,11 @@ var testMap = {
     worldMap.coords[2][1].biome = dataBiomes.tundra;
     worldMap.coords[2][2].biome = dataBiomes.shrubland;
     
+    worldMap.coords[1][1].name = "Northwest Forest";
+    worldMap.coords[1][2].name = "Southwest Desert";
+    worldMap.coords[2][1].name = "Northeast Tundra";
+    worldMap.coords[2][2].name = "Southeast Shrubland";
+    
     var south = new people("South",2,2);
     var north = new people("North",1,1);
     
@@ -59,6 +64,10 @@ var testMap = {
     worldMap.coords[1][2].units = [];
     worldMap.coords[2][2].units = [southeast,northwest,southwest,northeast];
     worldMap.coords[2][1].units = [];
+    
+    worldMap.coords[2][2].buildings = [{building:dataBuildings.palisade,capacity:50},{building:dataBuildings.greatHall,capacity:50},{building:dataBuildings.library,capacity:50}];
+    worldMap.coords[2][2].shrines = [dataShrines.menhir,dataShrines.temple];
+    worldMap.coords[2][2].links = [{type:dataLinks.overland, x:1, y:1},{type:dataLinks.overlandSmuggling, x:1, y:2}];
     
     var rite1 = new Rite(southeast,"caribou");
     var rite2 = new Rite(southeast,"bone");

@@ -1,6 +1,7 @@
 var worldMap = {
   
   coords: [],
+  rites: [],
   stage: 0,
   
   prefs: {

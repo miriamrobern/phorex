@@ -882,10 +882,11 @@ var dataSites = {
     name: 'Cenote',
     job: 'cenotista',
     tools: [],
+    bonusTools: [],
     materials: [],
     primaryProduce: dataResources.water,
     primaryEfficiency: 1,
-    secondaryProduce: [dataResources.food,dataResources.bone,dataResources.clay,dataResources.stone,dataResources.fiber],
+    secondaryProduce: [dataResources.food, dataResources.bone, dataResources.clay, dataResources.stone, dataResources.fiber],
     secondaryEfficiency: 0.5,
     baseCapacity: 100,
   },
@@ -1882,6 +1883,60 @@ var dataSites = {
     baseCapacity: 20,
   },
   
+};
+
+var dataBuildings = {
+
+	greatHall: {
+		name: "Great Hall",
+		desc: "Man I have no idea what this does.",
+		buildCost: {stone:50,simpleTool:10}
+	},
+
+	library: {
+		name: "Library",
+		desc: "The library shares negative data produced here with all residents.",
+		buildCost: {stone:50,simpleTool:10}
+	},
+
+	palisade: {
+		name: "Palisade",
+		desc: "A ring of wooden poles lashed together, affording protection from outsiders.",
+		defense: 1.2,
+		buildCost: {stone:100,lumber:20}
+	},
+
+};
+
+var dataShrines = {
+
+	menhir: {
+		name: "Menhir",
+		desc: "Rites which require stone have doubled efficacy.",
+		buildCost: {stone:50,simpleTool:10}
+	},
+
+	temple: {
+		name: "Temple",
+		desc: "This does something.",
+		buildCost: {stone:100,lumber:20}
+	},
+
+};
+
+var dataLinks = {
+
+	overland: {
+		name: "Overland Route",
+		legal: true,
+		restrictedResources: [dataResources.food,dataResources.water,dataResources.dog],
+	},
+
+	overlandSmuggling: {
+		name: "Overland Smuggling Route",
+		legal: false,
+		restrictedResources: [dataResources.food,dataResources.water,dataResources.dog],
+	},
 };
 
 var dataBiomes = {
