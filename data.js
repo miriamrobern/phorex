@@ -46,6 +46,14 @@ var dataAdvances = {
     			{type:'site', key:'bronzeArmory'}],
   },
   
+  camelHerding: {
+  	key: "camelHerding",
+    name: "Camel Herding",
+    biomes: ["Desert","Savanna"],
+    unlocks: [,	{type:'site', key:"camelHerd"},
+    			{type:'site', key:"camelFarm"}],
+  },
+  
   carpentry: {
   	key: "carpentry",
     name: "Carpentry",
@@ -204,6 +212,14 @@ var dataAdvances = {
     			{type:'site', key:'fineLeatherworks'}],
   },
   
+  llamaHerding: {
+  	key: "llamaHerding",
+    name: "Llama Herding",
+    biomes: ["Shrubland","Savanna"],
+    unlocks: [,	{type:'site', key:"llamaHerd"},
+    			{type:'site', key:"llamaFarm"}],
+  },
+  
   masculinism: {
   	key: "masculinism",
     name: "Masculinism",
@@ -239,6 +255,14 @@ var dataAdvances = {
     name: "Race",
     biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'value', key:'racism'}],
+  },
+  
+  sheepHerding: {
+  	key: "sheepHerding",
+    name: "Sheep Herding",
+    biomes: ["Shrubland","Savanna"],
+    unlocks: [,	{type:'site', key:"sheepHerd"},
+    			{type:'site', key:"sheepfold"}],
   },
   
   slings: {
@@ -299,7 +323,7 @@ var dataResources = {
     key: "food",
     name: "Food",
     plural: "sacks of Food",
-    advances: [dataAdvances.agriculture, dataAdvances.falconry, dataAdvances.kennelry, dataAdvances.horseHerding, dataAdvances.cattleHerding, dataAdvances.goatHerding, dataAdvances.caribouHerding],
+    advances: [dataAdvances.agriculture, dataAdvances.falconry, dataAdvances.kennelry, dataAdvances.horseHerding, dataAdvances.cattleHerding, dataAdvances.goatHerding, dataAdvances.caribouHerding,dataAdvances.sheepHerding,dataAdvances.llamaHerding,dataAdvances.camelHerding],
   },
   
   beer: {
@@ -356,11 +380,20 @@ var dataResources = {
   	plural: "Bronze Tools",
   },
   
+  camel: {
+    key: "camel",
+    name: "Camel",
+    plural: "head of Camel",
+    advances: [dataAdvances.camelHerding],
+    foodValue: 4,
+  },
+  
   caribou: {
     key: "caribou",
     name: "Caribou",
     plural: "head of Caribou",
     advances: [dataAdvances.caribouHerding],
+    foodValue: 3,
   },
   
   cattle: {
@@ -368,6 +401,7 @@ var dataResources = {
     name: "Cattle",
     plural: "head of Cattle",
     advances: [dataAdvances.cattleHerding],
+    foodValue: 4,
   },
   
   chicken: {
@@ -375,6 +409,7 @@ var dataResources = {
     name: "Chicken",
     plural: "head of chicken",
     advances: [dataAdvances.chickenHusbandry],
+    foodValue: 0.1,
   },
   
   clay: {
@@ -416,6 +451,7 @@ var dataResources = {
   	name: "Dog",
   	plural: "Dogs",
   	advances: [dataAdvances.kennelry],
+  	foodValue: 0.2,
   },
   
   dye: {
@@ -437,6 +473,7 @@ var dataResources = {
     name: "Goat",
     plural: "head of goats",
     advances: [dataAdvances.goatHerding],
+    foodValue: 1,
   },
   
   falcon: {
@@ -486,6 +523,7 @@ var dataResources = {
     name: "Horse",
     plural: "head of Horses",
     advances: [dataAdvances.horseHerding],
+    foodValue: 3,
   },
   
   ironIngot: {
@@ -557,6 +595,14 @@ var dataResources = {
     advances: [dataAdvances.leatherworking,dataAdvances.dyes],
   },
   
+  llama: {
+    key: "llama",
+    name: "Llama",
+    plural: "head of Llama",
+    advances: [dataAdvances.llamaHerding],
+    foodValue: 2,
+  },
+  
   lumber: {
     key: "lumber",
     name: "Lumber",
@@ -612,6 +658,13 @@ var dataResources = {
     plural: "piles of Saltpeter",
   },
   
+  sheep: {
+    key: "sheep",
+    name: "Sheep",
+    plural: "head of Sheep",
+    foodValue: 2,
+  },
+  
   shortbow: {
     key: "shortbow",
     name: "Shortbow",
@@ -644,6 +697,7 @@ var dataResources = {
     name: "Steed",
     plural: "noble Steeds",
     advances: [dataAdvances.horseHerding],
+    foodValue: 3,
   },
   
   steelBar: {
@@ -695,7 +749,8 @@ var dataResources = {
     key: "swine",
     name: "Swine",
     plural: "head of Swine",
-    advances: [dataAdvances.swineHerding],
+    advances: [dataAdvances.swineHusbandry],
+    foodValue: 2,
   },
   
   tile: {
@@ -714,7 +769,7 @@ var dataResources = {
     key: "water",
     name: "Water",
     plural: "jugs of Water",
-    advances: [dataAdvances.agriculture, dataAdvances.brewing, dataAdvances.dyes],
+    advances: [dataAdvances.agriculture, dataAdvances.brewing, dataAdvances.dyes,dataAdvances.camelHerding],
   },
   
   wolf: {
@@ -722,6 +777,7 @@ var dataResources = {
   	name: "Wolf",
   	plural: "wolves",
   	advances: [dataAdvances.kennelry],
+  	foodValue: 0.2,
   },
   
 };
@@ -1032,6 +1088,37 @@ var dataSites = {
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.bronzeworking,
     buildCost: {simpleTool:50,stone:50},
+    baseCapacity: 20,
+  },
+    
+  camelHerd: {
+    name: 'Camel Herd',
+    job: 'camel herder',
+    tools: [],
+    bonusTools: [],
+    materials: [],
+    biomes: ['desert','savanna'],
+    primaryProduce: dataResources.food,
+    primaryEfficiency: 0.9,
+    secondaryProduce: [dataResources.camel,dataResources.manure,dataResources.fiber],
+    secondaryEfficiency: 0.1,
+    upgradeAdvance: dataAdvances.camelHerding,
+    buildCost: {water:20},
+    baseCapacity: 20,
+  },
+  
+  camelFarm: {
+    name: 'Camel Farm',
+    job: 'camel farmer',
+    tools: [],
+    bonusTools: [],
+    materials: [dataResources.simpleTool],
+    primaryProduce: dataResources.camel,
+    primaryEfficiency: 1.1,
+    secondaryProduce: [dataResources.food,dataResources.manure,dataResources.fiber],
+    secondaryEfficiency: 1.5,
+    upgradeAdvance: dataAdvances.camelHerding,
+    buildCost: {water:20,lumber:50},
     baseCapacity: 20,
   },
   
@@ -1399,6 +1486,37 @@ var dataSites = {
     buildCost: {lumber:50},
     baseCapacity: 20,
   },
+    
+  llamaHerd: {
+    name: 'Llama Herd',
+    job: 'llama herder',
+    tools: [],
+    bonusTools: [],
+    materials: [],
+    biomes: ['shrubland','savanna'],
+    primaryProduce: dataResources.food,
+    primaryEfficiency: 0.9,
+    secondaryProduce: [dataResources.llama,dataResources.manure,dataResources.fiber],
+    secondaryEfficiency: 0.1,
+    upgradeAdvance: dataAdvances.llamaHerding,
+    buildCost: {fur:20},
+    baseCapacity: 20,
+  },
+  
+  llamaFarm: {
+    name: 'Llama Farm',
+    job: 'llama farmer',
+    tools: [],
+    bonusTools: [],
+    materials: [dataResources.simpleTool],
+    primaryProduce: dataResources.llama,
+    primaryEfficiency: 1.1,
+    secondaryProduce: [dataResources.food,dataResources.manure,dataResources.fiber],
+    secondaryEfficiency: 1.5,
+    upgradeAdvance: dataAdvances.llamaHerding,
+    buildCost: {fur:20,lumber:50},
+    baseCapacity: 20,
+  },
   
   loom: {
     name: 'Loom',
@@ -1502,6 +1620,37 @@ var dataSites = {
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.textiles,
     buildCost: {lumber:100},
+    baseCapacity: 20,
+  },
+    
+  sheepHerd: {
+    name: 'Sheep Herd',
+    job: 'shepherd',
+    tools: [],
+    bonusTools: [],
+    materials: [],
+    biomes: ['desert','savanna'],
+    primaryProduce: dataResources.food,
+    primaryEfficiency: 0.9,
+    secondaryProduce: [dataResources.sheep,dataResources.manure,dataResources.fiber],
+    secondaryEfficiency: 0.1,
+    upgradeAdvance: dataAdvances.sheepHerding,
+    buildCost: {fur:20},
+    baseCapacity: 20,
+  },
+  
+  sheepfold: {
+    name: 'Sheepfold',
+    job: 'shepherd',
+    tools: [],
+    bonusTools: [],
+    materials: [dataResources.simpleTool],
+    primaryProduce: dataResources.sheep,
+    primaryEfficiency: 1.1,
+    secondaryProduce: [dataResources.food,dataResources.manure,dataResources.fiber],
+    secondaryEfficiency: 1.5,
+    upgradeAdvance: dataAdvances.sheepHerding,
+    buildCost: {water:20,lumber:50},
     baseCapacity: 20,
   },
   
@@ -1866,7 +2015,9 @@ var dataForceAdvances = {
 };
 
 var dataMoveItems = {
-  horse: 0.5,
+	camel: 0.5,
+	horse: 0.5,
+	llama: 0.5,
 };
 
 var dataMoveAdvances = {

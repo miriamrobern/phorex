@@ -1272,6 +1272,50 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
     }
     
+    // Butchering
+    
+    if (this.inv.food < this.population) {
+    	var onTheHoof = [];
+    	var butchered = {};
+    	for (i in this.inv) {
+    		if (dataResources[i].foodValue > 0) {
+    			for (l=0; l < this.inv[i]; l++) {
+    				onTheHoof.push(i);
+    			}
+    			butchered[i] = 0;
+    		}
+    	}
+    	onTheHoof.sort(function() {return Math.random() > 0.5; });
+    	console.log(onTheHoof);
+    	for (i=0; i<onTheHoof.length;i++) {
+    		this.inv[onTheHoof[i]]--;
+    		this.inv.food += dataResources[onTheHoof[i]].foodValue;
+    		butchered[onTheHoof[i]]++;
+    		if (this.inv.food >= this.population) {
+    			i = onTheHoof.length + 1;
+    		}
+    	}
+    	var butcherStock = Object.keys(butchered);
+    	if (butcherStock.length > 0) {
+    		var butcheredList = [];
+    		var butcheredText = '';
+    		for (i in butchered) {
+    			if (butchered[i] > 0) {
+    				butcheredList.push(i);
+    			}
+    		}
+    		for (i in butcheredList) {
+    			butcheredText += butchered[butcheredList[i]] + " " + dataResources[butcheredList[i]].plural ;
+    			if (i < butcheredList.length - 2) {
+    				butcheredText += ", ";
+    			} else if (i == butcheredList.length - 2) {
+    				butcheredText += ", and ";
+    			}
+    		}
+    		notification += "  " + this.name + " butchers " + butcheredText + "." ;
+    	}
+    }
+    
     // Actually eating
     
     if (this.population > this.inv.food) {

@@ -35,7 +35,7 @@ var testMap = {
     worldMap.coords[1][2].altitude = 2;
     worldMap.coords[2][1].altitude = 2;
     worldMap.coords[2][2].altitude = 2;
-    worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.crudeFields,capacity:100},{site:dataSites.well,capacity:100}];
+    worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.outcropping,capacity:100},{site:dataSites.well,capacity:100}];
     worldMap.coords[1][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.grazingLand,capacity:100},{site:dataSites.river,capacity:100}];
     worldMap.coords[1][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.outcropping,capacity:100},{site:dataSites.peatBog,capacity:100}];
     worldMap.coords[2][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.clayDeposit,capacity:100},{site:dataSites.pond,capacity:100}];
@@ -74,8 +74,13 @@ var testMap = {
     pops.push(northeast);
     pops.push(northwest);
     
-    southeast.advances = {failures:80, stonecraft:2, caribouHerding:1, };
+    southeast.advances = {failures:80, caribouHerding:2,swineHusbandry:2,cattleHerding:2,llamaHerding:2};
     southeast.inv.caribou = 10;
+    
+    southeast.inv = {food:0,cattle:100,chicken:100,llama:100,swine:100,dog:100,wolf:100};
+    northeast.inv = {food:0,cattle:100,chicken:100,llama:100,swine:100,dog:100,wolf:100};
+    southwest.inv = {food:0,cattle:100,chicken:100,llama:100,swine:100,dog:100,wolf:100};
+    northwest.inv = {food:0,cattle:100,chicken:100,llama:100,swine:100,dog:100,wolf:100};
 
     
     view.focusX = 2;
