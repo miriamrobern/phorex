@@ -122,7 +122,9 @@ var dataAdvances = {
     name: "Excavation",
     biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
     unlocks: [,	{type:'site', key:'well'},
-    			{type:'site', key:'openPitMine'}],
+    			{type:'site', key:'openPitMine'},
+    			{type:'site', key:'lateralMine'},
+    			{type:'site', key:'shaftMine'}],
   },
   
   falconry: {
@@ -299,7 +301,7 @@ var dataAdvances = {
   	key: "trade",
     name: "Trade",
     biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    unlocks: [,	{type:'trade', key:'tradeRoute'},
+    unlocks: [,	{type:'link', key:'overland'},
     			{type:'pile', key:'warehouse'},
     			{type:'pile', key:'market'}],
   },
@@ -326,10 +328,18 @@ var dataResources = {
     advances: [dataAdvances.agriculture, dataAdvances.falconry, dataAdvances.kennelry, dataAdvances.horseHerding, dataAdvances.cattleHerding, dataAdvances.goatHerding, dataAdvances.caribouHerding,dataAdvances.sheepHerding,dataAdvances.llamaHerding,dataAdvances.camelHerding],
   },
   
+  aluminumOre: {
+    key: "aluminumOre",
+    name: "Aluminum Ore",
+    plural: "piles of Aluminum Ore",
+    desc: "A useful thing. (Placeholder Text)",
+  },
+  
   beer: {
     key: "beer",
     name: "Beer",
     plural: "skins of Beer",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.brewing],
   },
   
@@ -337,6 +347,7 @@ var dataResources = {
     key: "bronzeArmor",
     name: "Bronze Armor",
     plural: "suit of Bronze Armor",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.bronzeworking],
   },
   
@@ -344,6 +355,7 @@ var dataResources = {
     key: "bone",
     name: "Bone",
     plural: "piles of Bones",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.kennelry],
   },
   
@@ -351,6 +363,7 @@ var dataResources = {
     key: "brick",
     name: "Brick",
     plural: "stack of Bricks",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.construction],
   },
   
@@ -358,12 +371,14 @@ var dataResources = {
     key: "bronze",
     name: "Bronze",
     plural: "ingots of Bronze",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   bronzeArmor:  {
     key: "bronzeArmor",
     name: "Bronze Armor",
     plural: "Bronze Armor",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
@@ -371,6 +386,7 @@ var dataResources = {
     key: "bronzeArms",
     name: "Bronze Arms",
     plural: "Bronze Arms",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
@@ -378,13 +394,15 @@ var dataResources = {
   	key: "bronzeTool",
   	name: "Bronze Tool",
   	plural: "Bronze Tools",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   camel: {
     key: "camel",
     name: "Camel",
     plural: "head of Camel",
-    advances: [dataAdvances.camelHerding],
+    desc: "A useful thing. (Placeholder Text)",
+    advances: [dataAdvances.camelHerding,dataAdvances.trade],
     foodValue: 4,
   },
   
@@ -392,7 +410,8 @@ var dataResources = {
     key: "caribou",
     name: "Caribou",
     plural: "head of Caribou",
-    advances: [dataAdvances.caribouHerding],
+    desc: "A useful thing. (Placeholder Text)",
+    advances: [dataAdvances.caribouHerding,dataAdvances.trade],
     foodValue: 3,
   },
   
@@ -400,6 +419,7 @@ var dataResources = {
     key: "cattle",
     name: "Cattle",
     plural: "head of Cattle",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.cattleHerding],
     foodValue: 4,
   },
@@ -408,6 +428,7 @@ var dataResources = {
     key: "chicken",
     name: "Chicken",
     plural: "head of chicken",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.chickenHusbandry],
     foodValue: 0.1,
   },
@@ -416,6 +437,7 @@ var dataResources = {
     key: "clay",
     name: "Clay",
     plural: "lumps of Clay",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.ceramics, dataAdvances.preservation, dataAdvances.construction],
   },
   
@@ -423,6 +445,7 @@ var dataResources = {
     key: "cloth",
     name: "Cloth",
     plural: "bolts of Cloth",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.textiles],
   },
   
@@ -430,19 +453,29 @@ var dataResources = {
     key: "clothing",
     name: "Clothing",
     plural: "outfits of Clothing",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.textiles],
+  },
+  
+  coal: {
+    key: "coal",
+    name: "Coal",
+    plural: "piles of Coal",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   copperOre: {
     key: "copperOre",
     name: "Copper Ore",
     plural: "piles of Copper Ore",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   cowrie: {
     key: "cowrie",
     name: "Cowrie Shell",
     plural: "Cowries",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.finance,dataAdvances.trade],
   },
   
@@ -450,7 +483,8 @@ var dataResources = {
   	key: "dog",
   	name: "Dog",
   	plural: "Dogs",
-  	advances: [dataAdvances.kennelry],
+    desc: "A useful thing. (Placeholder Text)",
+  	advances: [dataAdvances.kennelry,dataAdvances.trade],
   	foodValue: 0.2,
   },
   
@@ -458,6 +492,7 @@ var dataResources = {
     key: "dye",
     name: "Dye",
     plural: "bucket of Dye",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.dyes,dataAdvances.textiles],
   },
   
@@ -465,6 +500,7 @@ var dataResources = {
     key: "dyedCloth",
     name: "Dyed Cloth",
     plural: "bolts of Dyed Cloth",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.textiles],
   },
   
@@ -472,6 +508,7 @@ var dataResources = {
     key: "goat",
     name: "Goat",
     plural: "head of goats",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.goatHerding],
     foodValue: 1,
   },
@@ -480,6 +517,7 @@ var dataResources = {
   	key: "falcon",
   	name: "Falcon",
   	plural: "Falcons",
+    desc: "A useful thing. (Placeholder Text)",
   	advances: [dataAdvances.falconry],
   },
   
@@ -487,6 +525,7 @@ var dataResources = {
     key: "fiber",
     name: "Fiber",
     plural: "cords of Fiber",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.textiles],
   },
   
@@ -494,6 +533,7 @@ var dataResources = {
     key: "fineClothing",
     name: "Fine Clothing",
     plural: "outfits of Fine Clothing",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.textiles],
   },
   
@@ -501,6 +541,7 @@ var dataResources = {
     key: "fuel",
     name: "Fuel",
     plural: "stacks of Fuel",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.pyrotechnics],
   },
   
@@ -508,6 +549,7 @@ var dataResources = {
     key: "fur",
     name: "Fur",
     plural: "Furs",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.leatherworking, dataAdvances.dyes],
   },
   
@@ -515,6 +557,7 @@ var dataResources = {
     key: "glaze",
     name: "Glaze",
     plural: "pots of Glaze",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.pottery, dataAdvances.dyes],
   },
   
@@ -522,7 +565,8 @@ var dataResources = {
     key: "horse",
     name: "Horse",
     plural: "head of Horses",
-    advances: [dataAdvances.horseHerding],
+    desc: "A useful thing. (Placeholder Text)",
+    advances: [dataAdvances.horseHerding,dataAdvances.trade],
     foodValue: 3,
   },
   
@@ -530,6 +574,7 @@ var dataResources = {
     key: "ironIngot",
     name: "Iron Ingot",
     plural: "Iron Ingots",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.ironworking],
   },
   
@@ -537,6 +582,7 @@ var dataResources = {
     key: "ironOre",
     name: "Iron Ore",
     plural: "piles of Iron Ore",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.ironworking],
   },
   
@@ -544,6 +590,7 @@ var dataResources = {
     key: "ironArmor",
     name: "Iron Armor",
     plural: "Iron Armor",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
@@ -551,6 +598,7 @@ var dataResources = {
     key: "ironArms",
     name: "Iron Arms",
     plural: "Iron Arms",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
@@ -558,12 +606,14 @@ var dataResources = {
   	key: "ironTool",
   	name: "Iron Tool",
   	plural: "Iron Tools",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   leadOre: {
     key: "leadOre",
     name: "Lead Ore",
     plural: "piles of Lead Ore",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.smelting,dataAdvances.ironworking,dataAdvances.bronzeworking],
   },
   
@@ -571,6 +621,7 @@ var dataResources = {
   	key: "leadPellet",
   	name: "Lead Pellet",
   	plural: "Pouch of Lead Pellets",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.slings],
   },
   
@@ -578,6 +629,7 @@ var dataResources = {
   	key: "leather",
   	name: "Leather",
   	plural: "bale of Leathers",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.leatherworking,dataAdvances.dyes],
   },
   
@@ -585,6 +637,7 @@ var dataResources = {
   	key: "leatherFinery",
   	name: "Leather Finery",
   	plural: "suit of Leather Finery",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.leatherworking,dataAdvances.dyes],
   },
   
@@ -592,6 +645,7 @@ var dataResources = {
   	key: "leatherJerkin",
   	name: "Leather Jerkin",
   	plural: "leather Jerkins",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.leatherworking,dataAdvances.dyes],
   },
   
@@ -599,7 +653,8 @@ var dataResources = {
     key: "llama",
     name: "Llama",
     plural: "head of Llama",
-    advances: [dataAdvances.llamaHerding],
+    desc: "A useful thing. (Placeholder Text)",
+    advances: [dataAdvances.llamaHerding,dataAdvances.trade],
     foodValue: 2,
   },
   
@@ -607,6 +662,7 @@ var dataResources = {
     key: "lumber",
     name: "Lumber",
     plural: "stacks of Lumber",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.forestry, dataAdvances.pyrotechnics, dataAdvances.carpentry, dataAdvances.aquatecture],
   },
   
@@ -627,7 +683,8 @@ var dataResources = {
   mysteryOre: {
   	key: "mysteryOre",
   	name: "Mystery Ore!",
-  	plural: "glowing clumps of Mysterious Ore",
+  	plural: "Ore",
+    desc: "A useful thing. (Placeholder Text)",
   	advances: [],
   },
   
@@ -635,6 +692,7 @@ var dataResources = {
   	key: "net",
   	name: "Fishing Net",
   	plural: "Fishing Nets",
+    desc: "A useful thing. (Placeholder Text)",
   	advances: [dataAdvances.fishing],
   },
   
@@ -642,6 +700,7 @@ var dataResources = {
   	key: "pottery",
   	name: "Pottery",
   	plural: "pots",
+    desc: "A useful thing. (Placeholder Text)",
   	advances: [dataAdvances.preservation],
   },
   
@@ -649,19 +708,24 @@ var dataResources = {
   	key: "rope",
   	name: "Rope",
   	plural: "cords of Rope",
-  	advances: [dataAdvances.fishing,dataAdvances.slings],
+    desc: "A useful thing. (Placeholder Text)",
+  	advances: [dataAdvances.fishing,dataAdvances.slings,dataAdvances.trade],
   },
   
   saltpeter: {
     key: "saltpeter",
     name: "Saltpeter",
     plural: "piles of Saltpeter",
+    desc: "A useful thing. (Placeholder Text)",
+    advances: [dataAdvances.blackPowder],
   },
   
   sheep: {
     key: "sheep",
     name: "Sheep",
     plural: "head of Sheep",
+    desc: "A useful thing. (Placeholder Text)",
+  	advances: [dataAdvances.agriculture,dataAdvances.leatherworking,dataAdvances.textiles],
     foodValue: 2,
   },
   
@@ -669,6 +733,7 @@ var dataResources = {
     key: "shortbow",
     name: "Shortbow",
     plural: "short Bows",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
@@ -676,6 +741,7 @@ var dataResources = {
     key: "simpleTool",
     name: "Simple Tool",
     plural: "Simple Tools",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.excavation],
   },
   
@@ -683,6 +749,7 @@ var dataResources = {
   	key: "slag",
   	name: "Slag",
   	plural: "lumps of Slag",
+    desc: "A useful thing. (Placeholder Text)",
   	advances: [dataAdvances.ironworking,dataAdvances.ceramics],
   },
   
@@ -690,13 +757,15 @@ var dataResources = {
   	key: "sling",
   	name: "Sling",
   	plural: "Slings",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   steed: {
     key: "steed",
     name: "Steed",
     plural: "noble Steeds",
-    advances: [dataAdvances.horseHerding],
+    desc: "A useful thing. (Placeholder Text)",
+    advances: [dataAdvances.horseHerding,dataAdvances.trade],
     foodValue: 3,
   },
   
@@ -704,12 +773,14 @@ var dataResources = {
     key: "steelBar",
     name: "Steel Bar",
     plural: "stacks of Steel Bars",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   steelArmor:  {
     key: "steelArmor",
     name: "Steel Armor",
     plural: "Steel Armor",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
@@ -717,6 +788,7 @@ var dataResources = {
     key: "steelArms",
     name: "Steel Arms",
     plural: "Steel Arms",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.discipline,dataAdvances.tactics],
   },
   
@@ -724,12 +796,14 @@ var dataResources = {
   	key: "steelTool",
   	name: "Steel Tool",
   	plural: "Steel Tools",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   stone: {
     key: "stone",
     name: "Stone",
     plural: "piles of Stones",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.excavation, dataAdvances.stonecraft, dataAdvances.construction],
   },
   
@@ -737,18 +811,21 @@ var dataResources = {
     key: "stoneArms",
     name: "Stone Axe",
     plural: "Stone Axes",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   sulfur: {
     key: "sulfur",
     name: "Sulfur",
     plural: "piles of Sulfur",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   swine: {
     key: "swine",
     name: "Swine",
     plural: "head of Swine",
+    desc: "A useful thing. (Placeholder Text)",
     advances: [dataAdvances.swineHusbandry],
     foodValue: 2,
   },
@@ -757,25 +834,29 @@ var dataResources = {
     key: "tile",
     name: "Tile",
     plural: "stacks of tile",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   tinOre: {
     key: "tinOre",
     name: "Tin Ore",
     plural: "piles of Tin Ore",
+    desc: "A useful thing. (Placeholder Text)",
   },
   
   water: {
     key: "water",
     name: "Water",
     plural: "jugs of Water",
-    advances: [dataAdvances.agriculture, dataAdvances.brewing, dataAdvances.dyes,dataAdvances.camelHerding],
+    desc: "A useful thing. (Placeholder Text)",
+    advances: [dataAdvances.agriculture, dataAdvances.brewing, dataAdvances.dyes,dataAdvances.camelHerding,dataAdvances.trade],
   },
   
   wolf: {
   	key: "wolf",
   	name: "Wolf",
   	plural: "wolves",
+    desc: "A useful thing. (Placeholder Text)",
   	advances: [dataAdvances.kennelry],
   	foodValue: 0.2,
   },
@@ -1149,7 +1230,7 @@ var dataSites = {
     primaryEfficiency: 1.1,
     secondaryProduce: [dataResources.food,dataResources.manure],
     secondaryEfficiency: 1.5,
-    upgradeAdvance: dataAdvances.caribouHerding,
+    upgradeAdvance: dataAdvances.cattleHerding,
     buildCost: {fur:20, lumber: 50},
     baseCapacity: 20,
   },
@@ -1473,6 +1554,22 @@ var dataSites = {
     baseCapacity: 20,
   },
   
+  lateralMine: {
+    name: 'Lateral Mine',
+    job: 'miner',
+    tools: [dataResources.bronzeTool],
+    bonusTools: [],
+    materials: [],
+    primaryProduce: dataResources.mysteryOre,
+    primaryEfficiency: 0.4,
+    miningDepth: 1,
+    secondaryProduce: [dataResources.simpleTool,dataResources.stone],
+    secondaryEfficiency: 0.4,
+    upgradeAdvance: dataAdvances.excavation,
+    buildCost: {simpleTool:100},
+    baseCapacity: 20,
+  },
+  
   leatherworks: {
     name: 'Leatherworks',
     job: 'leatherworker',
@@ -1587,6 +1684,7 @@ var dataSites = {
     materials: [],
     primaryProduce: dataResources.mysteryOre,
     primaryEfficiency: 0.2,
+    miningDepth: 0,
     secondaryProduce: [dataResources.simpleTool,dataResources.stone],
     secondaryEfficiency: 0.3,
     upgradeAdvance: dataAdvances.excavation,
@@ -1621,6 +1719,22 @@ var dataSites = {
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.textiles,
     buildCost: {lumber:100},
+    baseCapacity: 20,
+  },
+  
+  shaftMine: {
+    name: 'Shaft Mine',
+    job: 'miner',
+    tools: [dataResources.ironTool],
+    bonusTools: [],
+    materials: [],
+    primaryProduce: dataResources.mysteryOre,
+    primaryEfficiency: 0.6,
+    miningDepth: 2,
+    secondaryProduce: [dataResources.stone],
+    secondaryEfficiency: 0.5,
+    upgradeAdvance: dataAdvances.excavation,
+    buildCost: {simpleTool:100},
     baseCapacity: 20,
   },
     
@@ -1887,39 +2001,188 @@ var dataSites = {
 
 var dataBuildings = {
 
+	agora: {
+		name: "Agora",
+		desc: "This structure allows populations to share with their neighbors once more per season.",
+		buildCost: {stone:20,tile:50,simpleTool:30},
+    	baseCapacity: 25,
+	},
+
+	beerGarten: {
+		name: "Beer Garten",
+		desc: "This structure allows populations to share with their neighbors once more per season.",
+		buildCost: {lumber:20,beer:50,simpleTool:20},
+    	baseCapacity: 25,
+	},
+
+	customsHouse: {
+		name: "Customs House",
+		desc: "This building allows elite populations to restrict imports and exports to this tile.",
+		buildCost: {lumber:20,beer:50,simpleTool:20},
+    	baseCapacity: 25,
+	},
+
+	geographicalSociety: {
+		name: "Geographical Society",
+		desc: "Populations which undertake scouting missions share their knowledge with all populations with access to this building.",
+		buildCost: {stone:50,simpleTool:10},
+    	baseCapacity: 25,
+	},
+
 	greatHall: {
 		name: "Great Hall",
-		desc: "Man I have no idea what this does.",
-		buildCost: {stone:50,simpleTool:10}
+		desc: "This structure doubles the prestige bonus for a successful raid.",
+		buildCost: {stone:50,simpleTool:10},
+    	baseCapacity: 25,
+	},
+	
+	laboratory: {
+		name: "Laboratory",
+		desc: "The laboratory increases the chance of a population learning an advance.",
+		buildCost: {lumber:20,stone:20,simpleTool:20},
+    	baseCapacity: 25,
 	},
 
 	library: {
 		name: "Library",
 		desc: "The library shares negative data produced here with all residents.",
-		buildCost: {stone:50,simpleTool:10}
+		buildCost: {stone:50,simpleTool:10},
+    	baseCapacity: 25,
+    },
+
+	moat: {
+		name: "Moat",
+		desc: "A circular ditch filled with water, affording protection from outsiders.",
+		defense: 1.1,
+		buildCost: {simpleTools:50,water:200},
+    	baseCapacity: 25,
 	},
 
 	palisade: {
 		name: "Palisade",
 		desc: "A ring of wooden poles lashed together, affording protection from outsiders.",
 		defense: 1.2,
-		buildCost: {stone:100,lumber:20}
+		buildCost: {stone:100,lumber:20},
+    	baseCapacity: 25,
+	},
+
+	stoneWall: {
+		name: "Stone Wall",
+		desc: "A bulwark of stone, affording protection from outsiders.",
+		defense: 1.5,
+		buildCost: {stone:100,lumber:20},
+    	baseCapacity: 25,
+	},
+	
+	university: {
+		name: "University",
+		desc: "When a population learns a new advance, there is a small chance they will immediately share the advance with another population.",
+		buildCost: {lumber:50,stone:50,tile:20,bronzeTools:20},
+    	baseCapacity: 25,
+	},
+	
+	watchtowers: {
+		name: "Watchtowers",
+		desc: "Sentries warn of impending attack, allowing raid targets in this tile to be defended by their neighbors.",
+		buildCost: {lumber:100,simpleTool:20},
+    	baseCapacity: 25,
 	},
 
 };
 
 var dataShrines = {
 
+	cathedral: {
+		name: "Cathedral",
+		desc: "The audience for rites performed here extends to neighboring tiles.",
+		buildCost: {stone:500,lumber:100,tile:50,simpleTool:50}
+	},
+
+	cloister: {
+		name: "Cloister",
+		desc: "Rites performed by populations of celibates are more effective.",
+		bonus: {type:"demographic",lock:"fertility",key:"Celibate"},
+		buildCost: {stone:50,lumber:10,simpleTool:20}
+	},
+
+	forecourtMen: {
+		name: "Men's Forecourt",
+		desc: "Rites performed by populations of women are more effective.",
+		bonus: {type:"demographic",lock:"gender",key:"Women"},
+		buildCost: {stone:50,lumber:10,tile:20,simpleTool:20}
+	},
+
+	forecourtWomen: {
+		name: "Women's Forecourt",
+		desc: "Rites performed by populations of men are more effective.",
+		bonus: {type:"demographic",lock:"gender",key:"Men"},
+		buildCost: {stone:50,lumber:10,tile:20,simpleTool:20}
+	},
+
+	kiva: {
+		name: "Kiva",
+		desc: "TK.",
+		buildCost: {stone:20,simpleTool:50}
+	},
+
 	menhir: {
 		name: "Menhir",
-		desc: "Rites which require stone have doubled efficacy.",
+		desc: "Rites which require Stone are more effective.",
+		bonus: {type:"item",lock:"item",key:"stone"},
 		buildCost: {stone:50,simpleTool:10}
+	},
+
+	reliquary: {
+		name: "Reliquary",
+		desc: "Rites which require Bone are more effective.",
+		bonus: {type:"item",lock:"item",key:"bone"},
+		buildCost: {bone:30,stone:10,simpleTool:10}
+	},
+
+	ritualLoom: {
+		name: "Ritual Loom",
+		desc: "Rites which require Fiber are more effective.",
+		bonus: {type:"item",lock:"item",key:"fiber"},
+		buildCost: {lumber:20,fiber:10,simpleTool:20}
+	},
+
+	sacredGrove: {
+		name: "Sacred Grove",
+		desc: "Rites which require Lumber are more effective.",
+		bonus: {type:"item",lock:"item",key:"lumber"},
+		buildCost: {lumber:20, stone:20,simpleTool:20}
+	},
+
+	sacredSpring: {
+		name: "Sacred Spring",
+		desc: "Rites which require Water are more effective.",
+		bonus: {type:"item",lock:"item",key:"water"},
+		buildCost: {stone:30,simpleTool:20}
+	},
+
+	seminary: {
+		name: "Seminary",
+		desc: "New rites developed through synthesis are immediately shared with one additional population.",
+		buildCost: {stone:50,lumber:20,tile:20,simpleTool:20}
+	},
+
+	shrine: {
+		name: "Shrine",
+		desc: "Rites performed on this tile lose power only half the time.",
+		bonus: {type:"icon",lock:"icon",key:"icon"},
+		buildCost: {stone:30,simpleTool:20}
+	},
+
+	shul: {
+		name: "Shul",
+		desc: "Rites performed on this tile lose power only half the time, and are more likely to be learned by other populations.",
+		buildCost: {lumber:100,stone:100,simpleTool:30}
 	},
 
 	temple: {
 		name: "Temple",
-		desc: "This does something.",
-		buildCost: {stone:100,lumber:20}
+		desc: "When rites are synthesized here, they gain bonus power.",
+		buildCost: {stone:50,lumber:20,tile:20,simpleTool:20}
 	},
 
 };
@@ -1929,13 +2192,15 @@ var dataLinks = {
 	overland: {
 		name: "Overland Route",
 		legal: true,
-		restrictedResources: [dataResources.food,dataResources.water,dataResources.dog],
+		reflexive: true,
+		restrictedResources: [dataResources.food,dataResources.water],
 	},
 
 	overlandSmuggling: {
 		name: "Overland Smuggling Route",
 		legal: false,
-		restrictedResources: [dataResources.food,dataResources.water,dataResources.dog],
+		reflexive: false,
+		restrictedResources: [dataResources.food,dataResources.water],
 	},
 };
 
@@ -2072,7 +2337,9 @@ var dataForceAdvances = {
 var dataMoveItems = {
 	camel: 0.5,
 	horse: 0.5,
-	llama: 0.5,
+	llama: 0.4,
+	caribou: 0.3,
+	dog: 0.2,
 };
 
 var dataMoveAdvances = {

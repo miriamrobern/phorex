@@ -12,6 +12,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   this.history = [];
   this.loyalty = {player:0};
   this.guided = 0;
+  this.familiarTiles = [worldMap.coords[x][y]];
   
   if (prestige === undefined) {
     this.prestige = 20 + Math.floor(Math.random()*60);
@@ -359,6 +360,11 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     this.population = Math.ceil(this.population*(1-split));
     this.prestige /= 0.8;
     
+    newPop.familiarTiles = [];
+    for (i in this.familiarTiles) {
+    	newPop.familiarTiles.push(this.familiarTiles[i]);
+    }
+    
     pops.push(newPop);
     worldMap.coords[this.x][this.y].units.push(newPop);
     
@@ -544,6 +550,15 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	this.notify(notification);
 // 	this.guided = 1;
   	};
+  
+  this.link = function(destination,type) {
+  	worldMap.coords[this.x][this.y].links.push({destination:destination,type:type});
+  	if (type.reflexive === true) {
+  		destination.links.push({destination:worldMap.coords[this.x][this.y],type:type});
+  	}
+  	notification = this.name + " establishes a trade route to " + destination.name + "(" + destination.x + "," + destination.y + ").";
+  	this.notify(notification);
+  };
   	
   	
   
@@ -699,31 +714,27 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	
   	
   	
-  this.scout = function(x,y) {
+  this.scout = function(destination) {
   	var old = {x:0,y:0};
-  	var observations = 0;
   	old.x = this.x;
   	old.y = this.y
-  	this.x = x;
-  	this.y = y;
+  	this.x = destination.x;
+  	this.y = destination.y;
 	
 	if (this.loyalty.player > 0) {
 		var withinSight = this.withinSight();
 		for (t in withinSight) {
 			if (worldMap.coords[withinSight[t].x][withinSight[t].y].fog === 0) {
 				worldMap.coords[withinSight[t].x][withinSight[t].y].fog = 1;
-				observations++;
 			}
 		}
-	} else {
-		observations = 10; // This is a terrible and cludgy fix
 	}
+	this.familiarTiles.push(destination);
 	
 	this.x = old.x;
 	this.y = old.y;
-	this.advances.failures += Math.ceil(observations/5);
 	
-	notification = this.name + " mounts a scouting expedition to " + worldMap.coords[x][y].name + " (" +x+ "," +y+ ") and comes home with tall tales. ("+observations+" observations)";
+	notification = this.name + " mounts a scouting expedition to " + destination.name + " (" +destination.x+ "," +destination.y+ ") and comes home with tall tales.";
   	this.notify(notification);
 // 	this.guided = 1;
   	};
@@ -747,6 +758,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 	var spoilsPop;
   	var spoilsPileNum = 0;
   	var spoilsPopNum = 0;
+  	
+  	this.familiarTiles.push(worldMap.coords[x][y]);
   	
 //   	for (i in targetTile.stocks) {
 //   		pileLoot += targetTile.stocks[i] ;
@@ -918,6 +931,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 	this.y = y;
 	this.prestige = Math.floor((this.prestige + 50)/2);
 	this.job = worldMap.coords[this.x][this.y].sites[0];
+	this.familiarTiles.push(worldMap.coords[x][y]);
 	targetTile.units.push(this);
 	notification = this.name + " migrates to " + worldMap.coords[x][y].name + " (" +x+ "," +y+ ")."
 	
@@ -1224,7 +1238,11 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     var secondaryQuantity = Math.floor(Math.min(matsCheck,toolsCheck) * job.secondaryEfficiency * this.population * toolBonus * 100) / 100;
     
     if (primary === dataResources.mysteryOre) {
-    	primary = dataResources.leadOre;
+    	if (worldMap.coords[this.x][this.y].veins.length >= job.miningDepth) {
+    		primary = worldMap.coords[this.x][this.y].veins[job.miningDepth][Math.floor(Math.random()*3)];
+    	} else {
+    		primary = dataResources.aluminumOre;
+    	}
     }
       
     notification += this.name + " works as " + job.job + "s," + materialCost + " producing " + primaryQuantity + " " + primary.plural + " and " + secondaryQuantity + " " + secondary.plural + ".  " + breakage;
@@ -1378,6 +1396,67 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       }
     }
     
+    // Update local valueTable (if necessary)
+    if (worldMap.coords[this.x][this.y].valueTableTime !== gameClock.turn) {
+    	worldMap.coords[this.x][this.y].valueTableTime = gameClock.turn;
+		worldMap.coords[this.x][this.y].valueTable = {};
+	
+		// Compile list of local resources
+		for (var u in worldMap.coords[this.x][this.y].units) {
+			for (var i in worldMap.coords[this.x][this.y].units[u].inv) {
+				if (worldMap.coords[this.x][this.y].units[u].inv[i] > 0) {
+					if (worldMap.coords[this.x][this.y].valueTable[i] > 0) {
+						worldMap.coords[this.x][this.y].valueTable[i] += worldMap.coords[this.x][this.y].units[u].inv[i];
+					} else {
+						worldMap.coords[this.x][this.y].valueTable[i] = worldMap.coords[this.x][this.y].units[u].inv[i];
+					}
+				}
+			}
+		}
+		for (var i in availableStocks) {
+			if (worldMap.coords[this.x][this.y].valueTable[availableStocks[i]] > 0) {
+				worldMap.coords[this.x][this.y].valueTable[availableStocks[i]] += worldMap.coords[this.x][this.y].stocks[availableStocks[i]];
+			} else {
+				worldMap.coords[this.x][this.y].valueTable[availableStocks[i]] = worldMap.coords[this.x][this.y].stocks[availableStocks[i]];
+			}
+		}
+		
+		// Calculate local scarcity to get base resource value
+		var totalStocks = 0;
+		for (i in worldMap.coords[this.x][this.y].valueTable) {
+			totalStocks += worldMap.coords[this.x][this.y].valueTable[i];
+		}
+		for (i in worldMap.coords[this.x][this.y].valueTable) {
+			worldMap.coords[this.x][this.y].valueTable[i] = totalStocks / worldMap.coords[this.x][this.y].valueTable[i];
+		}
+	
+		// Now double the value of resources used as tools, bonusTools, and mats in work sites here
+		for (i in worldMap.coords[this.x][this.y].sites) {
+			var resources = [];
+			resources = resources.concat(worldMap.coords[this.x][this.y].sites[i].site.tools);
+			resources = resources.concat(worldMap.coords[this.x][this.y].sites[i].site.bonusTools);
+			resources = resources.concat(worldMap.coords[this.x][this.y].sites[i].site.materials);
+			for (n in resources) {
+				if (worldMap.coords[this.x][this.y].valueTable[resources[n].key] > 0) {
+					worldMap.coords[this.x][this.y].valueTable[resources[n].key] *= 2;
+				}
+			}
+		}
+		
+		// Apply resources' Force and Move modifiers to their values
+		for (i in worldMap.coords[this.x][this.y].valueTable) {
+			if (dataForceItems[i] > 0) {
+				worldMap.coords[this.x][this.y].valueTable[i] *= 1 + dataForceItems[i]/4;
+			}
+		}
+		for (i in worldMap.coords[this.x][this.y].valueTable) {
+			if (dataMoveItems[i] > 0) {
+				worldMap.coords[this.x][this.y].valueTable[i] *= 1 + dataMoveItems[i];
+			}
+		}
+		
+	}
+    
     var claim = availableStocks[Math.floor(Math.random()*availableStocks.length)];
     
     if (claim === undefined) {
@@ -1438,7 +1517,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       var sharingRites = this.rites;
       var sharingAdvances = this.advances;
       
-      if (Math.random() < 0.7 && this.values.piety !== undefined && sharingRites.length > 0) { // share a rite
+      if (Math.random() > 0.8 && this.values.piety !== undefined && sharingRites.length > 0) { // share a rite
         var rite = sharingRites[Math.floor(Math.random()*sharingRites.length)];
         if (targetPop.rites.indexOf(rite) === -1) {
           targetPop.rites.push(rite);
@@ -1492,6 +1571,11 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       impulse[i] = this.values[i] - Math.random()*100;
     }
     
+    var withinRange = this.withinRange();
+    if (this.values.inquiry > 0 && this.familiarTiles.length < withinRange.length) {
+    	impulse.scout = this.values.inquiry - 20 - Math.random()*100;
+    }
+    
     if (this.prestige < 1 || this.health < 50 || this.inv.food + worldMap.coords[this.x][this.y].stocks.food < this.population/10) {
       // will eventually need to check for freedom of movement
       impulse.migration =  this.prestige * -1 * (50/this.health) ;
@@ -1515,12 +1599,24 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     
     // OMG the Build Impulse
-    var canBuild = [];
+    var canBuild = []; // Work Sites
+    var canRaise = []; // Communal Buildings
+    var canErect = []; // Places of Worship
+    var canLink = []; // Trade Links
     for (i in this.advances) {
     	if (i !== 'failures') {
 			for (l = 1 ; l < this.advances[i]+1 ; l++) {
 				if (dataAdvances[i].unlocks[l].type === "site") {
 					canBuild.push(dataAdvances[i].unlocks[l].key);
+				}
+				if (dataAdvances[i].unlocks[l].type === "building") {
+					canRaise.push(dataAdvances[i].unlocks[l].key);
+				}
+				if (dataAdvances[i].unlocks[l].type === "shrine") {
+					canErect.push(dataAdvances[i].unlocks[l].key);
+				}
+				if (dataAdvances[i].unlocks[l].type === "link") {
+					canLink.push(dataAdvances[i].unlocks[l].key);
 				}
 			}
 		}
@@ -1547,6 +1643,48 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     if (letsBuild.length > 0) {
     	impulse.build = 75;
     	letsBuild = letsBuild[Math.floor(Math.random()*letsBuild.length)];
+    }
+    
+    // Are there tiles this unit is familiar with to which there are no trade links?
+    if (canLink.length > 0) {
+    	existingRoutes = [];
+    	noRoutes = [];
+    	for (i in worldMap.coords[this.x][this.y].links) {
+    		existingRoutes.push(worldMap.coords[this.x][this.y].links[i].destination);
+    	}
+    	for (i in this.familiarTiles) {
+    		if (existingRoutes.indexOf(this.familiarTiles[i]) === -1 && this.familiarTiles[i] !== worldMap.coords[this.x][this.y]) {
+    			noRoutes.push(this.familiarTiles[i]);	
+    		}
+    	}
+    }
+    
+    // Setting Link-related impulses
+    if (canLink.length > 0 && noRoutes.length === 0 && this.familiarTiles.length < withinRange.length/2) {	
+    	if (impulse.scout > 0) {
+    		impulse.scout += 20;
+    	} else {
+    		impulse.scout = 20;
+    	}
+    } else if (canLink.length > 0) {
+    	// find a good tile to link to and set an impulse for it (based on value?)
+    	var goodRoutes = [];
+    	localValueTable = worldMap.coords[this.x][this.y].valueTable;
+    	for (i in noRoutes) {
+    		for (r in worldMap.coords[noRoutes[i].x][noRoutes[i].y].valueTable) {
+    			if (localValueTable[r] > 0) {
+    				if (worldMap.coords[noRoutes[i].x][noRoutes[i].y].valueTable[r] < localValueTable[r] * 0.8) {
+    					goodRoutes.push({destination:worldMap.coords[noRoutes[i].x][noRoutes[i].y], r:r, v:localValueTable[r] / worldMap.coords[noRoutes[i].x][noRoutes[i].y].valueTable[r]});
+    				}
+    			} else {
+    				goodRoutes.push({destination:worldMap.coords[noRoutes[i].x][noRoutes[i].y], r:r, v:25});
+    			}
+    		}
+    	}
+    	if (goodRoutes.length > 0) {
+    		var letsLink = goodRoutes[Math.floor(Math.random()*goodRoutes.length)];
+    		impulse.link = 2 * letsLink.v;
+    	}
     }
     
     // End Build Impulse
@@ -1576,6 +1714,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       this.impulse.authority(this);
     } else if (impulse === "inquiry") {
       this.impulse.inquiry(this);
+    } else if (impulse === "scout") {
+      this.impulse.scout(this);
     } else if (impulse === "aggression") {
       this.impulse.aggression(this);
     } else if (impulse === "migration") {
@@ -1588,6 +1728,8 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       this.impulse.prestige(this);
     } else if (impulse === "build") {
       this.build(letsBuild);
+    } else if (impulse === "link") {
+      this.link(letsLink.destination,dataLinks.overland);
     } 
     
   };
@@ -2044,6 +2186,26 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     
     
+  };
+  
+  this.impulse.scout = function(pop) {
+  	var tiles = pop.withinRange();
+  	var scoutDestinations = [];
+  	var scoutDestination;
+  	
+  	for (i in tiles) {
+  		if (pop.familiarTiles.indexOf(tiles[i].tile) === -1) {
+  			scoutDestinations.push(tiles[i].tile);
+  		}	
+  	}
+  	scoutDestination = scoutDestinations[Math.floor(Math.random()*scoutDestinations.length)];
+  	console.log("tiles: ",tiles," familiar: ",pop.familiarTiles," scoutDestinations: ",scoutDestinations);
+  	if (scoutDestination === undefined) {
+  		console.log("No destination for scouting...");
+  		pop.impulse.inquiry(pop);
+  	} else {
+  		pop.scout(scoutDestination);
+  	}
   };
   
   this.impulse.aggression = function(pop) {

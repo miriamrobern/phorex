@@ -32,8 +32,12 @@ var worldMap = {
           downhill: '',
           biome: '',
           sites: [],
+          links: [],
           units: [],
           stocks: {},
+          veins: [],
+          x:x,
+          y:y,
           name: "("+x+","+y+")",
           
         });
@@ -104,6 +108,12 @@ var worldMap = {
       landmarks[i+1].y = landmarks[i].y+offset_y;
       landmarks[i+1].r = landmarks[i].r * (Math.random()/4 + 0.75);
       
+      // Veins of metals for extraction
+      var metals = [];
+      for (l=0;l<3;l++) {
+		metals.push([dataResources.leadOre,dataResources.leadOre,dataResources.copperOre,dataResources.copperOre,dataResources.copperOre,dataResources.tinOre,dataResources.tinOre,dataResources.ironOre,dataResources.ironOre,dataResources.aluminumOre,dataResources.aluminumOre,dataResources.coal,dataResources.coal][Math.floor(Math.random()*13)]);
+	  }
+      
       for (x = Math.max(0,Math.floor(landmarks[i].x-landmarks[i].r)); x < Math.min(worldMap.prefs.size_x,landmarks[i].x+landmarks[i].r); x++ ){
         for (y = Math.max(0,Math.floor(landmarks[i].y-landmarks[i].r)); y < Math.min(worldMap.prefs.size_y,landmarks[i].y+landmarks[i].r); y++ ) {
           
@@ -119,6 +129,9 @@ var worldMap = {
             worldMap.coords[x][y].altitude = worldMap.coords[x][y].altitude + landmarks[i+1].z;
           } else if (dist_offset < landmarks[i+1].r && Math.random() < 0.8) {
             worldMap.coords[x][y].altitude = worldMap.coords[x][y].altitude + landmarks[i+1].z;
+          }
+          if (dist < landmarks[i].r * 0.9 && dist_offset > landmarks[i+1].r * 0.9) {
+          	worldMap.coords[x][y].veins.push(metals);
           }
         }
       }

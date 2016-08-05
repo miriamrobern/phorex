@@ -4,7 +4,7 @@ var popsByPrestige = [];
 
 var gameClock = {
   turn: 0,
-  guidancePoints: 100,
+  guidancePoints: 300,
   
   year: function() {
     return 1+Math.floor(gameClock.turn/4);

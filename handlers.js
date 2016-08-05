@@ -441,7 +441,7 @@ var handlers = {
     
     gameClock.turn++;
     
-    gameClock.guidancePoints = 100;
+    gameClock.guidancePoints = 300;
     
     view.refreshUi();
   },

@@ -512,7 +512,20 @@ var view = {
       resource = Math.floor(worldMap.coords[view.focusX][view.focusY].stocks[i]);
       
       if (resource > 0) {
-        resourceText = resource + " " + dataResources[i].name;
+      	resourceText = "<a class='popup'>";
+        resourceText = resourceText + resource + " " + dataResources[i].name;
+        resourceText = resourceText + "<span><strong>"+dataResources[i].name+"</strong>";
+        resourceText = resourceText + "<p>"+dataResources[i].desc+"</p>";
+        if (dataForceItems[i] > 0) {
+        	resourceText = resourceText + "<p>Provides a Force Multiplier of "+dataForceItems[i]+".</p>";
+        }
+        if (dataMoveItems[i] > 0) {
+        	resourceText = resourceText + "<p>Provides a Move Multiplier of "+dataMoveItems[i]+".</p>";
+        }
+        if (dataResources[i].foodValue > 0) {
+        	resourceText = resourceText + "<p>Can be slaughtered to provide "+dataResources[i].foodValue+" Food.</p>";
+        }
+        resourceText = resourceText + "<p>Local Value: "+Math.floor(100*worldMap.coords[view.focusX][view.focusY].valueTable[i])/100+"</p></span></a>";
         var stocksLi = document.createElement('li');
         stocksLi.innerHTML = resourceText;
         uiStocksList.appendChild(stocksLi);        
@@ -565,15 +578,36 @@ var view = {
   	var uiBuildingsList = document.getElementById('uiBuildingsList');
   	var buildingPopUp;
   	var buildingsList = '';
+  	var remainingCapacity = 0;
+  	var permittedPops = [];
   	
   	for (i in worldMap.coords[view.focusX][view.focusY].buildings) {
   		building = worldMap.coords[view.focusX][view.focusY].buildings[i];
   		buildingPopUp = "<strong>" + building.building.name + "</strong><br /><p>" + building.building.desc + "</p>";
   		if (building.building.defense > 0) {
-  			buildingPopUp += "<p>It has a defense value of "+building.building.defense+" and will protect "+building.capacity+" souls.</p>";
-  		} else {
-  			buildingPopUp += "<p>Its capacity is "+building.capacity+"</p>";
+  			buildingPopUp += "<p>It has a defense value of "+building.building.defense+".</p>";
   		}
+  		buildingPopUp += "<p>This building is large enough to service "+building.capacity+" souls: ";
+  		remainingCapacity = building.capacity;
+  		permittedPops = [];
+  		for (i = 0; i < worldMap.coords[view.focusX][view.focusY].units.length; i++) {
+  			if (remainingCapacity > worldMap.coords[view.focusX][view.focusY].units[i].population) {
+  				permittedPops.push(worldMap.coords[view.focusX][view.focusY].units[i]);
+  				remainingCapacity -= worldMap.coords[view.focusX][view.focusY].units[i].population;
+  			}
+  		}
+  		for (i in permittedPops) {
+  			buildingPopUp += "the " + permittedPops[i].name;
+  			if (i < permittedPops.length - 2) {
+  				buildingPopUp += ", ";
+  			} else if (i == permittedPops.length - 2) {
+  				buildingPopUp += ", and ";
+  			}
+  		}
+  		if (permittedPops.length === 0) {
+  			buildingPopUp += "it is not large enough for any population to use effectively.";
+  		}
+  		buildingPopUp += "</p>";
   		buildingsList += "<li><a class='popup'>"+building.building.name+"<span>"+buildingPopUp+"</span></a></li>";
   	}
   	
@@ -632,7 +666,7 @@ var view = {
   			restrictedResources = link.type.restrictedResources;
   		}
   		
-  		linkPopUp = "<strong>"+link.type.name+"</strong><br /><p>Destination: " +worldMap.coords[link.x][link.y].name + " ("+link.x+","+link.y+")</p>";
+  		linkPopUp = "<strong>"+link.type.name+"</strong><br /><p>Destination: " +link.destination.name + " ("+link.destination.x+","+link.destination.y+")</p>";
   		if (restrictedResources.length > 0) {
   			var restrictedResourcesText = '';
   			for (n in restrictedResources) {
@@ -645,7 +679,7 @@ var view = {
   			}
   			linkPopUp += "<p>This trade link cannot transport "+restrictedResourcesText+"</p>";
   		}
-  		linksList += "<li><a class='popup'>"+link.type.name+" to "+worldMap.coords[link.x][link.y].name+"<span>"+linkPopUp+"</span></li>";
+  		linksList += "<li><a class='popup'>"+link.type.name+" to "+link.destination.name+"<span>"+linkPopUp+"</span></li>";
   	}
   	
   	uiLinksList.innerHTML = linksList;
