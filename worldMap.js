@@ -53,6 +53,153 @@ var worldMap = {
     
   },
   
+  setupVoronoi: function(n) {
+  	worldMap.stage = 1;
+  	worldMap.prefs.legend = "altitude";
+  	
+  	var plates = [];
+  	var distances = [];
+  	var continents = [];
+  	
+  	for (i = 0; i < 4; i++) {
+  		continents.push({x:Math.floor((worldMap.prefs.size_x/4)+Math.random()*worldMap.prefs.size_x/2),y:Math.floor((worldMap.prefs.size_y/4)+Math.random()*worldMap.prefs.size_y/2)});
+  	}
+  	
+  	for (i = 0; i < n; i++) {
+  		plates.push({x:Math.floor(Math.random()*worldMap.prefs.size_x),y:Math.floor(Math.random()*worldMap.prefs.size_y),z:-1,deltaX:Math.floor(Math.random()*3)-1,deltaY:Math.floor(Math.random()*3)-1,deltaZ:0});
+  		for (c in continents) {
+  			if (Math.pow(Math.pow(plates[i].x-continents[c].x,2)+Math.pow(plates[i].y-continents[c].y,2),.5) < worldMap.prefs.size_x/4) {
+  				plates[i].z = 1;
+  			}
+  		}
+  		if (i < n / 2 ) {
+  			plates[i].z = 1;
+  		}
+  	}
+  	
+  	for (x = 0; x < worldMap.prefs.size_x; x++) {
+  		for (y = 0; y < worldMap.prefs.size_y; y++) {
+  			distances = [];
+  			closest = Infinity;
+  			for (i = 0; i < plates.length; i++) {
+  				distances.push(Math.pow((Math.pow(x-plates[i].x,2) + Math.pow(y-plates[i].y,2)),.5));
+  			}
+  			for (i in distances) {
+  				if (distances[i] < closest) {
+  					closest = distances[i];
+  					worldMap.coords[x][y].altitude = plates[i].z * (1+ Math.floor(Math.random()*1.5));
+  					worldMap.coords[x][y].plate = plates[i];
+  				}
+  			}
+  		}
+  	}
+  	
+  	for (x=1;x< worldMap.prefs.size_x-1;x++) {
+  		for (y=1;y<worldMap.prefs.size_y-1;y++) {
+  			if (worldMap.coords[x+1][y].plate !== worldMap.coords[x][y].plate) {
+  			
+  				if (worldMap.coords[x][y].plate.deltaX === worldMap.coords[x+1][y].plate.deltaX) {
+  					worldMap.coords[x][y].altitude += Math.floor(Math.random()*3)-1;
+  				} else if (worldMap.coords[x][y].plate.deltaX == 1 && worldMap.coords[x+1][y].plate.deltaX == -1) {
+  					if (worldMap.coords[x][y].plate.z >= worldMap.coords[x+1][y].plate.z) {
+  						worldMap.coords[x][y].altitude++;
+  						worldMap.coords[x-1][y].altitude += Math.floor(Math.random()*2);
+  						worldMap.coords[x][y].plate.deltaZ++;
+  					} else {
+//   						worldMap.coords[x][y].altitude--
+  						worldMap.coords[x][y].plate.deltaZ--;
+  					}
+  				} else {
+  					worldMap.coords[x][y].altitude--;
+  				}
+  				
+  			}
+  			if (worldMap.coords[x-1][y].plate !== worldMap.coords[x][y].plate) {
+  			
+  				if (worldMap.coords[x][y].plate.deltaX === worldMap.coords[x-1][y].plate.deltaX) {
+  					worldMap.coords[x][y].altitude += Math.floor(Math.random()*3)-1;
+  				} else if (worldMap.coords[x][y].plate.deltaX == -1 && worldMap.coords[x-1][y].plate.deltaX == 1) {
+  					if (worldMap.coords[x][y].plate.z >= worldMap.coords[x-1][y].plate.z) {
+  						worldMap.coords[x][y].altitude++;
+  						worldMap.coords[x+1][y].altitude += Math.floor(Math.random()*2);
+  						worldMap.coords[x][y].plate.deltaZ++;
+  					} else {
+//   						worldMap.coords[x][y].altitude--
+  						worldMap.coords[x][y].plate.deltaZ--;
+  					}
+  				} else {
+  					worldMap.coords[x][y].altitude--;
+  				}
+  				
+  			
+  			}
+  			if (worldMap.coords[x][y+1].plate !== worldMap.coords[x][y].plate) {
+  			
+  				if (worldMap.coords[x][y].plate.deltaY === worldMap.coords[x][y+1].plate.deltaY) {
+  					worldMap.coords[x][y].altitude += Math.floor(Math.random()*3)-1;
+  				} else if (worldMap.coords[x][y].plate.deltaY == 1 && worldMap.coords[x][y+1].plate.deltaY == -1) {
+  					if (worldMap.coords[x][y].plate.z >= worldMap.coords[x][y+1].plate.z) {
+  						worldMap.coords[x][y].altitude++;
+  						worldMap.coords[x][y-1].altitude += Math.floor(Math.random()*2);
+  						worldMap.coords[x][y].plate.deltaZ++;
+  					} else {
+//   						worldMap.coords[x][y].altitude--
+  						worldMap.coords[x][y].plate.deltaZ--;
+  					}
+  				} else {
+  					worldMap.coords[x][y].altitude--;
+  				}
+  				
+  			
+  			}
+  			if (worldMap.coords[x][y-1].plate !== worldMap.coords[x][y].plate) {
+  			
+  				if (worldMap.coords[x][y].plate.deltaY === worldMap.coords[x][y-1].plate.deltaY) {
+  					worldMap.coords[x][y].altitude += Math.floor(Math.random()*3)-1;
+  				} else if (worldMap.coords[x][y].plate.deltaY == -1 && worldMap.coords[x][y-1].plate.deltaY == 1) {
+  					if (worldMap.coords[x][y].plate.z >= worldMap.coords[x][y-1].plate.z) {
+  						worldMap.coords[x][y].altitude++;
+  						worldMap.coords[x][y-1].altitude += Math.floor(Math.random()*2);
+  						worldMap.coords[x][y].plate.deltaZ++;
+  					} else {
+//   						worldMap.coords[x][y].altitude--
+  						worldMap.coords[x][y].plate.deltaZ--;
+  					}
+  				} else {
+  					worldMap.coords[x][y].altitude--;
+  				}
+  				
+  			
+  			}
+  		}
+  	}
+  	
+  	for (x=0;x< worldMap.prefs.size_x;x++) {
+  		for (y=0;y<worldMap.prefs.size_y;y++) {
+  			worldMap.coords[x][y].altitude += worldMap.coords[x][y].plate.deltaZ / 5;
+  		}
+  	}
+  	
+  	for (x=1;x< worldMap.prefs.size_x-1;x++) {
+  		for (y=1;y<worldMap.prefs.size_y-1;y++) {
+  			if (worldMap.coords[x][y].altitude < worldMap.coords[x+1][y].altitude - 2) {
+  				worldMap.coords[x][y].altitude++;
+  			}
+  			if (worldMap.coords[x][y].altitude < worldMap.coords[x-1][y].altitude - 2) {
+  				worldMap.coords[x][y].altitude++;
+  			}
+  			if (worldMap.coords[x][y].altitude < worldMap.coords[x][y+1].altitude - 2) {
+  				worldMap.coords[x][y].altitude++;
+  			}
+  			if (worldMap.coords[x][y].altitude < worldMap.coords[x][y-1].altitude - 2) {
+  				worldMap.coords[x][y].altitude++;
+  			}
+  		}
+  	}
+    
+    view.displayWorldMap();
+  },
+  
   setupTectonics: function(plates) {
     
     worldMap.stage = 1;

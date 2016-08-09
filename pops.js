@@ -1475,6 +1475,41 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
 		notification = this.name + " claims " + claimNum + " " + dataResources[claim].plural + ".";
 
     }
+    
+    if (worldMap.coords[this.x][this.y].links.length > 0) {
+    	var tradeTarget = worldMap.coords[this.x][this.y].links[Math.floor(Math.random()*worldMap.coords[this.x][this.y].links.length)];
+    	var comparedValuesTable = {};
+    	for (i in this.inv) {
+    		if (tradeTarget.valueTable[i] > 0) {
+    			comparedValuesTable[i] = tradeTarget.valueTable[i] / worldMap.coords[this.x][this.y].valueTable ;
+    		} else {
+    			comparedValuesTable[i] = 1000;
+    		}
+    	}
+    	for (i in tradeTarget.stocks) {
+    		if (this.inv[i] > 0) {
+    			comparedValuesTable[i] = tradeTarget.valueTable[i] / worldMap.coords[this.x][this.y].valueTable ;
+    		} else {
+    			comparedValuesTable[i] = 0.001;
+    		}
+    	}
+    	
+    	// Get the resource with the highest Comparative Value (most valuable there / least valuable here)
+    	
+    	// Get the resource with the lowest Comparative Value (most valuable here / least valuable there)
+    	
+    	// Take a quarter of this's stock of highest Comparative Value
+    	
+    	// Multiply that number by its value in the tradeTarget, divide by value of the highest Comparative Value
+    	
+    	// Check if this number is higher than what's in tradeTarget's stockpile
+    	
+    	// If it is, work it backwards by clearing out the stockpile and converting that into how much you need to buy it all
+    	
+    	// Reduce and increase inventory and stocks
+    	
+    	notification += pop.name + "trades with " + tradeTarget.name + ", trading " + tradeAwayNum + " " + tradeAway + " for " + tradeForNum + " " + tradeFor + ".";
+    }
 
     this.notify(notification);
   

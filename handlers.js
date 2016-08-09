@@ -37,7 +37,9 @@ var handlers = {
   },
   
   setupTectonics: function() {
-    worldMap.setupTectonics(20);
+  	var size = document.getElementById('setupCoordsButton').valueAsNumber;
+  	var plates = document.getElementById('setupTectonicsButton').valueAsNumber;
+    worldMap.setupVoronoi(plates*Math.pow(size,2)/20);
     view.displaySetUpTable();
   },
   
