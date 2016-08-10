@@ -380,6 +380,50 @@ var worldMap = {
       }
       
     }
+
+    for (x = 1; x < worldMap.prefs.size_x-1; x++) {
+      for (y = 1; y < worldMap.prefs.size_y-1; y++) {
+      	var coastNorth = worldMap.coords[x][y-1].altitude < 0;
+      	var coastSouth = worldMap.coords[x][y+1].altitude < 0;
+      	var coastEast = worldMap.coords[x+1][y].altitude < 0;
+      	var coastWest = worldMap.coords[x-1][y].altitude < 0;
+      	if (worldMap.coords[x][y].altitude < 0) {
+      		worldMap.coords[x][y].coast = "";
+      	} else if (coastNorth && coastSouth && coastEast && coastWest) {
+      		worldMap.coords[x][y].coast = "nsew";
+      	} else if (coastNorth && coastSouth && coastEast) {
+      		worldMap.coords[x][y].coast = "nse";
+      	} else if (coastNorth && coastSouth && coastWest) {
+      		worldMap.coords[x][y].coast = "nsw";
+      	} else if (coastNorth && coastEast && coastWest) {
+      		worldMap.coords[x][y].coast = "new";
+      	} else if (coastSouth && coastEast && coastWest) {
+      		worldMap.coords[x][y].coast = "sew";
+      	} else if (coastNorth && coastSouth) {
+      		worldMap.coords[x][y].coast = "ns";
+      	} else if (coastEast && coastWest) {
+      		worldMap.coords[x][y].coast = "ew";
+      	} else if (coastNorth && coastEast) {
+      		worldMap.coords[x][y].coast = "ne";
+      	} else if (coastNorth && coastWest) {
+      		worldMap.coords[x][y].coast = "nw";
+      	} else if (coastSouth && coastEast) {
+      		worldMap.coords[x][y].coast = "se";
+      	} else if (coastSouth && coastWest) {
+      		worldMap.coords[x][y].coast = "sw";
+      	} else if (coastNorth) {
+      		worldMap.coords[x][y].coast = "n";
+      	} else if (coastSouth) {
+      		worldMap.coords[x][y].coast = "s";
+      	} else if (coastEast) {
+      		worldMap.coords[x][y].coast = "e";
+      	} else if (coastWest) {
+      		worldMap.coords[x][y].coast = "w";
+      	} else {
+      		worldMap.coords[x][y].coast = "";
+      	}
+      }
+    }
     
     view.displayWorldMap();
     

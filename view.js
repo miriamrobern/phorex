@@ -197,6 +197,11 @@ var view = {
           
         } 
         
+        //Coastlines
+        if (worldMap.coords[x][y].coast) {
+        	mapCell.setAttribute('background','assets/coast-'+worldMap.coords[x][y].coast+'.png');
+        }
+        
         
         //Tile Contents
         
@@ -232,6 +237,7 @@ var view = {
         	mapCell.classname = "";
         	mapCell.innerHTML = "?";
         	mapCell.setAttribute('bgcolor','#AAA');
+        	mapCell.setAttribute('background','');
         }
         
         return mapCell;

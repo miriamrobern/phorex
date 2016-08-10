@@ -35,6 +35,7 @@ h3.banner {
 td.mapTile {
   width: 500px;
   text-align: center;
+  background-size: 100% 100%;
 }
 
 td:hover.mapTile {
@@ -44,6 +45,7 @@ td:hover.mapTile {
 td.focusTile {
 	border: 1px solid red;
 	text-align: center;
+  	background-size: 100% 100%;
 }
 
 table {
