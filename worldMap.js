@@ -199,8 +199,6 @@ var worldMap = {
   			indices = [];
   			for (i=0;i<9;i++) {
   				indices[i] = Math.floor(Math.random()*metals.length);
-  				console.log(i,metals[i]);
-  				console.log(metals)
   			}
   			worldMap.coords[x][y].veins = [[metals[indices[0]],metals[indices[1]],metals[indices[2]]],[metals[indices[3]],metals[indices[4]],metals[indices[5]]],[metals[indices[6]],metals[indices[7]],metals[indices[8]]]];
   		}

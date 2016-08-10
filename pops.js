@@ -556,7 +556,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   	if (type.reflexive === true) {
   		destination.links.push({destination:worldMap.coords[this.x][this.y],type:type});
   	}
-  	notification = this.name + " establishes a trade route to " + destination.name + "(" + destination.x + "," + destination.y + ").";
+  	notification = this.name + " establishes a trade route to " + destination.name + " (" + destination.x + "," + destination.y + ").";
   	this.notify(notification);
   };
   	
@@ -1477,38 +1477,103 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     }
     
     if (worldMap.coords[this.x][this.y].links.length > 0) {
-    	var tradeTarget = worldMap.coords[this.x][this.y].links[Math.floor(Math.random()*worldMap.coords[this.x][this.y].links.length)];
+    	var tradeAway;
+    	var tradeAwayNum;
+    	var tradeFor;
+    	var tradeForNum;
+    	var tradeLink = worldMap.coords[this.x][this.y].links[Math.floor(Math.random()*worldMap.coords[this.x][this.y].links.length)];
+    	var tradeTarget = tradeLink.destination;
     	var comparedValuesTable = {};
+    	
+    	if (tradeTarget.units.length == 0) {
+    		tradeTarget.valueTable = {};
+    		notification += "  Their traders travel to " + tradeTarget.name + " ("+tradeTarget.x+","+tradeTarget.y+") and finds the place deserted!";
+    	}
+    	    	
     	for (i in this.inv) {
-    		if (tradeTarget.valueTable[i] > 0) {
-    			comparedValuesTable[i] = tradeTarget.valueTable[i] / worldMap.coords[this.x][this.y].valueTable ;
-    		} else {
+    		if (tradeTarget.valueTable[i] > 0 && this.inv[i] > 1) {
+    			comparedValuesTable[i] = tradeTarget.valueTable[i] / worldMap.coords[this.x][this.y].valueTable[i] ;
+    		} else if (this.inv[i] > 1) {
     			comparedValuesTable[i] = 1000;
     		}
     	}
     	for (i in tradeTarget.stocks) {
-    		if (this.inv[i] > 0) {
-    			comparedValuesTable[i] = tradeTarget.valueTable[i] / worldMap.coords[this.x][this.y].valueTable ;
-    		} else {
-    			comparedValuesTable[i] = 0.001;
+    		if (worldMap.coords[this.x][this.y].valueTable[i] > 0 && tradeTarget.stocks[i] > 1 && tradeTarget.valueTable[i] > 0) {
+    			comparedValuesTable[i] = tradeTarget.valueTable[i] / worldMap.coords[this.x][this.y].valueTable[i] ;
+    		} else if (tradeTarget.stocks[i] > 1 && tradeTarget.valueTable[i] > 0) {
+    			comparedValuesTable[i] = .001;
     		}
     	}
     	
     	// Get the resource with the highest Comparative Value (most valuable there / least valuable here)
+    	tradeAway = Object.keys(comparedValuesTable).reduce(function(a, b){ return comparedValuesTable[a] > comparedValuesTable[b] ? a : b });
     	
     	// Get the resource with the lowest Comparative Value (most valuable here / least valuable there)
+    	tradeFor = Object.keys(comparedValuesTable).reduce(function(a, b){ return comparedValuesTable[a] < comparedValuesTable[b] ? a : b });
     	
-    	// Take a quarter of this's stock of highest Comparative Value
+    	tradeAwayNum = Math.floor(this.inv[tradeAway] / 4);
     	
-    	// Multiply that number by its value in the tradeTarget, divide by value of the highest Comparative Value
+    	if (comparedValuesTable[tradeAway] === 1000 || comparedValuesTable[tradeFor] === .001) {
+    		tradeAwayNum = 1;
+    		tradeForNum = Math.floor(tradeTarget.stocks[tradeFor] / 3);
+    	} else {
+	    	tradeForNum = Math.floor(tradeAwayNum * comparedValuesTable[tradeAway] / comparedValuesTable[tradeFor]);
+	    	
+	    	// Make sure we're not trading for more than they've got
+			if (tradeForNum > tradeTarget.stocks[tradeFor]) {
+				tradeForNum = Math.floor(tradeTarget.stocks[tradeFor]);
+				tradeAwayNum = Math.floor(tradeForNum * comparedValuesTable[tradeFor] / comparedValuesTable[tradeAway]);
+			}
+	    }
     	
-    	// Check if this number is higher than what's in tradeTarget's stockpile
+    	if (tradeAwayNum > 0 && tradeForNum > 0 && tradeAway !== tradeFor) {
+    		// Reduce and increase inventory and stocks
+			this.inv[tradeAway] -= tradeAwayNum;
+			tradeTarget.stocks[tradeFor] -= tradeForNum;
+		
+			if (tradeTarget.stocks[tradeAway] > 0) {
+				tradeTarget.stocks[tradeAway] += tradeAwayNum;
+			} else {
+				tradeTarget.stocks[tradeAway] = tradeAwayNum;
+			}
+		
+			if (this.inv[tradeFor] > 0) {
+				this.inv[tradeFor] += tradeForNum;
+			} else {
+				this.inv[tradeFor] = tradeForNum;
+			}
+		
+			notification += "  Their traders travel to " + tradeTarget.name + ", trading " + tradeAwayNum + " " + dataResources[tradeAway].plural + " for " + tradeForNum + " " + dataResources[tradeFor].plural + ".";
+
+    	} else if (tradeTarget.units.length == 0) {
     	
-    	// If it is, work it backwards by clearing out the stockpile and converting that into how much you need to buy it all
-    	
-    	// Reduce and increase inventory and stocks
-    	
-    	notification += pop.name + "trades with " + tradeTarget.name + ", trading " + tradeAwayNum + " " + tradeAway + " for " + tradeForNum + " " + tradeFor + ".";
+    		tradeFor = [];
+    		
+    		for (i in tradeTarget.stocks) {
+    			if (tradeTarget.stocks[i] >= 1) {
+    				tradeFor.push(i);
+    			}
+    		}
+    		
+    		if (tradeFor.length > 0) {
+				tradeFor = tradeFor[Math.floor(Math.random()*tradeFor.length)];
+				tradeForNum = Math.floor(tradeTarget.stocks[tradeFor]);
+		
+				tradeTarget.stocks[tradeFor] = 0;
+		
+				if (this.inv[tradeFor] > 0) {
+					this.inv[tradeFor] += tradeForNum;
+				} else {
+					this.inv[tradeFor] = tradeForNum;
+				}
+				notification += " The traders help themselves to " + tradeForNum + " " + tradeFor + " from the abandoned village.";
+			} else {
+			
+				worldMap.coords[this.x][this.y].links.splice(worldMap.coords[this.x][this.y].links.indexOf(tradeLink),1);
+				
+				notification += " With no one remaining to trade with, the trade link falls into disuse.";
+			}
+    	}
     }
 
     this.notify(notification);
@@ -1611,7 +1676,12 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     	impulse.scout = this.values.inquiry - 20 - Math.random()*100;
     }
     
-    if (this.prestige < 1 || this.health < 50 || this.inv.food + worldMap.coords[this.x][this.y].stocks.food < this.population/10) {
+    if (this.prestige < 1 || this.health < 50 ) {
+      // will eventually need to check for freedom of movement
+      impulse.migration =  this.prestige * -1 * (50/this.health) ;
+    }
+    
+    if (this.job.site.primaryProduce !== dataResources.food && this.inv.food + worldMap.coords[this.x][this.y].stocks.food < this.population/10) {
       // will eventually need to check for freedom of movement
       impulse.migration =  this.prestige * -1 * (50/this.health) ;
     }
@@ -2234,7 +2304,6 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
   		}	
   	}
   	scoutDestination = scoutDestinations[Math.floor(Math.random()*scoutDestinations.length)];
-  	console.log("tiles: ",tiles," familiar: ",pop.familiarTiles," scoutDestinations: ",scoutDestinations);
   	if (scoutDestination === undefined) {
   		console.log("No destination for scouting...");
   		pop.impulse.inquiry(pop);
