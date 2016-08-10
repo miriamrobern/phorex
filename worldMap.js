@@ -60,23 +60,22 @@ var worldMap = {
   	var plates = [];
   	var distances = [];
   	var continents = [];
+  	var faultType;
   	
-  	for (i = 0; i < 4; i++) {
-  		continents.push({x:Math.floor((worldMap.prefs.size_x/4)+Math.random()*worldMap.prefs.size_x/2),y:Math.floor((worldMap.prefs.size_y/4)+Math.random()*worldMap.prefs.size_y/2)});
+  	// Voronoi Seeds  	
+  	for (i = 0; i < 10; i++) {
+  		continents.push({x:Math.floor((worldMap.prefs.size_x/8)+Math.random()*worldMap.prefs.size_x*0.75),y:Math.floor((worldMap.prefs.size_y/8)+Math.random()*worldMap.prefs.size_y*0.75)});
   	}
-  	
   	for (i = 0; i < n; i++) {
   		plates.push({x:Math.floor(Math.random()*worldMap.prefs.size_x),y:Math.floor(Math.random()*worldMap.prefs.size_y),z:-1,deltaX:Math.floor(Math.random()*3)-1,deltaY:Math.floor(Math.random()*3)-1,deltaZ:0});
   		for (c in continents) {
-  			if (Math.pow(Math.pow(plates[i].x-continents[c].x,2)+Math.pow(plates[i].y-continents[c].y,2),.5) < worldMap.prefs.size_x/4) {
+  			if (Math.pow(Math.pow(plates[i].x-continents[c].x,2)+Math.pow(plates[i].y-continents[c].y,2),.5) < worldMap.prefs.size_x/12) {
   				plates[i].z = 1;
   			}
   		}
-  		if (i < n / 2 ) {
-  			plates[i].z = 1;
-  		}
   	}
   	
+  	// Voronoi Cells
   	for (x = 0; x < worldMap.prefs.size_x; x++) {
   		for (y = 0; y < worldMap.prefs.size_y; y++) {
   			distances = [];
@@ -94,13 +93,17 @@ var worldMap = {
   		}
   	}
   	
+  	// Tectonic Boundaries and Interactions
   	for (x=1;x< worldMap.prefs.size_x-1;x++) {
   		for (y=1;y<worldMap.prefs.size_y-1;y++) {
+  			faultType = 'none';
   			if (worldMap.coords[x+1][y].plate !== worldMap.coords[x][y].plate) {
   			
   				if (worldMap.coords[x][y].plate.deltaX === worldMap.coords[x+1][y].plate.deltaX) {
+  					faultType = 'orogenic';
   					worldMap.coords[x][y].altitude += Math.floor(Math.random()*3)-1;
   				} else if (worldMap.coords[x][y].plate.deltaX == 1 && worldMap.coords[x+1][y].plate.deltaX == -1) {
+  					faultType = 'convergent';
   					if (worldMap.coords[x][y].plate.z >= worldMap.coords[x+1][y].plate.z) {
   						worldMap.coords[x][y].altitude++;
   						worldMap.coords[x-1][y].altitude += Math.floor(Math.random()*2);
@@ -110,6 +113,7 @@ var worldMap = {
   						worldMap.coords[x][y].plate.deltaZ--;
   					}
   				} else {
+  					faultType = 'divergent';
   					worldMap.coords[x][y].altitude--;
   				}
   				
@@ -117,8 +121,10 @@ var worldMap = {
   			if (worldMap.coords[x-1][y].plate !== worldMap.coords[x][y].plate) {
   			
   				if (worldMap.coords[x][y].plate.deltaX === worldMap.coords[x-1][y].plate.deltaX) {
+  					faultType = 'orogenic';
   					worldMap.coords[x][y].altitude += Math.floor(Math.random()*3)-1;
   				} else if (worldMap.coords[x][y].plate.deltaX == -1 && worldMap.coords[x-1][y].plate.deltaX == 1) {
+  					faultType = 'convergent';
   					if (worldMap.coords[x][y].plate.z >= worldMap.coords[x-1][y].plate.z) {
   						worldMap.coords[x][y].altitude++;
   						worldMap.coords[x+1][y].altitude += Math.floor(Math.random()*2);
@@ -128,6 +134,7 @@ var worldMap = {
   						worldMap.coords[x][y].plate.deltaZ--;
   					}
   				} else {
+  					faultType = 'divergent';
   					worldMap.coords[x][y].altitude--;
   				}
   				
@@ -136,8 +143,10 @@ var worldMap = {
   			if (worldMap.coords[x][y+1].plate !== worldMap.coords[x][y].plate) {
   			
   				if (worldMap.coords[x][y].plate.deltaY === worldMap.coords[x][y+1].plate.deltaY) {
+  					faultType = 'orogenic';
   					worldMap.coords[x][y].altitude += Math.floor(Math.random()*3)-1;
   				} else if (worldMap.coords[x][y].plate.deltaY == 1 && worldMap.coords[x][y+1].plate.deltaY == -1) {
+  					faultType = 'convergent';
   					if (worldMap.coords[x][y].plate.z >= worldMap.coords[x][y+1].plate.z) {
   						worldMap.coords[x][y].altitude++;
   						worldMap.coords[x][y-1].altitude += Math.floor(Math.random()*2);
@@ -147,6 +156,7 @@ var worldMap = {
   						worldMap.coords[x][y].plate.deltaZ--;
   					}
   				} else {
+  					faultType = 'divergent';
   					worldMap.coords[x][y].altitude--;
   				}
   				
@@ -155,8 +165,10 @@ var worldMap = {
   			if (worldMap.coords[x][y-1].plate !== worldMap.coords[x][y].plate) {
   			
   				if (worldMap.coords[x][y].plate.deltaY === worldMap.coords[x][y-1].plate.deltaY) {
+  					faultType = 'orogenic';
   					worldMap.coords[x][y].altitude += Math.floor(Math.random()*3)-1;
   				} else if (worldMap.coords[x][y].plate.deltaY == -1 && worldMap.coords[x][y-1].plate.deltaY == 1) {
+  					faultType = 'convergent';
   					if (worldMap.coords[x][y].plate.z >= worldMap.coords[x][y-1].plate.z) {
   						worldMap.coords[x][y].altitude++;
   						worldMap.coords[x][y-1].altitude += Math.floor(Math.random()*2);
@@ -166,33 +178,56 @@ var worldMap = {
   						worldMap.coords[x][y].plate.deltaZ--;
   					}
   				} else {
+  					faultType = 'divergent';
   					worldMap.coords[x][y].altitude--;
   				}
   				
   			
   			}
+  			
+  			var metals = [dataResources.aluminumOre];
+  			var commonMetals = [dataResources.leadOre,dataResources.leadOre,dataResources.copperOre,dataResources.copperOre,dataResources.copperOre,dataResources.ironOre,dataResources.ironOre,dataResources.aluminumOre,dataResources.aluminumOre];
+  			if (faultType = 'orogenic') {
+  				metals = metals.concat([dataResources.coal,dataResources.coal,dataResources.oil]);
+  				metals = metals.concat(commonMetals);
+  			} else if (faultType = 'convergent') {
+  				metals = metals.concat(commonMetals);
+  				metals = metals.concat([dataResources.tinOre,dataResources.tinOre]);
+  			} else if (faultType = 'divergent') {
+  				metals = metals.concat(commonMetals);
+  			}
+  			metals.sort(function(){return Math.floor(Math.random()*2)});
+  			metals.sort(function(){return Math.floor(Math.random()*2)});
+  			metals.sort(function(){return Math.floor(Math.random()*2)});
+  			worldMap.coords[x][y].veins = [[metals[0],metals[1],metals[2]],[metals[3],metals[4],metals[5]],[metals[6],metals[7],metals[8]]];
   		}
   	}
   	
+  	// Tectonic Plate Uplift 
   	for (x=0;x< worldMap.prefs.size_x;x++) {
   		for (y=0;y<worldMap.prefs.size_y;y++) {
   			worldMap.coords[x][y].altitude += worldMap.coords[x][y].plate.deltaZ / 5;
   		}
   	}
   	
+  	// Erosion
   	for (x=1;x< worldMap.prefs.size_x-1;x++) {
   		for (y=1;y<worldMap.prefs.size_y-1;y++) {
   			if (worldMap.coords[x][y].altitude < worldMap.coords[x+1][y].altitude - 2) {
   				worldMap.coords[x][y].altitude++;
+  				worldMap.coords[x][y].veins[0]=worldMap.coords[x+1][y].veins[0];
   			}
   			if (worldMap.coords[x][y].altitude < worldMap.coords[x-1][y].altitude - 2) {
   				worldMap.coords[x][y].altitude++;
+  				worldMap.coords[x][y].veins[0]=worldMap.coords[x-1][y].veins[0];
   			}
   			if (worldMap.coords[x][y].altitude < worldMap.coords[x][y+1].altitude - 2) {
   				worldMap.coords[x][y].altitude++;
+  				worldMap.coords[x][y].veins[0]=worldMap.coords[x][y+1].veins[0];
   			}
   			if (worldMap.coords[x][y].altitude < worldMap.coords[x][y-1].altitude - 2) {
   				worldMap.coords[x][y].altitude++;
+  				worldMap.coords[x][y].veins[0]=worldMap.coords[x][y-1].veins[0];
   			}
   		}
   	}
