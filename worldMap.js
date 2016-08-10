@@ -188,7 +188,7 @@ var worldMap = {
   			var metals = [dataResources.aluminumOre];
   			var commonMetals = [dataResources.leadOre,dataResources.leadOre,dataResources.copperOre,dataResources.copperOre,dataResources.copperOre,dataResources.ironOre,dataResources.ironOre,dataResources.aluminumOre,dataResources.aluminumOre];
   			if (faultType = 'orogenic') {
-  				metals = metals.concat([dataResources.coal,dataResources.coal,dataResources.oil]);
+  				metals = metals.concat([dataResources.coal,dataResources.coal,dataResources.crudeOil]);
   				metals = metals.concat(commonMetals);
   			} else if (faultType = 'convergent') {
   				metals = metals.concat(commonMetals);
@@ -196,10 +196,13 @@ var worldMap = {
   			} else if (faultType = 'divergent') {
   				metals = metals.concat(commonMetals);
   			}
-  			metals.sort(function(){return Math.floor(Math.random()*2)});
-  			metals.sort(function(){return Math.floor(Math.random()*2)});
-  			metals.sort(function(){return Math.floor(Math.random()*2)});
-  			worldMap.coords[x][y].veins = [[metals[0],metals[1],metals[2]],[metals[3],metals[4],metals[5]],[metals[6],metals[7],metals[8]]];
+  			indices = [];
+  			for (i=0;i<9;i++) {
+  				indices[i] = Math.floor(Math.random()*metals.length);
+  				console.log(i,metals[i]);
+  				console.log(metals)
+  			}
+  			worldMap.coords[x][y].veins = [[metals[indices[0]],metals[indices[1]],metals[indices[2]]],[metals[indices[3]],metals[indices[4]],metals[indices[5]]],[metals[indices[6]],metals[indices[7]],metals[indices[8]]]];
   		}
   	}
   	

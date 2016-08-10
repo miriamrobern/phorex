@@ -479,6 +479,14 @@ var dataResources = {
     advances: [dataAdvances.finance,dataAdvances.trade],
   },
   
+  crudeOil: {
+    key: "crudeOil",
+    name: "Crude Oil",
+    plural: "buckets of Crude Oil",
+    desc: "A useful thing. (Placeholder Text)",
+    advances: [],
+  },
+  
   dog: {
   	key: "dog",
   	name: "Dog",
