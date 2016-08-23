@@ -37,7 +37,7 @@ var testMap = {
     worldMap.coords[1][2].altitude = 2;
     worldMap.coords[2][1].altitude = 2;
     worldMap.coords[2][2].altitude = 2;
-    worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.outcropping,capacity:100},{site:dataSites.well,capacity:100}];
+    worldMap.coords[2][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.outcropping,capacity:100},{site:dataSites.well,capacity:100},{site:dataSites.openPitMine,capacity:100}];
     worldMap.coords[1][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.grazingLand,capacity:100},{site:dataSites.river,capacity:100}];
     worldMap.coords[1][2].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.outcropping,capacity:100},{site:dataSites.peatBog,capacity:100}];
     worldMap.coords[2][1].sites = [{site:dataSites.theWilds,capacity:100},{site:dataSites.clayDeposit,capacity:100},{site:dataSites.pond,capacity:100}];
@@ -73,6 +73,12 @@ var testMap = {
     worldMap.coords[2][2].links = [];
     worldMap.coords[2][1].links = [];
     
+    
+    worldMap.coords[1][1].veins = [[dataResources.copperOre,dataResources.leadOre,dataResources.aluminumOre],[dataResources.copperOre,dataResources.leadOre,dataResources.aluminumOre],[dataResources.copperOre,dataResources.leadOre,dataResources.aluminumOre]];
+    worldMap.coords[1][2].veins = [[dataResources.copperOre,dataResources.leadOre,dataResources.aluminumOre],[dataResources.copperOre,dataResources.leadOre,dataResources.aluminumOre],[dataResources.copperOre,dataResources.leadOre,dataResources.aluminumOre]];
+    worldMap.coords[2][2].veins = [[dataResources.tinOre,dataResources.leadOre,dataResources.aluminumOre],[dataResources.tinOre,dataResources.leadOre,dataResources.aluminumOre],[dataResources.tinOre,dataResources.leadOre,dataResources.aluminumOre]];
+    worldMap.coords[2][1].veins = [[dataResources.tinOre,dataResources.leadOre,dataResources.aluminumOre],[dataResources.tinOre,dataResources.leadOre,dataResources.aluminumOre],[dataResources.tinOre,dataResources.leadOre,dataResources.aluminumOre]];
+    
     worldMap.coords[2][2].buildings = [{building:dataBuildings.agora,capacity:250},{building:dataBuildings.beerGarten,capacity:350},{building:dataBuildings.customsHouse,capacity:150},{building:dataBuildings.greatHall,capacity:950},{building:dataBuildings.laboratory,capacity:50},{building:dataBuildings.library,capacity:250},{building:dataBuildings.moat,capacity:350},{building:dataBuildings.palisade,capacity:250},{building:dataBuildings.stoneWall,capacity:250},{building:dataBuildings.university,capacity:250},{building:dataBuildings.watchtowers,capacity:250}];
     worldMap.coords[2][2].shrines = [dataShrines.cathedral,dataShrines.cloister,dataShrines.forecourtMen,dataShrines.forecourtWomen,dataShrines.kiva,dataShrines.menhir,dataShrines.sacredGrove,dataShrines.sacredSpring,dataShrines.shrine,dataShrines.reliquary,dataShrines.ritualLoom,dataShrines.shul,dataShrines.seminary,dataShrines.temple];
 //     worldMap.coords[2][2].links = [{type:dataLinks.overland, destination:worldMap.coords[1][1]},{type:dataLinks.overlandSmuggling, destination:worldMap.coords[1][2]}];
@@ -91,10 +97,10 @@ var testMap = {
     pops.push(northeast);
     pops.push(northwest);
     
-    southeast.advances = {failures:80, trade:1};
-    southwest.advances = {failures:80, trade:1};
-    northwest.advances = {failures:80, trade:1};
-    northeast.advances = {failures:80, trade:1};
+    southeast.advances = {failures:80, excavation:3};
+    southwest.advances = {failures:80, excavation:3};
+    northwest.advances = {failures:80, excavation:3};
+    northeast.advances = {failures:80, excavation:3};
     
     southeast.inv = {food:0};
     northeast.inv = {food:0};

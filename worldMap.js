@@ -422,6 +422,9 @@ var worldMap = {
       	} else {
       		worldMap.coords[x][y].coast = "";
       	}
+      	if (worldMap.coords[x][y].coast) {
+      		worldMap.coords[x][y].coast += "-" + (Math.floor(Math.random()*4)+1);
+      	}
       }
     }
     
@@ -595,7 +598,7 @@ var worldMap = {
         } else if (worldMap.coords[x][y].temperature < 0) {
           worldMap.coords[x][y].biome = dataBiomes.tundra;
           site = dataBiomes.tundra.naturalSites[Math.floor(Math.random()*dataBiomes.tundra.naturalSites.length)] ;
-          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
+          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:50},{site:site,capacity:20+Math.floor(Math.random()*20)});
           here.nameGeography = ["Reach","Expanse","Ice Shelf"];
           here.nameAdjective = ["Frozen","Cold","Icy","Moaning","Windy","White","Grey","Granite"];
           
@@ -609,28 +612,28 @@ var worldMap = {
         } else if (worldMap.coords[x][y].precipitation < 50) {
           worldMap.coords[x][y].biome = dataBiomes.desert;
           site = dataBiomes.desert.naturalSites[Math.floor(Math.random()*dataBiomes.desert.naturalSites.length)] ;
-          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
+          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:60},{site:site,capacity:20+Math.floor(Math.random()*20)});
           here.nameGeography = ["Reach","Expanse","Desert","Plateau","Bluffs","Badlands","Wastes"];
           here.nameAdjective = ["Dry","Thirsty","Dusty","Sandy","Windswept","Bleached","Rocky","Pebble"];
           
         } else if (worldMap.coords[x][y].temperature > 20) {
           worldMap.coords[x][y].biome = dataBiomes.savanna;
           site = dataBiomes.savanna.naturalSites[Math.floor(Math.random()*dataBiomes.savanna.naturalSites.length)] ;
-          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
+          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:80},{site:site,capacity:20+Math.floor(Math.random()*20)});
           here.nameGeography = ["Plain","Veldt","Grassland"];
           here.nameAdjective = ["Dry","Sighing","Endless","Placid"];
           
         } else if (worldMap.coords[x][y].precipitation > 100) {
           worldMap.coords[x][y].biome = dataBiomes.forest;
           site = dataBiomes.forest.naturalSites[Math.floor(Math.random()*dataBiomes.forest.naturalSites.length)] ;
-          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
+          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:80},{site:site,capacity:20+Math.floor(Math.random()*20)});
           here.nameGeography = ["Green","Forest","Glade","Wood"];
           here.nameAdjective = ["Verdant","Dark","Haunted","Tangled","Deep"];
           
         } else {
           worldMap.coords[x][y].biome = dataBiomes.shrubland;
           site = dataBiomes.shrubland.naturalSites[Math.floor(Math.random()*dataBiomes.shrubland.naturalSites.length)] ;
-          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:100},{site:site,capacity:20+Math.floor(Math.random()*20)});
+          worldMap.coords[x][y].sites.push({site:dataSites.theWilds,capacity:70},{site:site,capacity:20+Math.floor(Math.random()*20)});
           here.nameGeography = ["Plain","Grassland","Prairie","Dale"];
           here.nameAdjective = ["Windy","Harsh","Rolling","Treacherous"];
           

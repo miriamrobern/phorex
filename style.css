@@ -1,10 +1,36 @@
 /* Styles go here */
 
+
+.googlefonts {
+	font-family: 'Caesar Dressing', cursive;
+	font-family: 'Uncial Antiqua', cursive;
+	
+	font-family: 'Lato', sans-serif;
+	font-family: 'Raleway', sans-serif;
+}
+
+
+
 body {
-  background: #eee;
-  font-family: sans-serif;
-  font-size: .7em;
-  cursor: default;
+	background: #eee;
+	font-family: 'Raleway', sans-serif;
+	font-size: .7em;
+	cursor: default;
+}
+
+h1 {
+	font-family: 'Caesar Dressing', cursive;
+	font-size: 2.5em;
+}
+
+h2 {
+	font-family: 'Caesar Dressing', cursive;
+	font-size: 2em;
+}
+
+h3 {
+	font-family: 'Caesar Dressing', cursive;
+	font-size: 1.5em;
 }
 
 .clear {
@@ -18,8 +44,8 @@ body {
 }
 
 h3.banner {
-  text-decoration: overline;
-  font-family: sans-serif;
+	text-decoration: overline;
+	font-family: 'Raleway', sans-serif;
 }
 
 #introduction {
@@ -198,7 +224,8 @@ ul {
 
 .uiGuidancePointsDisplay {
 	font-size: 2em;
-	font-weight: bold;
+	font-weight: 700;
+	font-family: 'Caesar Dressing', cursive;
 }
 
 .uiPanelAlignRight {
@@ -365,7 +392,7 @@ a.popup:hover span {
 
 .bigstat {
   font-size: 2em;
-  font-weight: bolder;
+  font-weight: 700;
   color: #333;
   margin: 10px 0px 10px 0px;
 }
@@ -385,8 +412,6 @@ a.popup:hover span {
 .popupdata {
   text-align: left;
 }
-
-
 
 
 

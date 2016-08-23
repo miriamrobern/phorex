@@ -27,7 +27,7 @@ var dataAdvances = {
   	key: "blackPowder",
   	name: "Black Powder",
   	biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-  	unlocks: [,	],
+  	unlocks: [,	{type:'unknown',key:''}],
   },
   
   brewing: {
@@ -50,8 +50,8 @@ var dataAdvances = {
   	key: "camelHerding",
     name: "Camel Herding",
     biomes: ["Desert","Savanna"],
-    unlocks: [,	{type:'site', key:"camelHerd"},
-    			{type:'site', key:"camelFarm"}],
+    livestock: "camel",
+    unlocks: [,	{type:'site', key:"camelFarm"}],
   },
   
   carpentry: {
@@ -66,16 +66,16 @@ var dataAdvances = {
   	key: "caribouHerding",
     name: "Caribou Herding",
     biomes: ["Tundra"],
-    unlocks: [,	{type:'site', key:"caribouHerd"},
-    			{type:'site', key:"caribouPaddock"}],
+    livestock: "caribou",
+    unlocks: [,	{type:'site', key:"caribouPaddock"}],
   },
   
   cattleHerding: {
   	key: "cattleHerding",
     name: "Cattle Herding",
     biomes: ['Savanna'],
-    unlocks: [,	{type:'site', key:"cattleHerd"},
-    			{type:'site', key:"cattleKraal"}],
+    livestock: "cattle",
+    unlocks: [,	{type:'site', key:"cattleKraal"}],
   },
   
   ceramics: {
@@ -92,6 +92,7 @@ var dataAdvances = {
   	key: "chickenHusbandry",
     name: "Chicken Husbandry",
     biomes: ["Rainforest"],
+    livestock: "chicken",
     unlocks: [,	{type:'site', key:'chickenCoop'}],
   },
   
@@ -131,6 +132,7 @@ var dataAdvances = {
   	key: "falconry",
     name: "Falconry",
     biomes: "Forest",
+    livestock: "falcon",
     unlocks: [,	{type:'site', key:'mews'}],
   },
   
@@ -167,8 +169,8 @@ var dataAdvances = {
   	key: "goatHerding",
     name: "Goat Herding",
     biomes: ['Shrubland','Savanna'],
-    unlocks: [,	{type:'site', key:'goatHerd'},
-    			{type:'site', key:'goatPen'}],
+    livestock: "goat",
+    unlocks: [,	{type:'site', key:'goatPen'}],
   },
   
   honor: {
@@ -182,8 +184,8 @@ var dataAdvances = {
   	key: "horseHerding",
     name: "Horse Herding",
     biomes: ['Savanna'],
-    unlocks: [,	{type:'site', key:'horseHerd'},
-    			{type:'site', key:'horseCorral'},
+    livestock: "horse",
+    unlocks: [,	{type:'site', key:'horseCorral'},
     			{type:'site', key:'stable'}],
   },
   
@@ -201,8 +203,8 @@ var dataAdvances = {
   	key: "kennelry",
     name: "Kennelry",
     biomes: ['Tundra','Desert','Savanna','Shrubland','Forest','Rainforest','Ocean'],
-    unlocks: [,	{type:'site', key:'wolfDen'},
-    			{type:'site', key:'kennel'}],
+    livestock: "wolf",
+    unlocks: [,	{type:'site', key:'kennel'}],
   },
   
   leatherworking: {
@@ -218,8 +220,8 @@ var dataAdvances = {
   	key: "llamaHerding",
     name: "Llama Herding",
     biomes: ["Shrubland","Savanna"],
-    unlocks: [,	{type:'site', key:"llamaHerd"},
-    			{type:'site', key:"llamaFarm"}],
+    livestock: "llama",
+    unlocks: [,	{type:'site', key:"llamaFarm"}],
   },
   
   masculinism: {
@@ -263,8 +265,8 @@ var dataAdvances = {
   	key: "sheepHerding",
     name: "Sheep Herding",
     biomes: ["Shrubland","Savanna"],
-    unlocks: [,	{type:'site', key:"sheepHerd"},
-    			{type:'site', key:"sheepfold"}],
+    livestock: "sheep",
+    unlocks: [,	{type:'site', key:"sheepfold"}],
   },
   
   slings: {
@@ -283,11 +285,11 @@ var dataAdvances = {
   },
   
   swineHusbandry: {
-  	key: "swingHusbandry",
+  	key: "swineHusbandry",
     name: "Swine Husbandry",
     biomes: ["Shrubland","Forest"],
-    unlocks: [,	{type:'site', key:'swineHerd'},
-    			{type:'site', key:'swineHollow'}],
+    livestock: "swine",
+    unlocks: [,	{type:'site', key:'swineHollow'}],
   },
   
   tactics: {
@@ -325,6 +327,7 @@ var dataResources = {
     key: "food",
     name: "Food",
     plural: "sacks of Food",
+    desc: "Each sack of food will feed one person for one season.  Can be stretched across starving people, but their health will slowly degrade.",
     advances: [dataAdvances.agriculture, dataAdvances.falconry, dataAdvances.kennelry, dataAdvances.horseHerding, dataAdvances.cattleHerding, dataAdvances.goatHerding, dataAdvances.caribouHerding,dataAdvances.sheepHerding,dataAdvances.llamaHerding,dataAdvances.camelHerding],
   },
   
@@ -688,6 +691,14 @@ var dataResources = {
     advances: [dataAdvances.agriculture,dataAdvances.preservation,dataAdvances.blackPowder],
   },
   
+  mysteryLivestock: {
+  	key: "mysteryLivestock",
+  	name: "Mystery Livestock!",
+  	plural: "Livestock",
+    desc: "A useful thing. (Placeholder Text)",
+  	advances: [],
+  },
+  
   mysteryOre: {
   	key: "mysteryOre",
   	name: "Mystery Ore!",
@@ -863,7 +874,7 @@ var dataResources = {
   wolf: {
   	key: "wolf",
   	name: "Wolf",
-  	plural: "wolves",
+  	plural: "Wolves",
     desc: "A useful thing. (Placeholder Text)",
   	advances: [dataAdvances.kennelry],
   	foodValue: 0.2,
@@ -880,7 +891,7 @@ var dataSites = {
     materials: [],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.1,
-    secondaryProduce: [dataResources.simpleTool,dataResources.fur,dataResources.lumber,dataResources.bone,dataResources.stone,dataResources.fiber],
+    secondaryProduce: [dataResources.simpleTool,dataResources.fur,dataResources.lumber,dataResources.bone,dataResources.stone,dataResources.fiber,dataResources.mysteryLivestock],
     secondaryEfficiency: 0.1,
     baseCapacity: 200,
   },
@@ -934,7 +945,7 @@ var dataSites = {
     materials: [],
     primaryProduce: dataResources.food,
     primaryEfficiency: 1.3,
-    secondaryProduce: [dataResources.simpleTool,dataResources.bone,dataResources.fur,dataResources.fiber],
+    secondaryProduce: [dataResources.simpleTool,dataResources.bone,dataResources.fur,dataResources.fiber,dataResources.mysteryLivestock],
     secondaryEfficiency: 0.2,
     baseCapacity: 100,
   },
@@ -962,7 +973,7 @@ var dataSites = {
     materials: [],
     primaryProduce: dataResources.water,
     primaryEfficiency: 1,
-    secondaryProduce: [dataResources.food,dataResources.bone,dataResources.lumber,dataResources.fiber],
+    secondaryProduce: [dataResources.food,dataResources.bone,dataResources.lumber,dataResources.fiber,dataResources.mysteryLivestock],
     secondaryEfficiency: 0.5,
     baseCapacity: 100,
   },
@@ -1040,7 +1051,7 @@ var dataSites = {
     materials: [],
     primaryProduce: dataResources.fuel,
     primaryEfficiency: .3,
-    secondaryProduce: [dataResources.bone,dataResources.stone,dataResources.food,dataResources.simpleTool,dataResources.fur,dataResources.fiber],
+    secondaryProduce: [dataResources.bone,dataResources.stone,dataResources.food,dataResources.simpleTool,dataResources.fur,dataResources.fiber,dataResources.mysteryLivestock],
     secondaryEfficiency: 1,
     baseCapacity: 100,
   },
@@ -1103,6 +1114,21 @@ var dataSites = {
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.tactics,
     buildCost: {lumber:20,simpleTool:20},
+    baseCapacity: 20,
+  },
+  
+  breedingKennel: {
+    name: 'Breeding Kennel',
+    job: 'kennel keepers',
+    tools: [dataResources.simpleTool],
+    bonusTools: [],
+    materials: [dataResources.dog],
+    primaryProduce: dataResources.dog,
+    primaryEfficiency: 1.2,
+    secondaryProduce: [dataResources.food,dataResources.wolf],
+    secondaryEfficiency: 0.5,
+    upgradeAdvance: dataAdvances.kennelry,
+    buildCost: {dog:1,lumber:50},
     baseCapacity: 20,
   },
   
@@ -1180,22 +1206,6 @@ var dataSites = {
     buildCost: {simpleTool:50,stone:50},
     baseCapacity: 20,
   },
-    
-  camelHerd: {
-    name: 'Camel Herd',
-    job: 'camel herder',
-    tools: [],
-    bonusTools: [],
-    materials: [],
-    biomes: ['desert','savanna'],
-    primaryProduce: dataResources.food,
-    primaryEfficiency: 0.9,
-    secondaryProduce: [dataResources.camel,dataResources.manure,dataResources.fiber],
-    secondaryEfficiency: 0.1,
-    upgradeAdvance: dataAdvances.camelHerding,
-    buildCost: {water:20},
-    baseCapacity: 20,
-  },
   
   camelFarm: {
     name: 'Camel Farm',
@@ -1208,23 +1218,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.manure,dataResources.fiber],
     secondaryEfficiency: 1.5,
     upgradeAdvance: dataAdvances.camelHerding,
-    buildCost: {water:20,lumber:50},
-    baseCapacity: 20,
-  },
-  
-  cattleHerd: {
-    name: 'Cattle Herd',
-    job: 'cattle herder',
-    tools: [],
-    bonusTools: [],
-    materials: [],
-    biomes: ['savanna','shrubland','forest','rainforest'],
-    primaryProduce: dataResources.food,
-    primaryEfficiency: 0.9,
-    secondaryProduce: [dataResources.cattle,dataResources.manure],
-    secondaryEfficiency: 0.2,
-    upgradeAdvance: dataAdvances.cattleHerding,
-    buildCost: {fur:20},
+    buildCost: {water:20,lumber:50,camel:1},
     baseCapacity: 20,
   },
   
@@ -1239,23 +1233,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.manure],
     secondaryEfficiency: 1.5,
     upgradeAdvance: dataAdvances.cattleHerding,
-    buildCost: {fur:20, lumber: 50},
-    baseCapacity: 20,
-  },
-    
-  caribouHerd: {
-    name: 'Caribou Herd',
-    job: 'caribou herder',
-    tools: [],
-    bonusTools: [],
-    materials: [],
-    biomes: ['tundra'],
-    primaryProduce: dataResources.food,
-    primaryEfficiency: 0.9,
-    secondaryProduce: [dataResources.caribou,dataResources.manure],
-    secondaryEfficiency: 0.1,
-    upgradeAdvance: dataAdvances.caribouHerding,
-    buildCost: {fur:20},
+    buildCost: {fur:20, lumber:50, cattle:1},
     baseCapacity: 20,
   },
   
@@ -1270,7 +1248,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.manure],
     secondaryEfficiency: 1.5,
     upgradeAdvance: dataAdvances.caribouHerding,
-    buildCost: {fur:20,lumber:50},
+    buildCost: {fur:20, lumber:50, caribou:1},
     baseCapacity: 20,
   },
   
@@ -1296,11 +1274,11 @@ var dataSites = {
     bonusTools: [],
     materials: [dataResources.chicken],
     primaryProduce: dataResources.chicken,
-    primaryEfficiency: 0.5,
+    primaryEfficiency: 2,
     secondaryProduce: [dataResources.food,dataResources.manure],
     secondaryEfficiency: 1.5,
     upgradeAdvance: dataAdvances.chickenHusbandry,
-    buildCost: {lumber:20},
+    buildCost: {lumber:20, chicken:1},
     baseCapacity: 20,
   },
   
@@ -1440,22 +1418,6 @@ var dataSites = {
     baseCapacity: 20,
   },
   
-  goatHerd: {
-    name: 'Goat Herd',
-    job: 'goat herder',
-    tools: [],
-    bonusTools: [],
-    materials: [],
-    biomes: ['savanna','shrubland','desert'],
-    primaryProduce: dataResources.food,
-    primaryEfficiency: 1,
-    secondaryProduce: [dataResources.goat,dataResources.manure],
-    secondaryEfficiency: 0.4,
-    upgradeAdvance: dataAdvances.goatHerding,
-    buildCost: {fur:20},
-    baseCapacity: 20,
-  },
-  
   goatPen: {
     name: 'Goat Pen',
     job: 'goat wrangler',
@@ -1467,7 +1429,7 @@ var dataSites = {
     secondaryProduce: [dataResources.goat,dataResources.manure],
     secondaryEfficiency: 0.4,
     upgradeAdvance: dataAdvances.goatHerding,
-    buildCost: {fur:20,lumber:50},
+    buildCost: {fur:20, lumber:50, goat:1},
     baseCapacity: 20,
   },
   
@@ -1482,23 +1444,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.horse,dataResources.manure],
     secondaryEfficiency: 0.5,
     upgradeAdvance: dataAdvances.horseHerding,
-    buildCost: {fur:20,lumber:50},
-    baseCapacity: 20,
-  },
-  
-  horseHerd: {
-    name: 'Horse Herd',
-    job: 'horse wrangler',
-    tools: [dataResources.simpleTool],
-    bonusTools: [],
-    materials: [],
-    biomes: ['savanna','shrubland'],
-    primaryProduce: dataResources.horse,
-    primaryEfficiency: 0.5,
-    secondaryProduce: [dataResources.simpleTool,dataResources.food,dataResources.manure],
-    secondaryEfficiency: 0.1,
-    upgradeAdvance: dataAdvances.horseHerding,
-    buildCost: {fur:20},
+    buildCost: {fur:20, lumber:50, horse:1},
     baseCapacity: 20,
   },
   
@@ -1543,7 +1489,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.wolf],
     secondaryEfficiency: 0.5,
     upgradeAdvance: dataAdvances.kennelry,
-    buildCost: {lumber:50},
+    buildCost: {lumber:50, wolf:1},
     baseCapacity: 20,
   },
     
@@ -1592,22 +1538,6 @@ var dataSites = {
     buildCost: {lumber:50},
     baseCapacity: 20,
   },
-    
-  llamaHerd: {
-    name: 'Llama Herd',
-    job: 'llama herder',
-    tools: [],
-    bonusTools: [],
-    materials: [],
-    biomes: ['shrubland','savanna'],
-    primaryProduce: dataResources.food,
-    primaryEfficiency: 0.9,
-    secondaryProduce: [dataResources.llama,dataResources.manure,dataResources.fiber],
-    secondaryEfficiency: 0.1,
-    upgradeAdvance: dataAdvances.llamaHerding,
-    buildCost: {fur:20},
-    baseCapacity: 20,
-  },
   
   llamaFarm: {
     name: 'Llama Farm',
@@ -1620,7 +1550,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.manure,dataResources.fiber],
     secondaryEfficiency: 1.5,
     upgradeAdvance: dataAdvances.llamaHerding,
-    buildCost: {fur:20,lumber:50},
+    buildCost: {fur:20, lumber:50, llama:1},
     baseCapacity: 20,
   },
   
@@ -1658,14 +1588,14 @@ var dataSites = {
     name: 'Mews',
     job: 'falconer',
     tools: [dataResources.simpleTool],
-    bonusTools: [],
-    materials: [dataResources.leather],
+    bonusTools: [dataResources.leather],
+    materials: [dataResources.falcon],
     primaryProduce: dataResources.falcon,
-    primaryEfficiency: 0.2,
+    primaryEfficiency: 2,
     secondaryProduce: [dataResources.food],
     secondaryEfficiency: 0.8,
     upgradeAdvance: dataAdvances.falconry,
-    buildCost: {stone:50},
+    buildCost: {stone:50, falcon:1},
     baseCapacity: 20,
   },
   
@@ -1745,22 +1675,6 @@ var dataSites = {
     buildCost: {simpleTool:100},
     baseCapacity: 20,
   },
-    
-  sheepHerd: {
-    name: 'Sheep Herd',
-    job: 'shepherd',
-    tools: [],
-    bonusTools: [],
-    materials: [],
-    biomes: ['desert','savanna'],
-    primaryProduce: dataResources.food,
-    primaryEfficiency: 0.9,
-    secondaryProduce: [dataResources.sheep,dataResources.manure,dataResources.fiber],
-    secondaryEfficiency: 0.1,
-    upgradeAdvance: dataAdvances.sheepHerding,
-    buildCost: {fur:20},
-    baseCapacity: 20,
-  },
   
   sheepfold: {
     name: 'Sheepfold',
@@ -1773,7 +1687,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.manure,dataResources.fiber],
     secondaryEfficiency: 1.5,
     upgradeAdvance: dataAdvances.sheepHerding,
-    buildCost: {water:20,lumber:50},
+    buildCost: {water:20,lumber:50, sheep:1},
     baseCapacity: 20,
   },
   
@@ -1834,7 +1748,7 @@ var dataSites = {
     secondaryProduce: [dataResources.food,dataResources.horse,dataResources.manure],
     secondaryEfficiency: 0.8,
     upgradeAdvance: dataAdvances.horseHerding,
-    buildCost: {lumber:100},
+    buildCost: {lumber:100, horse:1},
     baseCapacity: 20,
   },
   
@@ -1883,22 +1797,6 @@ var dataSites = {
     baseCapacity: 20,
   },
   
-  swineHerd: {
-    name: 'Swine Herd',
-    job: 'swineherd',
-    tools: [],
-    bonusTools: [],
-    materials: [dataResources.food],
-    biomes: ['forest','rainforest'],
-    primaryProduce: dataResources.swine,
-    primaryEfficiency: 1,
-    secondaryProduce: [dataResources.food,dataResources.manure,dataResources.fur],
-    secondaryEfficiency: 1,
-    upgradeAdvance: dataAdvances.swineHerding,
-    buildCost: {fur:20},
-    baseCapacity: 20,
-  },
-  
   swineHollow: {
     name: 'Swine Hollow',
     job: 'swineherd',
@@ -1910,7 +1808,7 @@ var dataSites = {
     secondaryProduce: [dataResources.swine,dataResources.manure,dataResources.fur],
     secondaryEfficiency: 0.5,
     upgradeAdvance: dataAdvances.swineHerding,
-    buildCost: {fur:20,water:20,simpleTool:20},
+    buildCost: {fur:20, water:20, simpleTool:20, swine:1},
     baseCapacity: 20,
   },
   
@@ -1940,7 +1838,7 @@ var dataSites = {
     secondaryProduce: [dataResources.dye,dataResources.food],
     secondaryEfficiency: 0.1,
     upgradeAdvance: dataAdvances.leatherworking,
-    buildCost: {lumber:10,simpleTool:20},
+    buildCost: {lumber:10, simpleTool:20},
     baseCapacity: 20,
   },
   
@@ -1969,22 +1867,7 @@ var dataSites = {
     primaryEfficiency: 1,
     secondaryProduce: [dataResources.simpleTool,dataResources.food,dataResources.stone,dataResources.bone],
     secondaryEfficiency: 0.1,
-    buildCost: {stone:50,simpleTool:10},
-    baseCapacity: 20,
-  },
-  
-  wolfDen: {
-    name: 'Wolf Den',
-    job: 'wolf whisperer',
-    tools: [dataResources.simpleTool],
-    bonusTools: [],
-    materials: [dataResources.food],
-    primaryProduce: dataResources.wolf,
-    primaryEfficiency: 0.5,
-    secondaryProduce: [dataResources.food,dataResources.bone,dataResources.fur],
-    secondaryEfficiency: 0.1,
-    upgradeAdvance: dataAdvances.kennelry,
-    buildCost: {food:20,fur:20},
+    buildCost: {stone:50, simpleTool:10},
     baseCapacity: 20,
   },
   

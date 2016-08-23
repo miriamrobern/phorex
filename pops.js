@@ -1209,7 +1209,7 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
       
       if (Math.random() < 0.1) {
       	toolBreak = job.tools[Math.floor(Math.random()*job.tools.length)];
-      	toolBreakNum = Math.ceil(this.inv[toolBreak.key]/[5,6,7][Math.floor(Math.random()*10)])
+      	toolBreakNum = Math.ceil(this.inv[toolBreak.key]/[5,6,7][Math.floor(Math.random()*3)])
       	breakage = toolBreakNum + " " + toolBreak.plural + " are broken in the process!  ";
       }
     }
@@ -1238,11 +1238,23 @@ function Pop(name,people,population,x,y,prestige,values,demographics,disposition
     var secondaryQuantity = Math.floor(Math.min(matsCheck,toolsCheck) * job.secondaryEfficiency * this.population * toolBonus * 100) / 100;
     
     if (primary === dataResources.mysteryOre) {
-    	if (worldMap.coords[this.x][this.y].veins.length >= job.miningDepth) {
-    		primary = worldMap.coords[this.x][this.y].veins[job.miningDepth][Math.floor(Math.random()*3)];
-    	} else {
-    		primary = dataResources.aluminumOre;
+    	primary = worldMap.coords[this.x][this.y].veins[job.miningDepth][Math.floor(Math.random()*3)];
+    }
+    
+    if (secondary === dataResources.mysteryLivestock) {
+    	var husbandryAdvances = [dataAdvances.camelHerding,dataAdvances.caribouHerding,dataAdvances.cattleHerding,dataAdvances.chickenHusbandry,dataAdvances.falconry,dataAdvances.goatHerding,dataAdvances.horseHerding,dataAdvances.kennelry,dataAdvances.llamaHerding,dataAdvances.sheepHerding,dataAdvances.swineHusbandry];
+    	var potentialLivestock = [];
+    	for (i in husbandryAdvances) {
+    		if (husbandryAdvances[i].biomes.indexOf(worldMap.coords[this.x][this.y].biome.name) !== -1 && this.advances[husbandryAdvances[i].key] > 0) {
+    			potentialLivestock.push(dataResources[husbandryAdvances[i].livestock]);
+    		}
     	}
+    	if (potentialLivestock.length > 0) {
+    		secondary = potentialLivestock[Math.floor(Math.random()*potentialLivestock.length)];
+    	} else {
+    		secondary = dataResources.food;
+    	}
+    	
     }
       
     notification += this.name + " works as " + job.job + "s," + materialCost + " producing " + primaryQuantity + " " + primary.plural + " and " + secondaryQuantity + " " + secondary.plural + ".  " + breakage;
